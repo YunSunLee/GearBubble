@@ -1,5 +1,5 @@
 #include "bubble.h"
-//3_29
+//pull
 struct appdata {
 	/* Window */
 	Evas_Object *win;
