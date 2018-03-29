@@ -103,7 +103,7 @@ create_base_gui(appdata_s *ad)
 	elm_object_content_set(ad->navi, ad->box);
 
 	/* Push the box to the naviframe as a top item to create the first view.  */
-	ad->navi_item = elm_naviframe_item_push(ad->navi, "Gear Bubble", NULL, NULL, ad->box, NULL);
+	ad->navi_item = elm_naviframe_item_push(ad->navi, "GEAR BUBBLE", NULL, NULL, ad->box, NULL);
 
 	/* List */
 	int i;
