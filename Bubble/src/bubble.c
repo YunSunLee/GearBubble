@@ -48,11 +48,24 @@ list_item_doubleclicked_cb(void *data, Evas_Object *obj, void *event_info)
     navi_button = elm_button_add(nf);
     elm_object_text_set(navi_button, "Prev");
     elm_object_style_set(navi_button, "bottom");
-    evas_object_smart_callback_add(navi_button, "clicked",
-                                   prev_btn_clicked_cb, nf);
+    evas_object_smart_callback_add(navi_button, "clicked",prev_btn_clicked_cb, nf);
 
-    nf_it = elm_naviframe_item_push(nf, "Second view", NULL,
-                                    NULL, navi_button, NULL);
+    nf_it = elm_naviframe_item_push(nf, "1 PLAYER", NULL,NULL, navi_button, NULL);
+}
+
+static void
+list_item2_doubleclicked_cb(void *data, Evas_Object *obj, void *event_info)
+{
+    Evas_Object *navi_button;
+    Evas_Object *nf = data;
+    Elm_Object_Item *nf_it;
+
+    navi_button = elm_button_add(nf);
+    elm_object_text_set(navi_button, "Prev");
+    elm_object_style_set(navi_button, "bottom");
+    evas_object_smart_callback_add(navi_button, "clicked",prev_btn_clicked_cb, nf);
+
+    nf_it = elm_naviframe_item_push(nf, "Tutorial", NULL,NULL, navi_button, NULL);
 }
 
 static void
@@ -114,10 +127,10 @@ create_base_gui(appdata_s *ad)
 	evas_object_size_hint_align_set(ad->list, EVAS_HINT_FILL, EVAS_HINT_FILL);
 
 	/* Add an item to the list */
-	elm_list_item_append(ad->list, "1PLAYER", NULL, NULL, NULL, NULL);
+	elm_list_item_append(ad->list, "1PLAYER", NULL, NULL, list_item_doubleclicked_cb, ad->navi);
 	elm_list_item_append(ad->list, "2PLAYERS", NULL, NULL, NULL, NULL);
 	elm_list_item_append(ad->list, "MAP EDITOR", NULL, NULL, NULL, NULL);
-	elm_list_item_append(ad->list, "TUTORIAL", NULL, NULL, NULL, NULL);
+	elm_list_item_append(ad->list, "TUTORIAL", NULL, NULL, list_item2_doubleclicked_cb, ad->navi);
 	elm_list_item_append(ad->list, "RANKING", NULL, NULL, NULL, NULL);
 	elm_list_item_append(ad->list, "SOUND", NULL, NULL, NULL, NULL);
 
@@ -126,7 +139,7 @@ create_base_gui(appdata_s *ad)
 	elm_box_pack_end(ad->box, ad->list);
 
 	/* Add a callback */
-	evas_object_smart_callback_add(ad->list, "clicked,double", list_item_doubleclicked_cb, ad->navi);
+	//evas_object_smart_callback_add(ad->list, "clicked,double", list_item_doubleclicked_cb, ad->navi);
 
 	/* Show window after base gui is set up */
 	evas_object_show(ad->win);
