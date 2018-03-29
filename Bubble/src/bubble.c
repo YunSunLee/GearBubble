@@ -39,7 +39,7 @@ prev_btn_clicked_cb(void *data, Evas_Object *obj, void *event_info)
 }
 
 static void
-list_item_doubleclicked_cb(void *data, Evas_Object *obj, void *event_info)
+list_item1_doubleclicked_cb(void *data, Evas_Object *obj, void *event_info)
 {
     Evas_Object *navi_button;
     Evas_Object *nf = data;
@@ -65,8 +65,69 @@ list_item2_doubleclicked_cb(void *data, Evas_Object *obj, void *event_info)
     elm_object_style_set(navi_button, "bottom");
     evas_object_smart_callback_add(navi_button, "clicked",prev_btn_clicked_cb, nf);
 
+    nf_it = elm_naviframe_item_push(nf, "2 PLAYERS", NULL,NULL, navi_button, NULL);
+}
+
+static void
+list_item3_doubleclicked_cb(void *data, Evas_Object *obj, void *event_info)
+{
+    Evas_Object *navi_button;
+    Evas_Object *nf = data;
+    Elm_Object_Item *nf_it;
+
+    navi_button = elm_button_add(nf);
+    elm_object_text_set(navi_button, "Prev");
+    elm_object_style_set(navi_button, "bottom");
+    evas_object_smart_callback_add(navi_button, "clicked",prev_btn_clicked_cb, nf);
+
+    nf_it = elm_naviframe_item_push(nf, "Map Editor", NULL,NULL, navi_button, NULL);
+}
+
+static void
+list_item4_doubleclicked_cb(void *data, Evas_Object *obj, void *event_info)
+{
+    Evas_Object *navi_button;
+    Evas_Object *nf = data;
+    Elm_Object_Item *nf_it;
+
+    navi_button = elm_button_add(nf);
+    elm_object_text_set(navi_button, "Prev");
+    elm_object_style_set(navi_button, "bottom");
+    evas_object_smart_callback_add(navi_button, "clicked",prev_btn_clicked_cb, nf);
+
     nf_it = elm_naviframe_item_push(nf, "Tutorial", NULL,NULL, navi_button, NULL);
 }
+
+static void
+list_item5_doubleclicked_cb(void *data, Evas_Object *obj, void *event_info)
+{
+    Evas_Object *navi_button;
+    Evas_Object *nf = data;
+    Elm_Object_Item *nf_it;
+
+    navi_button = elm_button_add(nf);
+    elm_object_text_set(navi_button, "Prev");
+    elm_object_style_set(navi_button, "bottom");
+    evas_object_smart_callback_add(navi_button, "clicked",prev_btn_clicked_cb, nf);
+
+    nf_it = elm_naviframe_item_push(nf, "Ranking", NULL,NULL, navi_button, NULL);
+}
+
+static void
+list_item6_doubleclicked_cb(void *data, Evas_Object *obj, void *event_info)
+{
+    Evas_Object *navi_button;
+    Evas_Object *nf = data;
+    Elm_Object_Item *nf_it;
+
+    navi_button = elm_button_add(nf);
+    elm_object_text_set(navi_button, "Prev");
+    elm_object_style_set(navi_button, "bottom");
+    evas_object_smart_callback_add(navi_button, "clicked",prev_btn_clicked_cb, nf);
+
+    nf_it = elm_naviframe_item_push(nf, "Sound", NULL,NULL, navi_button, NULL);
+}
+
 
 static void
 create_base_gui(appdata_s *ad)
@@ -127,12 +188,12 @@ create_base_gui(appdata_s *ad)
 	evas_object_size_hint_align_set(ad->list, EVAS_HINT_FILL, EVAS_HINT_FILL);
 
 	/* Add an item to the list */
-	elm_list_item_append(ad->list, "1PLAYER", NULL, NULL, list_item_doubleclicked_cb, ad->navi);
-	elm_list_item_append(ad->list, "2PLAYERS", NULL, NULL, NULL, NULL);
-	elm_list_item_append(ad->list, "MAP EDITOR", NULL, NULL, NULL, NULL);
-	elm_list_item_append(ad->list, "TUTORIAL", NULL, NULL, list_item2_doubleclicked_cb, ad->navi);
-	elm_list_item_append(ad->list, "RANKING", NULL, NULL, NULL, NULL);
-	elm_list_item_append(ad->list, "SOUND", NULL, NULL, NULL, NULL);
+	elm_list_item_append(ad->list, "1PLAYER", NULL, NULL, list_item1_doubleclicked_cb, ad->navi);
+	elm_list_item_append(ad->list, "2PLAYERS", NULL, NULL, list_item2_doubleclicked_cb, ad->navi);
+	elm_list_item_append(ad->list, "MAP EDITOR", NULL, NULL, list_item3_doubleclicked_cb, ad->navi);
+	elm_list_item_append(ad->list, "TUTORIAL", NULL, NULL, list_item4_doubleclicked_cb, ad->navi);
+	elm_list_item_append(ad->list, "RANKING", NULL, NULL, list_item5_doubleclicked_cb, ad->navi);
+	elm_list_item_append(ad->list, "SOUND", NULL, NULL, list_item6_doubleclicked_cb, ad->navi);
 
 	/* Show and add to box */
 	evas_object_show(ad->list);
