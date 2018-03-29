@@ -103,7 +103,7 @@ create_base_gui(appdata_s *ad)
 	elm_object_content_set(ad->navi, ad->box);
 
 	/* Push the box to the naviframe as a top item to create the first view.  */
-	ad->navi_item = elm_naviframe_item_push(ad->navi, "First view", NULL, NULL, ad->box, NULL);
+	ad->navi_item = elm_naviframe_item_push(ad->navi, "Gear Bubble", NULL, NULL, ad->box, NULL);
 
 	/* List */
 	int i;
@@ -124,9 +124,9 @@ create_base_gui(appdata_s *ad)
 	elm_box_pack_end(ad->box, ad->list);
 
 	/* Change the first list item text */
-	Elm_Object_Item *it;
-	it = elm_list_first_item_get(ad->list);
-	elm_object_item_text_set(it, "Go to Second");
+	Elm_Object_Item *it1;
+	it1 = elm_list_first_item_get(ad->list);
+	elm_object_item_text_set(it1, "1 Player");
 	/* Add a callback */
 	evas_object_smart_callback_add(ad->list, "clicked,double", list_item_doubleclicked_cb, ad->navi);
 
