@@ -4,7 +4,7 @@
 <SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"></SignatureMethod>
 <Reference URI="bin%2Fbubble">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>Mf0mAV2BbVk5n86ZJYIbMnP3GRTYZtU1qeaLcQTL7K4=</DigestValue>
+<DigestValue>oXx3nI0Gs210rbhDXhtAqwFA8F/9nRDc+pRrc9+sT+I=</DigestValue>
 </Reference>
 <Reference URI="shared%2Fres%2Fbubble.png">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
@@ -23,9 +23,9 @@
 </Reference>
 </SignedInfo>
 <SignatureValue>
-TkzRaKvURCfA4x3ZtqqshtzUwdLRolFCmE23dowajWaLb+hI8llbkvRAHLtzKIlkaBTJTXvzaR1O
-tc6kW8zr+XFE5pQHBCXJsg7Vzxu9Lul1EGgkFrvoKgrPN+a7MJGzSEKjCvypLJLoAf/AZYwiJ4ei
-O1RzkdPod/w6wxxs0jg=
+EAfO3gzG08O5spGb8k4DkcTAz1FDuycTiUSJi0cgH9mA0PMekISIM4SLtg9GP/+pWOi8Cngkh1BM
+2oh59hrt1CMcANh69ZbwdHlGyfA7Z7FIIpIinoKqn7YCgOma6Dm/4JnoHBgyt1+juuEjG4VLJlgF
+G+kkfMANkXGzTyTRtPw=
 </SignatureValue>
 <KeyInfo>
 <X509Data>
