@@ -1,24 +1,10 @@
 #include "bubble.h"
-//pull
-struct appdata {
-	/* Window */
-	Evas_Object *win;
-	/* Conformant */
-	Evas_Object *conform;
-	/* Label */
-	Evas_Object *label;
-    /* Box */
-    Evas_Object *box;
-    /* List */
-    Evas_Object *list;
-    /* Naviframe */
-    Evas_Object *navi;
-    /* Item */
-    Elm_Object_Item *navi_item;
-};
-typedef struct appdata appdata_s;
-
-static int current_stage = 1;
+#include <sensor.h>
+#include "single_play.c"
+#include "network.c"
+#include "map_editor.c"
+#include "ranking.c"
+#include "tutorial.c"
 
 static void
 win_delete_request_cb(void *data, Evas_Object *obj, void *event_info)
@@ -33,297 +19,165 @@ win_back_cb(void *data, Evas_Object *obj, void *event_info)
 	/* Let window go to hide state. */
 	elm_win_lower(ad->win);
 }
-static void
-prev_btn_clicked_cb(void *data, Evas_Object *obj, void *event_info)
+
+static void create_base_gui(appdata_s *ad);
+
+static void show_is_supported(appdata_s *ad)
 {
-    Evas_Object *nf = data;
-    elm_naviframe_item_pop(nf);
+	char buf[PATH_MAX];
+	bool is_supported = false;
+	sensor_is_supported(SENSOR_ACCELEROMETER, &is_supported);
+	sprintf(buf, "Acceleration Sensor is %s", is_supported ? "support" : "not support");
+	elm_object_text_set(ad->acc_label[0], buf);
 }
 
-static void list_item1_doubleclicked_cb(void *data, Evas_Object *obj, void *event_info);
-static void list_item2_doubleclicked_cb(void *data, Evas_Object *obj, void *event_info);
-static void list_item3_doubleclicked_cb(void *data, Evas_Object *obj, void *event_info);
-static void list_item4_doubleclicked_cb(void *data, Evas_Object *obj, void *event_info);
-static void list_item5_doubleclicked_cb(void *data, Evas_Object *obj, void *event_info);
-static void list_item6_doubleclicked_cb(void *data, Evas_Object *obj, void *event_info);
-static void select_stage_cb(void *data, Evas_Object *obj, void *event_info);
+static void
+_new_sensor_value(sensor_h sensor, sensor_event_s *sensor_data, void *user_data)
+{
+	float x = sensor_data->values[0];
+	float y = sensor_data->values[1];
+	float z = sensor_data->values[2];
+
+	 appdata_s *ad = user_data;
+
+	 char buf[1024];
+	 if (sensor_data->value_count < 3)
+	 {
+		 elm_object_text_set(ad->acc_label[1], "Gathering data...");
+		 return;
+	 }
+	 snprintf(buf, sizeof(buf ), "<font_size = 10>X:%0.1f/Y:%0.1f/Z:%0.1f</font_size>", x, y, z);
+	 elm_object_text_set(ad->acc_label[1], buf);
+	 //evas_object_text_text_set(ad->title, buf);
+}
+
+static void
+start_acceleration_sensor(appdata_s *ad)
+{
+	sensor_error_e err = SENSOR_ERROR_NONE;
+	//err = sensor_get_default_sensor(SENSOR_ACCELEROMETER, &ad->sensor_info.sensor);
+	err = sensor_get_default_sensor(SENSOR_LINEAR_ACCELERATION, &ad->sensor_info.sensor);
+	if (err != SENSOR_ERROR_NONE)
+	goto error_check;
+	err = sensor_create_listener(ad->sensor_info.sensor, &ad->sensor_info.sensor_listener);
+	if (err != SENSOR_ERROR_NONE)
+	goto error_check;
+	sensor_listener_set_event_cb(ad->sensor_info.sensor_listener, 100, _new_sensor_value, ad); //INTERVAL
+	sensor_listener_start(ad->sensor_info.sensor_listener);
+	error_check:
+	if (err != SENSOR_ERROR_NONE)
+	{
+		const char *msg;
+		char fullmsg[1024];
+		switch (err)
+		{
+			case SENSOR_ERROR_IO_ERROR: msg = "I/O error"; break;
+			case SENSOR_ERROR_INVALID_PARAMETER: msg = "Invalid parameter"; break;
+			case SENSOR_ERROR_NOT_SUPPORTED: msg = "The sensor type is not supported in the current device"; break;
+			case SENSOR_ERROR_PERMISSION_DENIED: msg = "Permission denied"; break;
+			case SENSOR_ERROR_OUT_OF_MEMORY: msg = "Out of memory"; break;
+			case SENSOR_ERROR_NOT_NEED_CALIBRATION: msg = "Sensor doesn't need calibration"; break;
+			case SENSOR_ERROR_OPERATION_FAILED: msg = "Operation failed"; break;
+			default: msg = "Unknown error"; break;
+		}
+		snprintf(fullmsg, sizeof(fullmsg), "<align=center>An error occurred:<br/>%s</>", msg);
+		elm_object_text_set(ad->acc_label[0], "No data");
+		elm_object_text_set(ad->acc_label[1], fullmsg);
+	}
+}
 
 static void
 main_menu_cb(void *data, Evas_Object *obj, void *event_info){
-	Evas_Object *nf = data;
-	Elm_Object_Item *nf_it;
-
-	Evas_Object *box;
-	Evas_Object *list;
-
-	current_stage = 1;
-
-	box = elm_box_add(nf);
-	list = elm_list_add(box);
-	/* Set the list size */
-	evas_object_size_hint_weight_set(list, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	evas_object_size_hint_align_set(list, EVAS_HINT_FILL, EVAS_HINT_FILL);
-
-	/* Add an item to the list */
-	elm_list_item_append(list, "1PLAYER", NULL, NULL, select_stage_cb, nf);
-	elm_list_item_append(list, "2PLAYERS", NULL, NULL, list_item2_doubleclicked_cb, nf);
-	elm_list_item_append(list, "MAP EDITOR", NULL, NULL, list_item3_doubleclicked_cb,nf);
-	elm_list_item_append(list, "TUTORIAL", NULL, NULL, list_item4_doubleclicked_cb, nf);
-	elm_list_item_append(list, "RANKING", NULL, NULL, list_item5_doubleclicked_cb, nf);
-	elm_list_item_append(list, "SOUND", NULL, NULL, list_item6_doubleclicked_cb, nf);
-
-	/* Show and add to box */
-	evas_object_show(list);
-	elm_box_pack_end(box, list);
-	evas_object_show(box);
-
-	nf_it = elm_naviframe_item_push(nf, "GEAR BUBBLE", NULL,NULL, box, NULL);
-
+	appdata_s *ad = data;
+	create_base_gui(ad);
 }
 
-main_menu_saved_cb(void *data, Evas_Object *obj, void *event_info){
-	Evas_Object *nf = data;
-	Elm_Object_Item *nf_it;
+static void single_mode_cb(void *data, Evas_Object *obj, void *event_info){}
+static void vs_com_cb(void *data, Evas_Object *obj, void *event_info){}
 
-	Evas_Object *box;
-	Evas_Object *list;
+static void stage_size_3_cb(void *data, Evas_Object *obj, void *event_info){}
+static void stage_size_4_cb(void *data, Evas_Object *obj, void *event_info){}
+static void stage_size_5_cb(void *data, Evas_Object *obj, void *event_info){}
+static void stage_size_6_cb(void *data, Evas_Object *obj, void *event_info){}
 
-	box = elm_box_add(nf);
-	list = elm_list_add(box);
-	/* Set the list size */
-	evas_object_size_hint_weight_set(list, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	evas_object_size_hint_align_set(list, EVAS_HINT_FILL, EVAS_HINT_FILL);
+static void stage1_cb(void *data, Evas_Object *obj, void *event_info){}
+static void stage2_cb(void *data, Evas_Object *obj, void *event_info){}
+static void stage3_cb(void *data, Evas_Object *obj, void *event_info){}
+static void stage4_cb(void *data, Evas_Object *obj, void *event_info){}
+static void stage5_cb(void *data, Evas_Object *obj, void *event_info){}
 
-	/* Add an item to the list */
-	elm_list_item_append(list, "1PLAYER", NULL, NULL, select_stage_cb, nf);
-	elm_list_item_append(list, "2PLAYERS", NULL, NULL, list_item2_doubleclicked_cb, nf);
-	elm_list_item_append(list, "MAP EDITOR", NULL, NULL, list_item3_doubleclicked_cb,nf);
-	elm_list_item_append(list, "TUTORIAL", NULL, NULL, list_item4_doubleclicked_cb, nf);
-	elm_list_item_append(list, "RANKING", NULL, NULL, list_item5_doubleclicked_cb, nf);
-	elm_list_item_append(list, "SOUND", NULL, NULL, list_item6_doubleclicked_cb, nf);
-
-	/* Show and add to box */
-	evas_object_show(list);
-	elm_box_pack_end(box, list);
-	evas_object_show(box);
-
-	nf_it = elm_naviframe_item_push(nf, "GEAR BUBBLE", NULL,NULL, box, NULL);
-
-}
 
 static void
-save_cb(void *data, Evas_Object *obj, void *event_info){
-	Evas_Object *nf = data;
-	Elm_Object_Item *nf_it;
-
-	Evas_Object *box;
-	Evas_Object *list;
-
-	box = elm_box_add(nf);
-	list = elm_list_add(box);
-	/* Set the list size */
-	evas_object_size_hint_weight_set(list, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	evas_object_size_hint_align_set(list, EVAS_HINT_FILL, EVAS_HINT_FILL);
-
-	/* Add an item to the list */
-	elm_list_item_append(list, "YES", NULL, NULL, main_menu_saved_cb, nf);
-	elm_list_item_append(list, "NO", NULL, NULL, main_menu_cb, nf);
-
-	/* Show and add to box */
-	evas_object_show(list);
-	elm_box_pack_end(box, list);
-
-	nf_it = elm_naviframe_item_push(nf, "SAVE GAME?", NULL,NULL, box, NULL);
-
-
-}
-
-static void
-stage_clear_cb(void *data, Evas_Object *obj, void *event_info)
+sound_changed_cb(void *data, Evas_Object *obj, void *event_info)
 {
-    Evas_Object *nf = data;
-    Elm_Object_Item *nf_it;
+	appdata_s *ad = data;
+	Eina_Bool state = elm_check_state_get(obj);
+	if(state)
+		ad->sound = 1;
+	else
+		ad->sound = 0;
+}
 
-    Evas_Object *box;
-    Evas_Object *list;
+static void
+sound_cb(void *data, Evas_Object *obj, void *event_info)
+{
+	appdata_s *ad = data;
 
-    box = elm_box_add(nf);
-	list = elm_list_add(box);
-	/* Set the list size */
-	evas_object_size_hint_weight_set(list, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	evas_object_size_hint_align_set(list, EVAS_HINT_FILL, EVAS_HINT_FILL);
+	elm_object_text_set(ad->title, "<font_size = 50><align=center>SOUND</align></font_size>");
+	evas_object_hide(ad->main_list);
+	elm_box_unpack(ad->box, ad->main_list);
+	elm_box_clear(ad->box_content);
+	evas_object_hide(ad->bottom);
+	elm_box_pack_before(ad->box, ad->box_content, ad->box_bottom);
 
-	/* Add an item to the list */
-	elm_list_item_append(list, "NEXT STAGE", NULL, NULL, list_item1_doubleclicked_cb, nf);
-	elm_list_item_append(list, "MAIN MENU", NULL, NULL, save_cb, nf);
+	ad->sound_check = elm_check_add(ad->box_content);
+	elm_object_style_set(ad->sound_check,"popup");
+	//elm_object_text_set(ad->sound_check, "SOUND");
 
-	/* Show and add to box */
-	evas_object_show(list);
-	elm_box_pack_end(box, list);
+	if(ad->sound == 0)
+		elm_check_state_set(ad->sound_check, EINA_FALSE);
+	else
+		elm_check_state_set(ad->sound_check, EINA_TRUE);
 
+	elm_box_pack_end(ad->box_content, ad->sound_check);
+	evas_object_show(ad->sound_check);
 
-	char s[20];
+	evas_object_smart_callback_add(ad->sound_check, "changed", sound_changed_cb, ad);
 
-	sprintf(s, "STAGE %d CLEAR", current_stage);
-	current_stage++;
-
-	nf_it = elm_naviframe_item_push(nf, s, NULL,NULL, box, NULL);
-
-
+	evas_object_show(ad->back_list);
+	elm_box_pack_end(ad->box, ad->back_list);
 
 }
 
 static void
-select_stage_cb(void *data, Evas_Object *obj, void *event_info){
-	Evas_Object *nf = data;
-	Elm_Object_Item *nf_it;
-	Evas_Object *box;
-	Evas_Object *list;
+sensor_test_cb(void *data, Evas_Object *obj, void *event_info)
+{
+	appdata_s *ad = data;
 
-	box = elm_box_add(nf);
-	list = elm_list_add(box);
+	show_is_supported(ad);
+	start_acceleration_sensor(ad);
 
-	evas_object_size_hint_weight_set(list, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	evas_object_size_hint_align_set(list, EVAS_HINT_FILL, EVAS_HINT_FILL);
-
-	/* Add an item to the list */
-	int i;
-
-	for (i = 1; i < current_stage + 1; i++){
-		char s[10];
-		sprintf(s, "STAGE %d", i);
-		elm_list_item_append(list, s, NULL, NULL, list_item1_doubleclicked_cb, nf);
+	elm_object_text_set(ad->title, "<font_size = 50><align=center>SENSOR TEST</align></font_size>");
+	evas_object_hide(ad->main_list);
+	elm_box_unpack(ad->box, ad->main_list);
+	elm_box_clear(ad->box_content);
+	evas_object_hide(ad->bottom);
+	elm_box_pack_before(ad->box, ad->box_content, ad->box_bottom);
+	for(int i = 0; i < 2; i++){
+		ad->acc_label[i] = elm_label_add(ad->box_content);
+		elm_object_text_set(ad->acc_label[i], "Msg - ");
+		evas_object_show(ad->acc_label[i]);
+		elm_box_pack_end(ad->box_content, ad->acc_label[i]);
 	}
+	show_is_supported(ad);
+	start_acceleration_sensor(ad);
 
-	/* Show and add to box */
-	evas_object_show(list);
-	elm_box_pack_end(box, list);
+	//evas_object_event_callback_add(ad->conform, EVAS_CALLBACK_MOUSE_DOWN, main_menu_cb, ad);
+	//evas_object_show(ad->back);
 
-	nf_it = elm_naviframe_item_push(nf, "SELECT STAGE", NULL,NULL, box, NULL);
+	evas_object_show(ad->back_list);
+	elm_box_pack_end(ad->box, ad->back_list);
 }
-
-static void
-list_item1_doubleclicked_cb(void *data, Evas_Object *obj, void *event_info)
-{
-    Evas_Object *nf = data;
-    Elm_Object_Item *nf_it;
-
-
-
-    Evas_Object *box;
-    Evas_Object *list;
-
-
-    box = elm_box_add(nf);
-    list = elm_list_add(box);
-    /* Set the list size */
-    evas_object_size_hint_weight_set(list, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-    evas_object_size_hint_align_set(list, EVAS_HINT_FILL, EVAS_HINT_FILL);
-
-    /* Add an item to the list */
-    elm_list_item_append(list, "PRESS TO CLEAR", NULL, NULL, stage_clear_cb, nf);
-
-    if(current_stage >=2)
-    	elm_list_item_append(list, "MAIN MENU", NULL, NULL, save_cb, nf);
-    else
-    	elm_list_item_append(list, "MAIN MENU", NULL, NULL, main_menu_cb, nf);
-
-    /* Show and add to box */
-    evas_object_show(list);
-    elm_box_pack_end(box, list);
-
-
-    char s[20];
-
-    sprintf(s, "STAGE %d", current_stage);
-
-    nf_it = elm_naviframe_item_push(nf, s, NULL,NULL, box, NULL);
-}
-
-
-
-static void
-list_item2_doubleclicked_cb(void *data, Evas_Object *obj, void *event_info)
-{
-    Evas_Object *navi_button;
-    Evas_Object *nf = data;
-    Elm_Object_Item *nf_it;
-
-    navi_button = elm_button_add(nf);
-    elm_object_text_set(navi_button, "Prev");
-    elm_object_style_set(navi_button, "bottom");
-    evas_object_smart_callback_add(navi_button, "clicked",prev_btn_clicked_cb, nf);
-
-    nf_it = elm_naviframe_item_push(nf, "2 PLAYERS", NULL,NULL, navi_button, NULL);
-}
-
-static void
-list_item3_doubleclicked_cb(void *data, Evas_Object *obj, void *event_info)
-{
-    Evas_Object *navi_button;
-    Evas_Object *nf = data;
-    Elm_Object_Item *nf_it;
-
-    navi_button = elm_button_add(nf);
-    elm_object_text_set(navi_button, "Prev");
-    elm_object_style_set(navi_button, "bottom");
-    evas_object_smart_callback_add(navi_button, "clicked",prev_btn_clicked_cb, nf);
-
-    nf_it = elm_naviframe_item_push(nf, "Map Editor", NULL,NULL, navi_button, NULL);
-}
-
-static void
-list_item4_doubleclicked_cb(void *data, Evas_Object *obj, void *event_info)
-{
-    Evas_Object *navi_button;
-    Evas_Object *nf = data;
-    Elm_Object_Item *nf_it;
-
-
-    navi_button = elm_button_add(nf);
-    elm_object_text_set(navi_button, "Prev");
-    elm_object_style_set(navi_button, "bottom");
-    evas_object_smart_callback_add(navi_button, "clicked",prev_btn_clicked_cb, nf);
-
-
-    nf_it = elm_naviframe_item_push(nf, "Tutorial", NULL,NULL, navi_button, NULL);
-
-
-
-}
-
-static void
-list_item5_doubleclicked_cb(void *data, Evas_Object *obj, void *event_info)
-{
-	Evas_Object *navi_button;
-	Evas_Object *nf = data;
-	Elm_Object_Item *nf_it;
-
-	navi_button = elm_button_add(nf);
-	elm_object_text_set(navi_button, "Prev");
-	elm_object_style_set(navi_button, "bottom");
-	evas_object_smart_callback_add(navi_button, "clicked",prev_btn_clicked_cb, nf);
-
-	nf_it = elm_naviframe_item_push(nf, "Ranking", NULL,NULL, navi_button, NULL);
-}
-
-static void
-list_item6_doubleclicked_cb(void *data, Evas_Object *obj, void *event_info)
-{
-	Evas_Object *navi_button;
-	Evas_Object *nf = data;
-	Elm_Object_Item *nf_it;
-
-	navi_button = elm_button_add(nf);
-	elm_object_text_set(navi_button, "Prev");
-	elm_object_style_set(navi_button, "bottom");
-	evas_object_smart_callback_add(navi_button, "clicked",prev_btn_clicked_cb, nf);
-
-	nf_it = elm_naviframe_item_push(nf, "Sound", NULL,NULL, navi_button, NULL);
-}
-
-
-
 
 static void
 create_base_gui(appdata_s *ad)
@@ -348,58 +202,97 @@ create_base_gui(appdata_s *ad)
 	elm_win_resize_object_add(ad->win, ad->conform);
 	evas_object_show(ad->conform);
 
-	/* Naviframe */
-	ad->navi = elm_naviframe_add(ad->conform);
-	evas_object_show(ad->navi);
-	elm_object_content_set(ad->conform, ad->navi);
-
-
 	/* Box */
-	ad->box = elm_box_add(ad->navi);
-	evas_object_size_hint_weight_set(ad->box, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+
+	ad->box = elm_box_add(ad->conform);
+	evas_object_size_hint_weight_set(ad->box, EVAS_HINT_EXPAND,	EVAS_HINT_EXPAND);
+	elm_object_content_set(ad->conform, ad->box);
 	evas_object_show(ad->box);
-	elm_object_content_set(ad->navi, ad->box);
 
-	/* Label */
-	/* Modify the label code */
-	ad->label = elm_label_add(ad->box);
-	elm_object_text_set(ad->label, "<align=center>Hello Tizen</align>");
-	evas_object_size_hint_weight_set(ad->label, 0.0, 0.0);
-	/* Comment out the elm_object_content_set() function */
-	/* elm_object_content_set(ad->conform, ad->label); */
-	evas_object_size_hint_align_set(ad->label, EVAS_HINT_FILL, EVAS_HINT_FILL);
-	evas_object_size_hint_min_set(ad->label, 50, 50);
-	/* Show and add to box */
-	evas_object_show(ad->label);
-	elm_box_pack_end(ad->box, ad->label);
+	ad->box_title = elm_box_add(ad->box);
+	evas_object_size_hint_weight_set(ad->box_title, EVAS_HINT_EXPAND, 0.2);
+	evas_object_show(ad->box_title);
+	elm_box_pack_end(ad->box, ad->box_title);
 
+	//title
 
+	ad->title = elm_label_add(ad->box_title);
+	elm_object_text_set(ad->title, "<font_size = 50><align=center>GEAR BUBBLE</align></font_size>");
+	elm_box_pack_end(ad->box_title, ad->title);
+	evas_object_show(ad->title);
 
-	/* Push the box to the naviframe as a top item to create the first view.  */
-	ad->navi_item = elm_naviframe_item_push(ad->navi, "GEAR BUBBLE", NULL, NULL, ad->box, NULL);
+	ad->box_content = elm_box_add(ad->conform);
+	evas_object_size_hint_weight_set(ad->box_content, EVAS_HINT_EXPAND, 0.6);
+	evas_object_show(ad->box_content);
+//	elm_box_pack_end(ad->box, ad->box_content);
 
 	/* List */
 
 	/* Create the list */
-	ad->list = elm_list_add(ad->box);
+	ad->main_list = elm_list_add(ad->box);
 	/* Set the list size */
-	evas_object_size_hint_weight_set(ad->list, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	evas_object_size_hint_align_set(ad->list, EVAS_HINT_FILL, EVAS_HINT_FILL);
+	evas_object_size_hint_weight_set(ad->main_list, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+	evas_object_size_hint_align_set(ad->main_list, EVAS_HINT_FILL, EVAS_HINT_FILL);
 
 	/* Add an item to the list */
-	elm_list_item_append(ad->list, "1PLAYER", NULL, NULL, select_stage_cb, ad->navi);
-	elm_list_item_append(ad->list, "2PLAYERS", NULL, NULL, list_item2_doubleclicked_cb, ad->navi);
-	elm_list_item_append(ad->list, "MAP EDITOR", NULL, NULL, list_item3_doubleclicked_cb, ad->navi);
-	elm_list_item_append(ad->list, "TUTORIAL", NULL, NULL, list_item4_doubleclicked_cb, ad->navi);
-	elm_list_item_append(ad->list, "RANKING", NULL, NULL, list_item5_doubleclicked_cb, ad->navi);
-	elm_list_item_append(ad->list, "SOUND", NULL, NULL, list_item6_doubleclicked_cb, ad->navi);
+	elm_list_item_append(ad->main_list, "1PLAYER", NULL, NULL, single_play_cb, ad);
+	elm_list_item_append(ad->main_list, "2PLAYERS", NULL, NULL, network_play_cb, ad);
+	elm_list_item_append(ad->main_list, "MAP EDITOR", NULL, NULL, map_editor_cb, ad);
+	elm_list_item_append(ad->main_list, "TUTORIAL", NULL, NULL, tutorial_cb, ad);
+	elm_list_item_append(ad->main_list, "RANKING", NULL, NULL, ranking_cb, ad);
+	elm_list_item_append(ad->main_list, "SOUND", NULL, NULL, sound_cb, ad);
+	elm_list_item_append(ad->main_list, "SENSOR", NULL, NULL, sensor_test_cb, ad);
 
 	/* Show and add to box */
-	evas_object_show(ad->list);
-	elm_box_pack_end(ad->box, ad->list);
+	evas_object_show(ad->main_list);
+	elm_box_pack_end(ad->box, ad->main_list);
 
-	/* Add a callback */
-	//evas_object_smart_callback_add(ad->list, "clicked,double", list_item_doubleclicked_cb, ad->navi);
+
+	ad->box_bottom = elm_box_add(ad->conform);
+	evas_object_size_hint_weight_set(ad->box_bottom, EVAS_HINT_EXPAND, 0.2);
+	evas_object_show(ad->box_bottom);
+	elm_box_pack_end(ad->box, ad->box_bottom);
+
+	//main menu button(text)
+
+
+	ad->bottom = elm_label_add(ad->box_bottom);
+
+	if(ad->sound == 0)
+		elm_object_text_set(ad->bottom, _("<font_size=20><align=center>SOUND OFF</align></font_size>"));
+	else
+		elm_object_text_set(ad->bottom, _("<font_size=20><align=center>SOUND ON</align></font_size>"));
+
+	elm_box_pack_end(ad->box_bottom, ad->bottom);
+	evas_object_show(ad->bottom);
+
+	ad->back_list = elm_list_add(ad->box);
+	evas_object_size_hint_weight_set(ad->back_list, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+	evas_object_size_hint_align_set(ad->back_list, EVAS_HINT_FILL, EVAS_HINT_FILL);
+	elm_list_item_append(ad->back_list, "BACK", NULL, NULL, main_menu_cb, ad);
+
+	ad->single_mode_list = elm_list_add(ad->box);
+	evas_object_size_hint_weight_set(ad->single_mode_list, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+	evas_object_size_hint_align_set(ad->single_mode_list, EVAS_HINT_FILL, EVAS_HINT_FILL);
+	elm_list_item_append(ad->single_mode_list, "SINGLE", NULL, NULL, single_mode_cb, ad);
+	elm_list_item_append(ad->single_mode_list, "VS. COM", NULL, NULL, vs_com_cb, ad);
+
+	ad->stage_size_list = elm_list_add(ad->box);
+	evas_object_size_hint_weight_set(ad->stage_size_list, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+	evas_object_size_hint_align_set(ad->stage_size_list, EVAS_HINT_FILL, EVAS_HINT_FILL);
+	elm_list_item_append(ad->stage_size_list, "3X3", NULL, NULL, stage_size_3_cb, ad);
+	elm_list_item_append(ad->stage_size_list, "4X4", NULL, NULL, stage_size_4_cb, ad);
+	elm_list_item_append(ad->stage_size_list, "5X5", NULL, NULL, stage_size_5_cb, ad);
+	elm_list_item_append(ad->stage_size_list, "6X6", NULL, NULL, stage_size_6_cb, ad);
+
+	ad->stage_list = elm_list_add(ad->box);
+	evas_object_size_hint_weight_set(ad->stage_list, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+	evas_object_size_hint_align_set(ad->stage_list, EVAS_HINT_FILL, EVAS_HINT_FILL);
+	elm_list_item_append(ad->stage_list, "STAGE 1", NULL, NULL, stage1_cb, ad);
+	elm_list_item_append(ad->stage_list, "STAGE 2", NULL, NULL, stage2_cb, ad);
+	elm_list_item_append(ad->stage_list, "STAGE 3", NULL, NULL, stage3_cb, ad);
+	elm_list_item_append(ad->stage_list, "STAGE 4", NULL, NULL, stage4_cb, ad);
+	elm_list_item_append(ad->stage_list, "STAGE 5", NULL, NULL, stage5_cb, ad);
 
 	/* Show window after base gui is set up */
 	evas_object_show(ad->win);
@@ -507,5 +400,5 @@ main(int argc, char *argv[])
 	}
 
 	return ret;
-//june_test
+
 }
