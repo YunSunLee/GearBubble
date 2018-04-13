@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns="http://tizen.org/ns/packages" api-version="2.3.2" package="org.example.drawrect" version="1.0.0">
-	<profile name="wearable" />
-	<ui-application appid="org.example.drawrect" exec="drawrect" type="capp" multiple="false" taskmanage="true" nodisplay="false">
-		<icon>drawrect.png</icon>
-		<label>drawrect</label>
-	</ui-application>
-</manifest>
