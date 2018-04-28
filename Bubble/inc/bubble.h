@@ -41,6 +41,8 @@ Evas_Object *main_list;
 Evas_Object *single_mode_list;
 Evas_Object *stage_size_list;
 Evas_Object *stage_list;
+Evas_Object *stage;
+Evas_Object *sensor_list;
 
 //title
 Evas_Object *title;
@@ -62,28 +64,67 @@ Evas_Object *sound_check;
 
 Evas_Object *rect[36];
 
-sensorinfo sensor_info;
+sensorinfo sensor_info[3];
 
 int sound; //0: off, 1: on
 int single_mode; //0: single, 1: vs com
 int stage_size;
 int stage_num;
+
+/* sensor test label*/
+int sensor_status[2]; //acc sensor, heartrate sensor - 0:off, 1:on
+Evas_Object *sensor_label[4];
+float prev_accel[3];
+float curr_velocity[3];
+float curr_distance[3];
+
+
 };
 typedef struct appdata appdata_s;
 
-static void
-single_play_cb(void *data, Evas_Object *obj, void *event_info);
+static void main_menu_cb(void *data, Evas_Object *obj, void *event_info);
+
+static void single_play_cb(void *data, Evas_Object *obj, void *event_info);
+
+static void network_play_cb(void *data, Evas_Object *obj, void *event_info);
+
+static void map_editor_cb(void *data, Evas_Object *obj, void *event_info);
+
+static void ranking_cb(void *data, Evas_Object *obj, void *event_info);
+
+static void tutorial_cb(void *data, Evas_Object *obj, void *event_info);
+
+static void show_is_supported(appdata_s *ad);
+
+static void _new_sensor_value(sensor_h sensor, sensor_event_s *sensor_data, void *user_data);
+
+static void start_acceleration_sensor(appdata_s *ad);
+
+static void map_creater_cb(void *data, Evas_Object *obj, void *event_info);
+
+static void sensor_test_cb(void *data, Evas_Object *obj, void *event_info);
+
+static void sound_changed_cb(void *data, Evas_Object *obj, void *event_info);
+
+static void sound_cb(void *data, Evas_Object *obj, void *event_info);
+
+/* stage */
+static void stage_size_3_cb(void *data, Evas_Object *obj, void *event_info);
+static void stage_size_4_cb(void *data, Evas_Object *obj, void *event_info);
+static void stage_size_5_cb(void *data, Evas_Object *obj, void *event_info);
+static void stage_size_6_cb(void *data, Evas_Object *obj, void *event_info);
+
+static void stage1_cb(void *data, Evas_Object *obj, void *event_info);
+static void stage2_cb(void *data, Evas_Object *obj, void *event_info);
+static void stage3_cb(void *data, Evas_Object *obj, void *event_info);
+static void stage4_cb(void *data, Evas_Object *obj, void *event_info);
+static void stage5_cb(void *data, Evas_Object *obj, void *event_info);
 
 static void
-network_play_cb(void *data, Evas_Object *obj, void *event_info);
+app_get_resource(const char *res_file_in, char *res_path_out, int res_path_max);
 
-static void
-map_editor_cb(void *data, Evas_Object *obj, void *event_info);
+static void move_test_cb(void *data, Evas_Object *obj, void *event_info);
+static void heart_rate_test_cb(void *data, Evas_Object *obj, void *event_info);
 
-static void
-ranking_cb(void *data, Evas_Object *obj, void *event_info);
-
-static void
-tutorial_cb(void *data, Evas_Object *obj, void *event_info);
 
 #endif /* bubble_H */

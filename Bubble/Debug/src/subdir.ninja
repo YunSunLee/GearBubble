@@ -11,6 +11,16 @@ build src/bubble.o.ast: build_c_fast_ast ../src/bubble.c
 build $sareportdir/src/bubble.o.xml: build_c_fast_sa src/bubble.o.ast || externalFnMap.txt
 build src/bubble.o.txt: build_c_api ../src/bubble.c 
 build $coveragedir/src/bubble.o.cov: build_cov ../src/bubble.c 
+build src/bubble_image.o: build_c ../src/bubble_image.c 
+build src/bubble_image.o.ast: build_c_fast_ast ../src/bubble_image.c 
+build $sareportdir/src/bubble_image.o.xml: build_c_fast_sa src/bubble_image.o.ast || externalFnMap.txt
+build src/bubble_image.o.txt: build_c_api ../src/bubble_image.c 
+build $coveragedir/src/bubble_image.o.cov: build_cov ../src/bubble_image.c 
+build src/make_map.o: build_c ../src/make_map.c 
+build src/make_map.o.ast: build_c_fast_ast ../src/make_map.c 
+build $sareportdir/src/make_map.o.xml: build_c_fast_sa src/make_map.o.ast || externalFnMap.txt
+build src/make_map.o.txt: build_c_api ../src/make_map.c 
+build $coveragedir/src/make_map.o.cov: build_cov ../src/make_map.c 
 build src/map_editor.o: build_c ../src/map_editor.c 
 build src/map_editor.o.ast: build_c_fast_ast ../src/map_editor.c 
 build $sareportdir/src/map_editor.o.xml: build_c_fast_sa src/map_editor.o.ast || externalFnMap.txt
@@ -26,11 +36,21 @@ build src/ranking.o.ast: build_c_fast_ast ../src/ranking.c
 build $sareportdir/src/ranking.o.xml: build_c_fast_sa src/ranking.o.ast || externalFnMap.txt
 build src/ranking.o.txt: build_c_api ../src/ranking.c 
 build $coveragedir/src/ranking.o.cov: build_cov ../src/ranking.c 
+build src/sensor_test.o: build_c ../src/sensor_test.c 
+build src/sensor_test.o.ast: build_c_fast_ast ../src/sensor_test.c 
+build $sareportdir/src/sensor_test.o.xml: build_c_fast_sa src/sensor_test.o.ast || externalFnMap.txt
+build src/sensor_test.o.txt: build_c_api ../src/sensor_test.c 
+build $coveragedir/src/sensor_test.o.cov: build_cov ../src/sensor_test.c 
 build src/single_play.o: build_c ../src/single_play.c 
 build src/single_play.o.ast: build_c_fast_ast ../src/single_play.c 
 build $sareportdir/src/single_play.o.xml: build_c_fast_sa src/single_play.o.ast || externalFnMap.txt
 build src/single_play.o.txt: build_c_api ../src/single_play.c 
 build $coveragedir/src/single_play.o.cov: build_cov ../src/single_play.c 
+build src/sound.o: build_c ../src/sound.c 
+build src/sound.o.ast: build_c_fast_ast ../src/sound.c 
+build $sareportdir/src/sound.o.xml: build_c_fast_sa src/sound.o.ast || externalFnMap.txt
+build src/sound.o.txt: build_c_api ../src/sound.c 
+build $coveragedir/src/sound.o.cov: build_cov ../src/sound.c 
 build src/tutorial.o: build_c ../src/tutorial.c 
 build src/tutorial.o.ast: build_c_fast_ast ../src/tutorial.c 
 build $sareportdir/src/tutorial.o.xml: build_c_fast_sa src/tutorial.o.ast || externalFnMap.txt
