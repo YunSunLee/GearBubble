@@ -71,6 +71,7 @@ int single_mode; //0: single, 1: vs com
 int stage_size;
 int stage_num;
 
+
 /* sensor test label*/
 int sensor_status[2]; //acc sensor, heartrate sensor - 0:off, 1:on
 Evas_Object *sensor_label[4];
@@ -99,6 +100,8 @@ static void show_is_supported(appdata_s *ad);
 static void _new_sensor_value(sensor_h sensor, sensor_event_s *sensor_data, void *user_data);
 
 static void start_acceleration_sensor(appdata_s *ad);
+
+static void start_gyroscope_sensor(appdata_s *ad);
 
 static void map_creater_cb(void *data, Evas_Object *obj, void *event_info);
 

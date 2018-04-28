@@ -80,7 +80,7 @@ create_base_gui(appdata_s *ad)
 		ad->box_content = elm_box_add(ad->conform);
 		evas_object_size_hint_weight_set(ad->box_content, EVAS_HINT_EXPAND, 0.6);
 		evas_object_show(ad->box_content);
-	//	elm_box_pack_end(ad->box, ad->box_content);
+
 
 		/* List */
 
@@ -109,7 +109,7 @@ create_base_gui(appdata_s *ad)
 		evas_object_show(ad->box_bottom);
 		elm_box_pack_end(ad->box, ad->box_bottom);
 
-		//main menu button(text)
+
 
 
 		ad->bottom = elm_label_add(ad->box_bottom);

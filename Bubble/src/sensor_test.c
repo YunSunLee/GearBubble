@@ -17,6 +17,7 @@ static float recent_acc_y[10000];
 static int recent_acc_x_count = 0;
 static int recent_acc_y_count = 0;
 static int maybe_stop_count = 0;
+static int move = 0; //0: none, 1: up, 2: down, 3: left, 4: right
 
 
 static char* direction(appdata_s *ad, float x[], float y[]){
@@ -184,6 +185,14 @@ _new_sensor_value_acc(sensor_h sensor, sensor_event_s *sensor_data, void *user_d
 		 if(maybe_stop_count == 2 && (recent_acc_x_count >= MIN_ACC_DATA || recent_acc_y_count >= MIN_ACC_DATA - 1)){
 			 sprintf(buf, direction(ad, recent_acc_x, recent_acc_y));
 			 elm_object_text_set(ad->sensor_label[3], buf);
+			 if(strcmp(buf, "UP") == 0)
+				 move = 1;
+			 else if(strcmp(buf, "DOWN") == 0)
+				 move = 2;
+			 else if(strcmp(buf, "LEFT") == 0)
+				 move = 3;
+			 else if(strcmp(buf, "RIGHT") == 0)
+				 move = 4;
 			 maybe_stop_count = 0;
 			 recent_acc_x_count = 0;
 			 recent_acc_y_count = 0;

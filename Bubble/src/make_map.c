@@ -6,11 +6,16 @@
  */
 
 #include "bubble.h"
+//#include "sensor_test.c"
 
 static void
 map_creater_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	appdata_s *ad = data;
+
+	ad->sensor_status[0] = 1;
+	start_acceleration_sensor(ad);
+	start_gyroscope_sensor(ad);
 
 	evas_object_hide(ad->box);
 	evas_object_hide(ad->box_content);
