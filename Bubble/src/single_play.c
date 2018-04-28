@@ -1,9 +1,10 @@
 /*
  * single_play.c
  *
- *  Created on: Apr 9, 2018
+ *  Created on: Apr 14, 2018
  *      Author: june
  */
+
 #include "bubble.h"
 
 static void
@@ -25,7 +26,3 @@ single_play_cb(void *data, Evas_Object *obj, void *event_info)
 	evas_object_show(ad->back_list);
 	elm_box_pack_end(ad->box, ad->back_list);
 }
-
-
-
-
