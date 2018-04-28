@@ -42,23 +42,30 @@ struct appdata {
     Evas_Object *stage_size_list;
     Evas_Object *stage_list;
     Evas_Object *stage;
+    Evas_Object *sensor_list;
 
     /* title */
     Evas_Object *title;
     Evas_Object *bottom;
 
-    /* acc sensor test label*/
-    Evas_Object *acc_label[2];
+
 
     Evas_Object *back_list;
 
     Evas_Object *sound_check;
 
-    sensorinfo sensor_info;
+    sensorinfo sensor_info[3];
 
     int sound; //0: off, 1: on
     int stage_size;
     int stage_num;
+
+    /* sensor test label*/
+    int sensor_status[2]; //acc sensor, heartrate sensor - 0:off, 1:on
+	Evas_Object *sensor_label[4];
+    float prev_accel[3];
+    float curr_velocity[3];
+    float curr_distance[3];
 
 };
 typedef struct appdata appdata_s;
@@ -116,5 +123,9 @@ static void stage5_cb(void *data, Evas_Object *obj, void *event_info);
 
 static void
 app_get_resource(const char *res_file_in, char *res_path_out, int res_path_max);
+
+static void move_test_cb(void *data, Evas_Object *obj, void *event_info);
+static void heart_rate_test_cb(void *data, Evas_Object *obj, void *event_info);
+
 
 #endif /* __bubble_H__ */

@@ -29,6 +29,8 @@ static void create_base_gui(appdata_s *ad);
 static void
 main_menu_cb(void *data, Evas_Object *obj, void *event_info){
 	appdata_s *ad = data;
+	ad->sensor_status[0] = 0;
+	ad->sensor_status[1] = 0;
 	create_base_gui(ad);
 }
 
@@ -132,6 +134,8 @@ create_base_gui(appdata_s *ad)
 	evas_object_size_hint_weight_set(ad->stage, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	evas_object_size_hint_align_set(ad->stage, EVAS_HINT_FILL, EVAS_HINT_FILL);
 	elm_list_item_append(ad->stage, "START", NULL, NULL, map_creater_cb, ad);
+
+	eext_object_event_callback_add(ad->win, EEXT_CALLBACK_BACK, win_delete_request_cb, ad);
 
 	/* Show window after base gui is set up */
 	evas_object_show(ad->win);
