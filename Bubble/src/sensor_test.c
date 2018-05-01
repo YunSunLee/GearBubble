@@ -18,6 +18,41 @@ static int recent_acc_x_count = 0;
 static int recent_acc_y_count = 0;
 static int maybe_stop_count = 0;
 
+//1: up, 2: down, 3:left, 4:right
+static int can_move(appdata_s *ad, int direction){
+	if(direction == 1 && ad->user_state[1] != 0)
+		return 1;
+	else if(direction == 2 && ad->user_state[1] != ad->stage_size - 1)
+		return 1;
+	else if(direction == 3 && ad->user_state[0] != 0)
+		return 1;
+	else if(direction == 4 && ad->user_state[0] != ad->stage_size - 1)
+		return 1;
+	else
+		return 0;
+}
+
+static void move(appdata_s *ad, int from, int dest){
+	evas_object_color_set(ad->rect[from], 0, 0, 0, 255);
+	evas_object_color_set(ad->rect[dest], 255, 255, 255, 255);
+}
+
+static void bubble_pop(appdata_s *ad, int x, int y){
+	if(ad->grid_state[x][y][4] == 0){
+		char img_path[PATH_MAX] = "";
+		/* Bubble Popped */
+		app_get_resource("bubble_popped.png", img_path, PATH_MAX);
+		Evas_Object *img2 = evas_object_image_filled_add(ad->canvas);
+
+		img2 = evas_object_image_filled_add(ad->canvas);
+		evas_object_image_file_set(img2, img_path, NULL);
+		elm_grid_pack(ad->grid, img2, 26+(ad->grid_width+1)*x, 31+(ad->grid_width+1)*y, ad->grid_width, ad->grid_width);
+		evas_object_show(img2);
+		ad->grid_state[x][y][4] = 1;
+		ad->user_state[2]++;
+	}
+}
+
 
 static char* direction(appdata_s *ad, float x[], float y[]){
 
@@ -105,13 +140,12 @@ _new_sensor_value_acc(sensor_h sensor, sensor_event_s *sensor_data, void *user_d
 {
 	appdata_s *ad = user_data;
 
+
+
 	float x = sensor_data->values[0];
 	float y = sensor_data->values[1];
 	float z = sensor_data->values[2];
 
-//	float px = ad->prev_accel[0];
-//	float py = ad->prev_accel[1];
-//	float pz = ad->prev_accel[2];
 
 
 	 char buf[1024];
@@ -121,52 +155,23 @@ _new_sensor_value_acc(sensor_h sensor, sensor_event_s *sensor_data, void *user_d
 		 return;
 	 }
 
-	 if(ad->sensor_status[0] == 1){
+	 if(ad->sensor_status[0] >= 1){
 
+		 //play mode
+		 if(ad->sensor_status[0] == 2){
+			 char buf_title[100];
+			 if(ad->user_state[2] == ad->stage_size * ad->stage_size)
+				 sprintf(buf_title, "<align=center>CLEAR</align>");
+			 else
+				 sprintf(buf_title, "<align=center>BUBBLE: %d/%d</align>", ad->user_state[2], ad->stage_size * ad->stage_size);
+			 elm_object_text_set(ad->title, buf_title);
+		 }
+
+
+		//test mode
 		 snprintf(buf, sizeof(buf ), "<font_size = 10>X:%0.1f/Y:%0.1f/Z:%0.1f</font_size>", x, y, z);
 		 elm_object_text_set(ad->sensor_label[0], buf);
-		 //evas_object_text_text_set(ad->title, buf);
 
-
-//		 if(x * px > 10 && (x / px < 0.8 || x / px > 1.2) && fabsf(y * py) < 10 && fabsf(gyro[0]) < 10 && fabsf(gyro[1]) < 10 && wait == 0){
-//			 //ad->curr_velocity[0] += x * 0.1;
-//			 //wait = 1;
-//			 elm_object_text_set(ad->sensor_label[3], (x < 0) ? "Right" : "Left");
-//			 snprintf(buf, sizeof(buf ), "<font_size = 10>X:%0.1f/Y:%0.1f/Z:%0.1f</font_size>", x, y, z);
-//			 elm_object_text_set(ad->sensor_label[1], buf);
-//			 snprintf(buf, sizeof(buf ), "<font_size = 10>X:%0.1f/Y:%0.1f/Z:%0.1f</font_size>", px, py, pz);
-//			 elm_object_text_set(ad->sensor_label[2], buf);
-//		 }
-//		//else
-//			 //ad->curr_velocity[0] = 0;
-//
-//		 if(y * py > 10 && (y / py < 0.8 || y / py > 1.2) && fabsf(x * px) < 10 && fabsf(gyro[0]) < 10 && fabsf(gyro[1]) < 10 && wait == 0){
-//			 //ad->curr_velocity[1] += y * 0.1;
-//			 //wait = 1;
-//			 elm_object_text_set(ad->sensor_label[3], (y < 0) ? "Up" : "Down");
-//			 snprintf(buf, sizeof(buf ), "<font_size = 10>X:%0.1f/Y:%0.1f/Z:%0.1f</font_size>", x, y, z);
-//			 elm_object_text_set(ad->sensor_label[1], buf);
-//			 snprintf(buf, sizeof(buf ), "<font_size = 10>X:%0.1f/Y:%0.1f/Z:%0.1f</font_size>", px, py, pz);
-//			 elm_object_text_set(ad->sensor_label[2], buf);
-//		 }
-		 //else
-			 //ad->curr_velocity[1] = 0;
-	//
-	//	 ad->curr_distance[0] += ad->curr_velocity[0] * 0.1;
-	//	 ad->curr_distance[1] += ad->curr_velocity[1] * 0.1;
-	//
-	//	 snprintf(buf, sizeof(buf ), "<font_size = 10>X:%0.1f/Y:%0.1f/Z:%0.1f</font_size>", ad->curr_velocity[0], ad->curr_velocity[1], ad->curr_velocity[2]);
-	//	 	 elm_object_text_set(ad->sensor_label[1], buf);
-	//	 snprintf(buf, sizeof(buf ), "<font_size = 10>X:%0.1f/Y:%0.1f/Z:%0.1f</font_size>", ad->curr_distance[0], ad->curr_distance[1], ad->curr_distance[2]);
-	//	 	 elm_object_text_set(ad->sensor_label[2], buf);
-	//
-
-//		 if(fabsf(x) > 1)
-//			 ad->prev_accel[0] = x;
-//		 if(fabsf(y) > 1)
-//			 ad->prev_accel[1] = y;
-//		 if(fabsf(z) > 1)
-//			 ad->prev_accel[2] = z;
 
 		 if(fabsf(x) >= 1.5 && gyro[0] < 10 && gyro[1] < 10){
 			 recent_acc_x[recent_acc_x_count] = x;
@@ -184,6 +189,32 @@ _new_sensor_value_acc(sensor_h sensor, sensor_event_s *sensor_data, void *user_d
 		 if(maybe_stop_count == 2 && (recent_acc_x_count >= MIN_ACC_DATA || recent_acc_y_count >= MIN_ACC_DATA - 1)){
 			 sprintf(buf, direction(ad, recent_acc_x, recent_acc_y));
 			 elm_object_text_set(ad->sensor_label[3], buf);
+
+			 if(strcmp(buf, "UP") == 0 && can_move(ad, 1) == 1){
+				 move(ad, ad->stage_size * ad->user_state[1] + ad->user_state[0], ad->stage_size * (ad->user_state[1] - 1) + ad->user_state[0]);
+				 ad->user_state[1]--;
+				 sprintf(buf, "?");
+				 bubble_pop(ad, ad->user_state[0], ad->user_state[1]);
+			 }
+			 else if(strcmp(buf, "DOWN") == 0 && can_move(ad, 2) == 1){
+				 move(ad, ad->stage_size * ad->user_state[1] + ad->user_state[0], ad->stage_size * (ad->user_state[1] + 1) + ad->user_state[0]);
+				 ad->user_state[1]++;
+				 sprintf(buf, "?");
+				 bubble_pop(ad, ad->user_state[0], ad->user_state[1]);
+			 }
+			 else if(strcmp(buf, "LEFT") == 0 && can_move(ad, 3) == 1){
+				 move(ad, ad->stage_size * ad->user_state[1] + ad->user_state[0], ad->stage_size * ad->user_state[1] + (ad->user_state[0] - 1));
+				 ad->user_state[0]--;
+				 sprintf(buf, "?");
+				 bubble_pop(ad, ad->user_state[0], ad->user_state[1]);
+			 }
+			 else if(strcmp(buf, "RIGHT") == 0 && can_move(ad, 4) == 1){
+				 move(ad, ad->stage_size * ad->user_state[1] + ad->user_state[0], ad->stage_size * ad->user_state[1] + (ad->user_state[0] + 1));
+				 ad->user_state[0]++;
+				 sprintf(buf, "?");
+				 bubble_pop(ad, ad->user_state[0], ad->user_state[1]);
+			 }
+
 			 maybe_stop_count = 0;
 			 recent_acc_x_count = 0;
 			 recent_acc_y_count = 0;

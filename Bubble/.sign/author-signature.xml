@@ -4,7 +4,39 @@
 <SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"></SignatureMethod>
 <Reference URI="bin%2Fbubble">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>cRxelj5Undyp3eycG5Q1ZsRp9cesPQfdnT+USCrGRUM=</DigestValue>
+<DigestValue>CY3aRXuuCweng489EZp4L0eNx2/DA/KgCBFZU3rmoMQ=</DigestValue>
+</Reference>
+<Reference URI="res%2F0.png">
+<DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
+<DigestValue>ehJ0VqjKXuh4jtWvb78gxeS7/rxMVcUmvCbrr74CDYM=</DigestValue>
+</Reference>
+<Reference URI="res%2F1.png">
+<DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
+<DigestValue>eRF1tDWsLIi7ATSIqFqznhAsU9v6+pMmCFYq6u45RX4=</DigestValue>
+</Reference>
+<Reference URI="res%2F2.png">
+<DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
+<DigestValue>JiJaZw3eLC1G3QdtWq+TmyQvVfk5WVxbyoXS9VTiXCs=</DigestValue>
+</Reference>
+<Reference URI="res%2F3.png">
+<DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
+<DigestValue>0/cX5+v74ySnTr3n9/ckgSWRfYHSO1lVpkgdjK7vANQ=</DigestValue>
+</Reference>
+<Reference URI="res%2F4.png">
+<DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
+<DigestValue>ixlZ2VrekaXP7Cx3qlTEzJNxJJHPx4pbbDkFE8zsqTk=</DigestValue>
+</Reference>
+<Reference URI="res%2F5.png">
+<DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
+<DigestValue>KrBW72wod7TXbJEcssP1Ubpu7lWSzOCix2du+z5+3IE=</DigestValue>
+</Reference>
+<Reference URI="res%2Fbubble_not_popped.png">
+<DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
+<DigestValue>qfxwGMrKMTIKQksnqaJcPPG5UUNmZkBbBUX0QABbItk=</DigestValue>
+</Reference>
+<Reference URI="res%2Fbubble_popped.png">
+<DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
+<DigestValue>9OWYblnn8S4bnzR6HQ1vLN/+Mz89lq3rhVsEjQbYz0Y=</DigestValue>
 </Reference>
 <Reference URI="shared%2Fres%2Fbubble.png">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
@@ -23,11 +55,11 @@
 </Reference>
 </SignedInfo>
 <SignatureValue>
-KiTLerztTeszjbrtvsOmCrznBxa/Bbg+uKxHgTXcj/sdK9nYUkIK+wfWRHT1K7XGAk7DBTWAsHaX
-GRhYacwjkORBtQR9dclhVdYrEEfz3M57CUknRxMohXqye3dpAcI4UJjp4UdVxSTSpJX6+qb8YAXq
-8+LJzgNTNruWG6/TNE8NVIHYnrChlJEYeSFG+iPJGtVfo8TfW1cb4xIB5DU8LP00JQKiJu8MV/7X
-198HBMdW4IMiEex64wRhBPE90MFhci+qwbL1JFcKpNuzlUx2aZs0pGN10Ssm02iMM6Y5k2vodt16
-T74qKLDhQMZp04BTuixq1PyKWTXQRyln+1nHRQ==
+xIqUchbflDJLLB89TmVcc8mhHF5s18BOobRnUiOq5rdE1o3MqPJJuUS0R54zzA5mchgaxcnRCOcL
+mNuI9wXkSChFFO9NImxuR5hnXzVcBJ9gvTx88sT/76tyaiqLD9n17ev74l4g7SQDKccXtsf94qpb
+DJ1YwYQ2JaywM+O4qvVJZJtX95VNOZ04fPPGVN2/yCz7L/p9Ug5k8BZjDn9qwcJCsRXrEQcOKxCj
+yi3VY73BnO1YHxWHui6OlywpMBzfFXI1Cfa7zc/IMdYtfD4NFfu9AU3Wq3HMA51Wlp18CcEJdpOS
+9UKucAx7nACRQYMydEFl1U3yFIAQmBnf+nskxg==
 </SignatureValue>
 <KeyInfo>
 <X509Data>

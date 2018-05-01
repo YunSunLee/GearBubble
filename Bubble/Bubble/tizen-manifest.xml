@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns="http://tizen.org/ns/packages" api-version="2.3.2" package="org.example.bubble" version="1.0.0">
-	<profile name="wearable" />
-	<ui-application appid="org.example.bubble" exec="bubble" type="capp" multiple="false" taskmanage="true" nodisplay="false">
-		<icon>bubble.png</icon>
-		<label>bubble</label>
-	</ui-application>
-</manifest>

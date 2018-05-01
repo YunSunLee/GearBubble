@@ -6,10 +6,13 @@
  */
 #include "bubble.h"
 
+
 static void
 single_play_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	appdata_s *ad = data;
+
+
 
 	elm_object_text_set(ad->title, "<font_size = 50><align=center>1PLAYER</align></font_size>");
 
@@ -26,7 +29,6 @@ single_play_cb(void *data, Evas_Object *obj, void *event_info)
 	elm_list_item_append(ad->stage_size_list, "3X3", NULL, NULL, stage_size_3_cb, ad);
 	elm_list_item_append(ad->stage_size_list, "4X4", NULL, NULL, stage_size_4_cb, ad);
 	elm_list_item_append(ad->stage_size_list, "5X5", NULL, NULL, stage_size_5_cb, ad);
-	elm_list_item_append(ad->stage_size_list, "6X6", NULL, NULL, stage_size_6_cb, ad);
 	evas_object_show(ad->stage_size_list);
 	elm_box_pack_after(ad->box, ad->stage_size_list, ad->box_title);
 
@@ -64,18 +66,6 @@ static void stage_size_5_cb(void *data, Evas_Object *obj, void *event_info){
 	ad->stage_size = 5;
 
 	elm_object_text_set(ad->title, "<font_size = 50><align=center>5x5</align></font_size>");
-	evas_object_hide(ad->stage_size_list);
-	elm_box_unpack(ad->box, ad->stage_size_list);
-
-	evas_object_show(ad->stage_list);
-	elm_box_pack_after(ad->box, ad->stage_list, ad->box_title);
-}
-static void stage_size_6_cb(void *data, Evas_Object *obj, void *event_info){
-	appdata_s *ad = data;
-
-	ad->stage_size = 6;
-
-	elm_object_text_set(ad->title, "<font_size = 50><align=center>6x6</align></font_size>");
 	evas_object_hide(ad->stage_size_list);
 	elm_box_unpack(ad->box, ad->stage_size_list);
 
