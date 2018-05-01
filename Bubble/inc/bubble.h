@@ -62,7 +62,15 @@ Evas_Object *back_list;
 
 Evas_Object *sound_check;
 
-Evas_Object *rect[36];
+Evas_Object *grid; //added
+Evas_Object *rect[25]; //added
+Evas_Object *canvas; //added
+int grid_width;
+
+/* Initial User_State: grid_x, grid_y, bubble_count, shield_count */
+int user_state[4];
+/* 0: Up, 1: Down, 2: Left, 3: Right, 4: Bubble_Popped? 5:Challenger */
+int grid_state[5][5][6];
 
 sensorinfo sensor_info[3];
 
@@ -73,7 +81,7 @@ int stage_num;
 
 
 /* sensor test label*/
-int sensor_status[2]; //acc sensor, heartrate sensor - 0:off, 1:on
+int sensor_status[2]; //acc sensor, heartrate sensor - 0:off, 1:test_mode, 2:play_mode
 Evas_Object *sensor_label[4];
 float prev_accel[3];
 float curr_velocity[3];

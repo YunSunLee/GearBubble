@@ -31,6 +31,7 @@ main_menu_cb(void *data, Evas_Object *obj, void *event_info){
 	appdata_s *ad = data;
 	ad->sensor_status[0] = 0;
 	ad->sensor_status[1] = 0;
+	ad->user_state[2] = 0;
 	create_base_gui(ad);
 }
 

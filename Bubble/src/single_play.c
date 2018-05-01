@@ -12,6 +12,8 @@ single_play_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	appdata_s *ad = data;
 
+
+
 	elm_object_text_set(ad->title, "<font_size = 50><align=center>1PLAYER</align></font_size>");
 
 	evas_object_hide(ad->main_list);

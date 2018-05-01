@@ -6,14 +6,13 @@
  */
 
 #include "bubble.h"
-//#include "sensor_test.c"
 
 static void
 map_creater_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	appdata_s *ad = data;
 
-	ad->sensor_status[0] = 1;
+	ad->sensor_status[0] = 2;
 	start_acceleration_sensor(ad);
 	start_gyroscope_sensor(ad);
 
@@ -21,92 +20,100 @@ map_creater_cb(void *data, Evas_Object *obj, void *event_info)
 	evas_object_hide(ad->box_content);
 	evas_object_hide(ad->bottom);
 
-	int stage_size = ad->stage_size;
 
-	/* Initial User_State: grid_x, grid_y, bubble_count, shield_count */
-	int user_state[4] = {0, stage_size-1, 0, 0};
-	/* 0: Up, 1: Down, 2: Left, 3: Right, 4: Bubble_Popped? 5:Challenger */
-	int grid_state[stage_size][stage_size][6];
+	//initialize user_state
+	ad->user_state[0] = 0;
+	ad->user_state[1] = ad->stage_size-1;
+	ad->user_state[2] = 0;
+	ad->user_state[3] = 0;
 
-	/* Grid */
-	Evas_Object *grid = elm_grid_add(ad->win);
-	evas_object_size_hint_weight_set(grid, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	elm_object_content_set(ad->conform, grid);
 
-	evas_object_show(grid);
+	//grid
+	ad->grid = elm_grid_add(ad->win);
+	evas_object_size_hint_weight_set(ad->grid, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+	elm_object_content_set(ad->conform, ad->grid);
+
+	evas_object_show(ad->grid);
 
 	/* Information_ Popped Bubble, Timer */
-	ad->title = elm_label_add(grid);
-	elm_object_text_set(ad->title, "<font_size =20><align=center>BUBBLE: </align></font_size>");
-	elm_grid_pack(grid, ad->title, 5, 10, 70, 10);
+	ad->title = elm_label_add(ad->grid);
+	elm_object_text_set(ad->title, "Wait...");
+	elm_grid_pack(ad->grid, ad->title, 5, 10, 100, 10);
 	evas_object_show(ad->title);
 
-	/* Map Design */
-	Evas* canvas = evas_object_evas_get(ad->win);
+//	/* Map Design */
+	ad->canvas = evas_object_evas_get(ad->win);
 
-	double grid_width = (49-stage_size)/ stage_size;
+	ad->grid_width = (49-ad->stage_size)/ ad->stage_size;
 
 	/* Rect- White Wall */
-	Evas_Object *rect = evas_object_rectangle_add(canvas);
+	Evas_Object *rect = evas_object_rectangle_add(ad->canvas);
 	evas_object_color_set(rect, 255, 255, 255, 255);
 	evas_object_show(rect);
-	elm_grid_pack(grid, rect, 25, 30, (grid_width+1)*stage_size+1, (grid_width+1)*stage_size+1);
+	elm_grid_pack(ad->grid, rect, 25, 30, (ad->grid_width+1)*ad->stage_size+1, (ad->grid_width+1)*ad->stage_size+1);
 
 	// Need Revision
 	/* Rect- Red Wall_ horizontal
 	rect = evas_object_rectangle_add(canvas);
 	evas_object_color_set(rect, 255, 0, 0, 255);
 	evas_object_show(rect);
-	elm_grid_pack(grid, rect, 26, 30, grid_width, 1);*/
+	elm_grid_pack(grid, rect, 26, 30, ad->grid_width, 1);*/
 
 	/* Rect- Red Wall_ vertical
 	rect = evas_object_rectangle_add(canvas);
 	evas_object_color_set(rect, 255, 0, 0, 255);
 	evas_object_show(rect);
-	elm_grid_pack(grid, rect, 25, 31, 1, grid_width);*/
+	elm_grid_pack(grid, rect, 25, 31, 1, ad->grid_width);*/
 
 	/* Bubble Image */
 	char img_path[PATH_MAX] = "";
 	app_get_resource("bubble_not_popped.png", img_path, PATH_MAX);
-	Evas_Object *img = evas_object_image_filled_add(canvas);
+	Evas_Object *img = evas_object_image_filled_add(ad->canvas);
 
 	/* Rect- Grid */
-	for (int i=0;i<stage_size;i++){
-	 	for (int j=0;j<stage_size;j++){
-	   		rect = evas_object_rectangle_add(canvas);
-	   		evas_object_color_set(rect, 0, 0, 0, 255);
-	   		evas_object_show(rect);
-	   		elm_grid_pack(grid, rect, 26+(grid_width+1)*i, 31+(grid_width+1)*j, grid_width, grid_width);
+	int rect_count = 0;
+
+	for (int j=0;j<ad->stage_size;j++){ //i,j order change
+	 	for (int i=0;i<ad->stage_size;i++){
+	   		ad->rect[rect_count] = evas_object_rectangle_add(ad->canvas);
+	   		evas_object_color_set(ad->rect[rect_count], 0, 0, 0, 255);
+	   		evas_object_show(ad->rect[rect_count]);
+	   		elm_grid_pack(ad->grid, ad->rect[rect_count], 26+(ad->grid_width+1)*i, 31+(ad->grid_width+1)*j, ad->grid_width, ad->grid_width);
+
+	   		rect_count++;
 
 	   		/* Bubble_ not_ popped */
-	   		img = evas_object_image_filled_add(canvas);
+	   		img = evas_object_image_filled_add(ad->canvas);
 	   		evas_object_image_file_set(img, img_path, NULL);
-	   		elm_grid_pack(grid, img, 26+(grid_width+1)*i, 31+(grid_width+1)*j, grid_width, grid_width);
+	   		elm_grid_pack(ad->grid, img, 26+(ad->grid_width+1)*i, 31+(ad->grid_width+1)*j, ad->grid_width, ad->grid_width);
 	   		evas_object_show(img);
+
+	   		//grid_state initialize
+	   		ad->grid_state[i][j][4] = 0;
+	   		ad->user_state[2] = 1;
 	   	}
 	}
 
 	/* Place of User */
-	rect = evas_object_rectangle_add(canvas);
-	evas_object_color_set(rect, 255, 255, 255, 255);
-	evas_object_show(rect);
-	elm_grid_pack(grid, rect, 26+(grid_width+1)*user_state[0], 31+(grid_width+1)*user_state[1], grid_width, grid_width);
+
+	evas_object_color_set(ad->rect[ad->stage_size * ad->user_state[1] + ad->user_state[0]], 255, 255, 255, 255);
 
 	/* Bubble Popped */
 	app_get_resource("bubble_popped.png", img_path, PATH_MAX);
-	Evas_Object *img2 = evas_object_image_filled_add(canvas);
+	Evas_Object *img2 = evas_object_image_filled_add(ad->canvas);
 
-	img2 = evas_object_image_filled_add(canvas);
+	img2 = evas_object_image_filled_add(ad->canvas);
 	evas_object_image_file_set(img2, img_path, NULL);
-	elm_grid_pack(grid, img2, 26+(grid_width+1)*user_state[0], 31+(grid_width+1)*user_state[1], grid_width, grid_width);
+	elm_grid_pack(ad->grid, img2, 26+(ad->grid_width+1)*ad->user_state[0], 31+(ad->grid_width+1)*ad->user_state[1], ad->grid_width, ad->grid_width);
 	evas_object_show(img2);
+	ad->grid_state[ad->user_state[0]][ad->user_state[1]][4] = 1;
 
 	/* Back_list*/
-	ad->back_list = elm_list_add(grid);
+	ad->back_list = elm_list_add(ad->grid);
 	evas_object_size_hint_weight_set(ad->back_list, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	evas_object_size_hint_align_set(ad->back_list, EVAS_HINT_FILL, EVAS_HINT_FILL);
 	elm_list_item_append(ad->back_list, "MENU", NULL, NULL, main_menu_cb, ad);
-	elm_grid_pack(grid, ad->back_list, 0, 70, 100, 30);
+	elm_grid_pack(ad->grid, ad->back_list, 0, 70, 100, 30);
 	evas_object_show(ad->back_list);
 }
 
