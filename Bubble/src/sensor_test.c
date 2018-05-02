@@ -18,6 +18,13 @@ static int recent_acc_x_count = 0;
 static int recent_acc_y_count = 0;
 static int maybe_stop_count = 0;
 
+static int shake_flag=0;
+static int initial_flag=1;// 첫 심장박동수 측정인지를 체크하기 위
+static int initial_beat=0;
+static int jump_flag=0;
+static int bug_num=10;
+static int shake_cnt=0;
+
 //1: up, 2: down, 3:left, 4:right
 static int can_move(appdata_s *ad, int direction){
 	if(direction == 1 && ad->user_state[1] != 0)
@@ -136,17 +143,74 @@ static void show_is_supported(appdata_s *ad)
 }
 
 static void
-_new_sensor_value_acc(sensor_h sensor, sensor_event_s *sensor_data, void *user_data)
+_new_sensor_value_acc_jump(sensor_h sensor, sensor_event_s *sensor_data, void *user_data)
 {
 	appdata_s *ad = user_data;
 
+	float z = sensor_data->values[2];
 
+	 char buf[1024];
+	 if (sensor_data->value_count < 3)
+	 {
+		 elm_object_text_set(ad->sensor_label[0], "Gathering data...");
+		 return;
+	 }
+	 snprintf(buf, sizeof(buf ), "<font_size = 10>Z:%0.1f</font_size>", z);
+	 elm_object_text_set(ad->sensor_label[0], buf);
+
+	 if(z>20 || z<-20)
+	 {
+		 snprintf(buf, sizeof(buf ), "<font_size = 10>JUMP DETECTED!</font_size>");
+			 elm_object_text_set(ad->sensor_label[1], buf);
+	 }
+}
+
+static void
+_new_sensor_value_acc_shake(sensor_h sensor, sensor_event_s *sensor_data, void *user_data)
+{
+	appdata_s *ad = user_data;
 
 	float x = sensor_data->values[0];
 	float y = sensor_data->values[1];
 	float z = sensor_data->values[2];
 
+	 char buf[1024];
+	 if (sensor_data->value_count < 3)
+	 {
+		 elm_object_text_set(ad->sensor_label[0], "Gathering data...");
+		 return;
+	 }
+	 snprintf(buf, sizeof(buf ), "<font_size = 10>Bugs:%d</font_size>", bug_num);
+	 elm_object_text_set(ad->sensor_label[0], buf);
 
+	 snprintf(buf, sizeof(buf ), "<font_size = 10>Shake:%d</font_size>", shake_cnt);
+	 elm_object_text_set(ad->sensor_label[1], buf);
+
+	 if(fabsf(x)>20 || fabsf(y)>20 || fabsf(z)>20)
+	 {
+		 bug_num --;
+		 shake_cnt++;
+		 snprintf(buf, sizeof(buf ), "<font_size = 10>Bugs:%d</font_size>", bug_num);
+		 elm_object_text_set(ad->sensor_label[0], buf);
+
+		 snprintf(buf, sizeof(buf ), "<font_size = 10>Shake:%d</font_size>", shake_cnt);
+		 elm_object_text_set(ad->sensor_label[1], buf);
+	 }
+	 if(shake_cnt>=10)
+	 {
+		 snprintf(buf, sizeof(buf ), "<font_size = 10>Shake complete!</font_size>");
+		 elm_object_text_set(ad->sensor_label[2], buf);
+	 }
+}
+
+static void
+_new_sensor_value_acc(sensor_h sensor, sensor_event_s *sensor_data, void *user_data)
+{
+	appdata_s *ad = user_data;
+
+	float x = sensor_data->values[0];
+	float y = sensor_data->values[1];
+	float z = sensor_data->values[2];
 
 	 char buf[1024];
 	 if (sensor_data->value_count < 3)
@@ -248,7 +312,6 @@ _new_sensor_value_heart(sensor_h sensor, sensor_event_s *sensor_data, void *user
 {
 	int hr = sensor_data->values[0];
 
-
 	 appdata_s *ad = user_data;
 
 	 char buf[1024];
@@ -260,6 +323,20 @@ _new_sensor_value_heart(sensor_h sensor, sensor_event_s *sensor_data, void *user
 	 if(ad->sensor_status[1] == 1){
 		 snprintf(buf, sizeof(buf), "<font_size = 10>HEART RATE: %d</font_size>", hr);
 		 elm_object_text_set(ad->sensor_label[0], buf);
+	 }
+	 if(hr>30 && initial_flag)
+	 {
+		 initial_beat=hr;
+		 initial_flag=0;
+		 snprintf(buf, sizeof(buf), "<font_size = 10>Initial: %d</font_size>", hr);
+		 elm_object_text_set(ad->sensor_label[1], buf);
+	 }
+	 if(!initial_flag && hr> initial_beat+5)
+	 {
+		 snprintf(buf, sizeof(buf), "<font_size = 10>Initial: %d</font_size>", hr);
+		 elm_object_text_set(ad->sensor_label[2], buf);
+		 snprintf(buf, sizeof(buf), "<font_size = 10>WALL BREAK!</font_size>");
+		 elm_object_text_set(ad->sensor_label[3], buf);
 	 }
 }
 
@@ -274,7 +351,12 @@ start_acceleration_sensor(appdata_s *ad)
 	err = sensor_create_listener(ad->sensor_info[0].sensor, &ad->sensor_info[0].sensor_listener);
 	if (err != SENSOR_ERROR_NONE)
 	goto error_check;
-	sensor_listener_set_event_cb(ad->sensor_info[0].sensor_listener, 100, _new_sensor_value_acc, ad); //INTERVAL
+	if(jump_flag==1)
+		sensor_listener_set_event_cb(ad->sensor_info[0].sensor_listener, 100, _new_sensor_value_acc_jump, ad); //INTERVAL
+	else if(shake_flag==1)
+		sensor_listener_set_event_cb(ad->sensor_info[0].sensor_listener, 100, _new_sensor_value_acc_shake, ad); //INTERVAL
+	else
+		sensor_listener_set_event_cb(ad->sensor_info[0].sensor_listener, 100, _new_sensor_value_acc, ad); //INTERVAL
 	sensor_listener_start(ad->sensor_info[0].sensor_listener);
 	error_check:
 	if (err != SENSOR_ERROR_NONE)
@@ -382,6 +464,8 @@ sensor_test_cb(void *data, Evas_Object *obj, void *event_info)
 	evas_object_size_hint_weight_set(ad->sensor_list, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	evas_object_size_hint_align_set(ad->sensor_list, EVAS_HINT_FILL, EVAS_HINT_FILL);
 	elm_list_item_append(ad->sensor_list, "MOVE TEST", NULL, NULL, move_test_cb, ad);
+	elm_list_item_append(ad->sensor_list, "JUMP TEST", NULL, NULL, jump_test_cb, ad);
+	elm_list_item_append(ad->sensor_list, "SHAKE TEST", NULL, NULL, shake_test_cb, ad);
 	elm_list_item_append(ad->sensor_list, "HEART TEST", NULL, NULL, heart_rate_test_cb, ad);
 	evas_object_show(ad->sensor_list);
 	elm_box_pack_after(ad->box, ad->sensor_list, ad->box_title);
@@ -393,7 +477,66 @@ sensor_test_cb(void *data, Evas_Object *obj, void *event_info)
 	evas_object_show(ad->back_list);
 	elm_box_pack_end(ad->box, ad->back_list);
 }
+static void jump_test_cb(void *data, Evas_Object *obj, void *event_info){
+	appdata_s *ad = data;
 
+	elm_object_text_set(ad->title, "<font_size = 50><align=center>JUMP TEST</align></font_size>");
+
+	evas_object_hide(ad->sensor_list);
+	elm_box_unpack(ad->box, ad->sensor_list);
+	elm_box_clear(ad->box_content);
+	evas_object_hide(ad->bottom);
+
+	elm_box_pack_before(ad->box, ad->box_content, ad->box_bottom);
+
+	wait = 0;
+	//show_is_supported(ad);
+
+	ad->sensor_status[0] = 1;
+	jump_flag=1;
+	start_acceleration_sensor(ad);
+
+	for(int i = 0; i < 4; i++){
+		ad->sensor_label[i] = elm_label_add(ad->box_content);
+		elm_object_text_set(ad->sensor_label[i], "?");
+		evas_object_show(ad->sensor_label[i]);
+		elm_box_pack_end(ad->box_content, ad->sensor_label[i]);
+	}
+
+	evas_object_show(ad->back_list);
+	elm_box_pack_end(ad->box, ad->back_list);
+}
+
+static void shake_test_cb(void *data, Evas_Object *obj, void *event_info){
+	appdata_s *ad = data;
+
+	elm_object_text_set(ad->title, "<font_size = 50><align=center>SHAKE TEST</align></font_size>");
+
+	evas_object_hide(ad->sensor_list);
+	elm_box_unpack(ad->box, ad->sensor_list);
+	elm_box_clear(ad->box_content);
+	evas_object_hide(ad->bottom);
+
+	elm_box_pack_before(ad->box, ad->box_content, ad->box_bottom);
+
+	wait = 0;
+	//show_is_supported(ad);
+
+	ad->sensor_status[0] = 1;
+	shake_flag=1;
+	start_acceleration_sensor(ad);
+
+	for(int i = 0; i < 4; i++){
+		ad->sensor_label[i] = elm_label_add(ad->box_content);
+		elm_object_text_set(ad->sensor_label[i], "?");
+		evas_object_show(ad->sensor_label[i]);
+		elm_box_pack_end(ad->box_content, ad->sensor_label[i]);
+	}
+
+	evas_object_show(ad->back_list);
+	elm_box_pack_end(ad->box, ad->back_list);
+
+}
 static void move_test_cb(void *data, Evas_Object *obj, void *event_info){
 
 	appdata_s *ad = data;
@@ -407,21 +550,12 @@ static void move_test_cb(void *data, Evas_Object *obj, void *event_info){
 
 	elm_box_pack_before(ad->box, ad->box_content, ad->box_bottom);
 
-	for(int i = 0; i < 3; i++){
-		ad->prev_accel[i] = 0;
-		ad->curr_velocity[i] = 0;
-		ad->curr_distance[i] = 0;
-		gyro[i] = 0;
-	}
 	wait = 0;
 	//show_is_supported(ad);
 
 	ad->sensor_status[0] = 1;
 	start_acceleration_sensor(ad);
 	start_gyroscope_sensor(ad);
-
-
-
 
 	for(int i = 0; i < 4; i++){
 		ad->sensor_label[i] = elm_label_add(ad->box_content);
