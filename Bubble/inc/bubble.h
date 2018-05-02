@@ -136,6 +136,7 @@ app_get_resource(const char *res_file_in, char *res_path_out, int res_path_max);
 
 static void move_test_cb(void *data, Evas_Object *obj, void *event_info);
 static void heart_rate_test_cb(void *data, Evas_Object *obj, void *event_info);
-
+static void jump_test_cb(void *data, Evas_Object *obj, void *event_info);
+static void shake_test_cb(void *data, Evas_Object *obj, void *event_info);
 
 #endif /* bubble_H */
