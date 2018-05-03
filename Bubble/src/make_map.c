@@ -7,14 +7,36 @@
 
 #include "bubble.h"
 
+
+static Eina_Bool timer_cb(void *data EINA_UNUSED){
+	appdata_s *ad = data;
+
+	ad->time++;
+
+	return ECORE_CALLBACK_RENEW;
+}
+
 static void
 map_creater_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	appdata_s *ad = data;
 
-	ad->sensor_status[0] = 2;
+
+
+	//start timer
+	ad->timer = ecore_timer_add(1.0, timer_cb, ad);
+	ad->time = 0;
+
+	//create vibration
+	device_haptic_open(0, &ad->handle);
+
+
 	start_acceleration_sensor(ad);
 	start_gyroscope_sensor(ad);
+	start_heartrate_sensor(ad);
+	ad->sensor_status[0] = 2;
+	ad->sensor_status[1] = 2;
+	ad->sensor_status[2] = 2;
 
 	evas_object_hide(ad->box);
 	evas_object_hide(ad->box_content);
@@ -38,7 +60,7 @@ map_creater_cb(void *data, Evas_Object *obj, void *event_info)
 	/* Information_ Popped Bubble, Timer */
 	ad->title = elm_label_add(ad->grid);
 	elm_object_text_set(ad->title, "Wait...");
-	elm_grid_pack(ad->grid, ad->title, 5, 10, 100, 10);
+	elm_grid_pack(ad->grid, ad->title, 5, 10, 100, 20);
 	evas_object_show(ad->title);
 
 //	/* Map Design */

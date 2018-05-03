@@ -7,6 +7,7 @@
 #include <efl_extension.h>
 #include <dlog.h>
 #include <sensor.h>
+#include <device/haptic.h>
 
 #ifdef LOG_TAG
 #undef LOG_TAG
@@ -81,12 +82,16 @@ int stage_num;
 
 
 /* sensor test label*/
-int sensor_status[2]; //acc sensor, heartrate sensor - 0:off, 1:test_mode, 2:play_mode
+int sensor_status[3]; //acc sensor, gyroscope sensor, heartrate sensor // -1: unused, 0:off, 1:test_mode, 2:play_mode
 Evas_Object *sensor_label[4];
-float prev_accel[3];
-float curr_velocity[3];
-float curr_distance[3];
 
+//timer
+Ecore_Timer *timer;
+int time;
+
+//vibration
+haptic_device_h handle;
+haptic_effect_h effect_handle;
 
 };
 typedef struct appdata appdata_s;
@@ -110,6 +115,8 @@ static void _new_sensor_value(sensor_h sensor, sensor_event_s *sensor_data, void
 static void start_acceleration_sensor(appdata_s *ad);
 
 static void start_gyroscope_sensor(appdata_s *ad);
+
+static void start_heartrate_sensor(appdata_s *ad);
 
 static void map_creater_cb(void *data, Evas_Object *obj, void *event_info);
 
@@ -138,5 +145,6 @@ static void move_test_cb(void *data, Evas_Object *obj, void *event_info);
 static void heart_rate_test_cb(void *data, Evas_Object *obj, void *event_info);
 static void jump_test_cb(void *data, Evas_Object *obj, void *event_info);
 static void shake_test_cb(void *data, Evas_Object *obj, void *event_info);
+static void vibe_test_cb(void *data, Evas_Object *obj, void *event_info);
 
 #endif /* bubble_H */

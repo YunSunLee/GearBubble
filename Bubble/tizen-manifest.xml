@@ -8,5 +8,6 @@
     <privileges>
         <privilege>http://tizen.org/privilege/healthinfo</privilege>
         <privilege>http://tizen.org/privilege/bluetooth</privilege>
+        <privilege>http://tizen.org/privilege/haptic</privilege>
     </privileges>
 </manifest>
