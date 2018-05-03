@@ -29,9 +29,11 @@ static void create_base_gui(appdata_s *ad);
 static void
 main_menu_cb(void *data, Evas_Object *obj, void *event_info){
 	appdata_s *ad = data;
-	ad->sensor_status[0] = 0;
-	ad->sensor_status[1] = 0;
+	ad->sensor_status[0] = -1;
+	ad->sensor_status[1] = -1;
+	ad->sensor_status[2] = -1;
 	ad->user_state[2] = 0;
+	ecore_timer_del(ad->timer);
 	create_base_gui(ad);
 }
 
@@ -67,7 +69,7 @@ create_base_gui(appdata_s *ad)
 		evas_object_show(ad->box);
 
 		ad->box_title = elm_box_add(ad->box);
-		evas_object_size_hint_weight_set(ad->box_title, EVAS_HINT_EXPAND, 0.2);
+		evas_object_size_hint_weight_set(ad->box_title, EVAS_HINT_EXPAND, 0.3);
 		evas_object_show(ad->box_title);
 		elm_box_pack_end(ad->box, ad->box_title);
 
@@ -79,7 +81,7 @@ create_base_gui(appdata_s *ad)
 		evas_object_show(ad->title);
 
 		ad->box_content = elm_box_add(ad->conform);
-		evas_object_size_hint_weight_set(ad->box_content, EVAS_HINT_EXPAND, 0.6);
+		evas_object_size_hint_weight_set(ad->box_content, EVAS_HINT_EXPAND, 0.5);
 		evas_object_show(ad->box_content);
 
 
