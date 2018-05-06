@@ -55,12 +55,12 @@ static const char *odd_style[] = {
 	"item/odd_19",
 };
 
-static void
+/*static void
 _win_back_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	appdata_s *ad = data;
 	elm_win_lower(ad->win);
-}
+}*/
 
 static void
 _file_abs_resource_path_get(char *res_file_path, char *abs_path, int buf_size)
