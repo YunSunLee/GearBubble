@@ -379,21 +379,6 @@ _new_sensor_value_acc(sensor_h sensor, sensor_event_s *sensor_data, void *user_d
 
 				 ecore_timer_del(ad->timer);
 
-				 read_rank_file(ad); // get previous record
-
-				 int stage = ad->stage_num; // get stage
-				 int tmp;
-
-				 if (ad->ranking[5*stage-1] > tmp_time){
-					 ad->ranking[5*stage-1] = tmp_time;
-					 for (int i = 5*stage-1 ; i>5*(stage-1); i--){
-						 if(ad->ranking[i-1] > ad->ranking[i]){
-			 			 	 swap(&ad->ranking[i-1], &ad->ranking[i]);
-			 		 	 }
-			 	 	 }
-			 	 }
-			 	 write_rank_file(ad);
-
 			 	 device_haptic_vibrate(ad->handle, 1000, 100, &ad->effect_handle); //vibration
 
 			 }

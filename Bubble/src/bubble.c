@@ -34,6 +34,23 @@ main_menu_cb(void *data, Evas_Object *obj, void *event_info){
 	ad->user_state[2] = 0;
 	ecore_timer_del(ad->timer);
 	create_base_gui(ad);
+
+	if((ad->user_state[2] == ad->stage_size * ad->stage_size)&(ad->timer>0)){
+		 read_rank_file(ad); // get previous record
+
+		 int stage = ad->stage_num; // get stage
+		 int tmp;
+
+		 if (ad->ranking[5*stage-1] > tmp_time){
+			 ad->ranking[5*stage-1] = tmp_time;
+			 for (int i = 5*stage-1 ; i>5*(stage-1); i--){
+				 if(ad->ranking[i-1] > ad->ranking[i]){
+	 			 	 swap(&ad->ranking[i-1], &ad->ranking[i]);
+	 		 	 }
+	 	 	 }
+	 	 }
+	 	 write_rank_file(ad);
+	}
 }
 
 
