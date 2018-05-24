@@ -69,6 +69,10 @@ static void bubble_pop(appdata_s *ad, int x, int y){
 		ad->grid_state[x][y][4] = 1;
 		ad->user_state[2]++;
 		device_haptic_vibrate(ad->handle, 200, 50, &ad->effect_handle); //vibration
+
+		/* Pop sound */
+		if( get_player_state(ad->player) != PLAYER_STATE_PLAYING)
+			player_start(ad->player);
 	}
 }
 
@@ -369,8 +373,28 @@ _new_sensor_value_acc(sensor_h sensor, sensor_event_s *sensor_data, void *user_d
 			 char buf_title[100];
 			 if(ad->user_state[2] == ad->stage_size * ad->stage_size){
 				 sprintf(buf_title, "<font_size=20><align=center>TIME: %d <br>CLEAR!!!</align></font_size>", ad->time);
+
+				/* store time */
+				int tmp_time = ad->time; // finished time
+
 				 ecore_timer_del(ad->timer);
-				 device_haptic_vibrate(ad->handle, 1000, 100, &ad->effect_handle); //vibration
+
+				 read_rank_file(ad); // get previous record
+
+				 int stage = ad->stage_num; // get stage
+				 int tmp;
+
+				 if (ad->ranking[5*stage-1] > tmp_time){
+					 ad->ranking[5*stage-1] = tmp_time;
+					 for (int i = 5*stage-1 ; i>5*(stage-1); i--){
+						 if(ad->ranking[i-1] > ad->ranking[i]){
+			 			 	 swap(&ad->ranking[i-1], &ad->ranking[i]);
+			 		 	 }
+			 	 	 }
+			 	 }
+			 	 write_rank_file(ad);
+
+			 	 device_haptic_vibrate(ad->handle, 1000, 100, &ad->effect_handle); //vibration
 
 			 }
 			 else

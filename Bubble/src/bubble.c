@@ -8,7 +8,6 @@
 #include "sensor_test.c"
 #include "make_map.c"
 #include "sound.c"
-#include "bubble_image.c"
 
 static void
 win_delete_request_cb(void *data, Evas_Object *obj, void *event_info)
