@@ -148,6 +148,12 @@ create_base_gui(appdata_s *ad)
 
 		/* Show window after base gui is set up */
 		evas_object_show(ad->win);
+
+		/* Create player */
+		ad->player = create_player();
+
+		/* Load audio file to Player */
+		prepare_player(ad, 0);
 }
 
 static bool

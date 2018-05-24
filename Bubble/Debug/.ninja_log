@@ -15,3 +15,14 @@
 7	2884	0	src/sensor_test.o	d044bf4733744df
 3	870	0	src/bubble.o	98a31a2835a238e
 871	1129	0	bubble	9e25fbfc9cc39f4b
+11	1258	0	src/sound.o	91ccb2c5d9ec5cc6
+20	1347	0	src/make_map.o	74a2e50efcffdb6a
+14	2023	0	src/tutorial.o	7f2513e8f14e9923
+8	2127	0	src/single_play.o	75f674fb98ec3bd4
+3	2412	0	src/sensor_test.o	d044bf4733744df
+17	2728	0	src/bubble.o	98a31a2835a238e
+1309	3221	0	src/map_editor.o	7929d950f390ca30
+1409	3564	0	src/network.o	4682e3c24f5464cd
+2074	3714	0	src/ranking.o	b593c0cbdf7abb8f
+3741	4053	0	bubble	9e25fbfc9cc39f4b
+5	274	0	bubble	9e25fbfc9cc39f4b
