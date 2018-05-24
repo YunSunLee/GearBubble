@@ -231,6 +231,11 @@ main(int argc, char *argv[])
 appdata_s ad = {0,};
 int ret = 0;
 
+//initial sensors
+ad.sensor_status[0] = 0;
+ad.sensor_status[1] = 0;
+ad.sensor_status[2] = 0;
+
 ui_app_lifecycle_callback_s event_callback = {0,};
 app_event_handler_h handlers[5] = {NULL, };
 
