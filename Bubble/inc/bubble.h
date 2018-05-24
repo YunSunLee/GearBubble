@@ -47,6 +47,7 @@ Evas_Object *sensor_list;
 
 //title
 Evas_Object *title;
+Evas_Object *title2;
 Evas_Object *bottom;
 
 //acc sensor test label
@@ -64,8 +65,9 @@ Evas_Object *back_list;
 Evas_Object *sound_check;
 
 Evas_Object *grid; //added
+Evas_Object *grid2;
 Evas_Object *rect[25]; //added
-Evas_Object *canvas; //added
+Evas *canvas; //added
 int grid_width;
 
 /* Initial User_State: grid_x, grid_y, bubble_count, shield_count */
@@ -146,5 +148,10 @@ static void heart_rate_test_cb(void *data, Evas_Object *obj, void *event_info);
 static void jump_test_cb(void *data, Evas_Object *obj, void *event_info);
 static void shake_test_cb(void *data, Evas_Object *obj, void *event_info);
 static void vibe_test_cb(void *data, Evas_Object *obj, void *event_info);
+static void check_obstacle(appdata_s *ad);
+static int start_jmp_sensor(appdata_s *ad);
+
+static void draw_map(appdata_s *ad);
+
 
 #endif /* bubble_H */
