@@ -19,7 +19,7 @@ static int recent_acc_y_count = 0;
 static int maybe_stop_count = 0;
 
 static int shake_flag=0;
-static int initial_flag=1;// 泥??ъ옣諛뺣룞??痢≪젙?몄?瑜?泥댄겕?섍린 ??
+static int initial_flag=1;// 泥??ъ옣諛뺣룞??痢≪젙?몄?瑜?泥댄겕?섍린 ??
 static int initial_beat=0;
 static int jump_flag=0;
 static int heart_flag=0;
@@ -202,6 +202,7 @@ static void check_obstacle(appdata_s *ad){
 
 			ad->sensor_status[0] = 2; //play mode
 			is_obstacle=1;
+			return;
 		}
 		else if(ad->user_state[0]==1 && ad->user_state[1]==2 )
 		{	//show Heart image
@@ -215,6 +216,7 @@ static void check_obstacle(appdata_s *ad){
 
 			ad->sensor_status[2] = 2; //play mode
 			is_obstacle=1;
+			return;
 		}
 		else if((ad->user_state[0]==2 && ad->user_state[1]==1) || (ad->user_state[0]==3 && ad->user_state[1]==3) )
 		{	//show Bug image
@@ -226,8 +228,10 @@ static void check_obstacle(appdata_s *ad){
 
 			ad->sensor_status[0] = 2;
 			is_obstacle=1;
+			return;
 		}
 	}
+	is_obstacle=0;
 	//return 0;
 }
 
