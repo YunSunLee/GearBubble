@@ -86,9 +86,6 @@ static void	draw_map(appdata_s *ad){
 				evas_object_image_file_set(img, img_path, NULL);
 				elm_grid_pack(ad->grid, img, 26+(ad->grid_width+1)*i, 31+(ad->grid_width+1)*j, ad->grid_width, ad->grid_width);
 				evas_object_show(img);
-
-				app_get_resource("bubble_not_popped.png", img_path, PATH_MAX);
-				continue;
 			}
 			else if(i==1 && j==2)
 			{
@@ -99,9 +96,6 @@ static void	draw_map(appdata_s *ad){
 				evas_object_image_file_set(img, img_path, NULL);
 				elm_grid_pack(ad->grid, img, 26+(ad->grid_width+1)*i, 31+(ad->grid_width+1)*j, ad->grid_width, ad->grid_width);
 				evas_object_show(img);
-
-				app_get_resource("bubble_not_popped.png", img_path, PATH_MAX);
-				continue;
 			}
 			else if((i==2 && j==1)||(i==3 && j==3))
 			{
@@ -112,18 +106,16 @@ static void	draw_map(appdata_s *ad){
 				evas_object_image_file_set(img, img_path, NULL);
 				elm_grid_pack(ad->grid, img, 26+(ad->grid_width+1)*i, 31+(ad->grid_width+1)*j, ad->grid_width, ad->grid_width);
 				evas_object_show(img);
-
-				app_get_resource("bubble_not_popped.png", img_path, PATH_MAX);
-				continue;
 			}
-
-
-			/* Bubble_ not_ popped */
-			img = evas_object_image_filled_add(ad->canvas);
-			evas_object_image_file_set(img, img_path, NULL);
-			if(ad->grid_state[i][j][4] == 0){
-				elm_grid_pack(ad->grid, img, 26+(ad->grid_width+1)*i, 31+(ad->grid_width+1)*j, ad->grid_width, ad->grid_width);
-				evas_object_show(img);
+			else
+			{
+				/* Bubble_ not_ popped */
+				app_get_resource("bubble_not_popped.png", img_path, PATH_MAX);
+				img = evas_object_image_filled_add(ad->canvas);
+				evas_object_image_file_set(img, img_path, NULL);
+				if(ad->grid_state[i][j][4] == 0){
+					elm_grid_pack(ad->grid, img, 26+(ad->grid_width+1)*i, 31+(ad->grid_width+1)*j, ad->grid_width, ad->grid_width);
+					evas_object_show(img);
 			}
 
 
