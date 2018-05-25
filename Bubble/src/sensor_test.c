@@ -269,9 +269,6 @@ _new_sensor_value_acc_jump(sensor_h sensor, sensor_event_s *sensor_data, void *u
 
 
 	}
-	else{
-		evas_object_show(ad->grid);
-	}
 	if((z>10 || z<-10) && jump_flag == 1)
 	 {
 		 elm_object_text_set(ad->title2, "<font_size = 50><align=center>JUMP detected!</align></font_size>");
@@ -282,7 +279,7 @@ _new_sensor_value_acc_jump(sensor_h sensor, sensor_event_s *sensor_data, void *u
 
 		 ad->user_state[2]++;
 
-		 start_acceleration_sensor(ad);
+		 start_acceleration_sensor(ad);//to enable move
 
 		 draw_map(ad);
 	 }
