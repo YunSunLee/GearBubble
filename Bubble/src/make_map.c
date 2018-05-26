@@ -165,7 +165,7 @@ static void	draw_map(appdata_s *ad){
 	ad->back_list = elm_list_add(ad->grid);
 	evas_object_size_hint_weight_set(ad->back_list, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	evas_object_size_hint_align_set(ad->back_list, EVAS_HINT_FILL, EVAS_HINT_FILL);
-	elm_list_item_append(ad->back_list, "MENU", NULL, NULL, store_rank_menu_cb, ad);
+	elm_list_item_append(ad->back_list, "MENU", NULL, NULL, main_menu_cb, ad);
 	elm_grid_pack(ad->grid, ad->back_list, 0, 70, 100, 30);
 	evas_object_show(ad->back_list);
 }

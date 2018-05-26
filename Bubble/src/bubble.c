@@ -28,29 +28,31 @@ static void create_base_gui(appdata_s *ad);
 static void
 main_menu_cb(void *data, Evas_Object *obj, void *event_info){
 	appdata_s *ad = data;
+
+	if((ad->user_state[2] == ad->stage_size * ad->stage_size) &(ad->time>0)){
+		read_rank_file(ad); // get previous record
+
+		 /* store time */
+		int stage = ad->stage_num; // get stage
+
+		if (ad->ranking[5*stage-1] > ad->time){
+		 	 ad->ranking[5*stage-1] =  ad->time;
+
+		 	 for (int i = 5*stage-1 ; i>5*(stage-1); i--){
+				 if(ad->ranking[i-1] > ad->ranking[i]){
+		 			 swap(&ad->ranking[i-1], &ad->ranking[i]);
+		 		 }
+		 	 }
+		}
+		write_rank_file(ad);
+	}
+
 	ad->sensor_status[0] = -1;
 	ad->sensor_status[1] = -1;
 	ad->sensor_status[2] = -1;
 	ad->user_state[2] = 0;
 	ecore_timer_del(ad->timer);
 	create_base_gui(ad);
-
-	if((ad->user_state[2] == ad->stage_size * ad->stage_size)&(ad->timer>0)){
-		 read_rank_file(ad); // get previous record
-
-		 int stage = ad->stage_num; // get stage
-		 int tmp;
-
-		 if (ad->ranking[5*stage-1] > tmp_time){
-			 ad->ranking[5*stage-1] = tmp_time;
-			 for (int i = 5*stage-1 ; i>5*(stage-1); i--){
-				 if(ad->ranking[i-1] > ad->ranking[i]){
-	 			 	 swap(&ad->ranking[i-1], &ad->ranking[i]);
-	 		 	 }
-	 	 	 }
-	 	 }
-	 	 write_rank_file(ad);
-	}
 }
 
 
