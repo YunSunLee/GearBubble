@@ -75,9 +75,12 @@ Evas_Object *rect[25]; //added
 Evas *canvas; //added
 int grid_width;
 
-/* Initial User_State: grid_x, grid_y, bubble_count, shield_count */
+/* Initial User_State 0: grid_x, 1: grid_y, 2: bubble_count, 3: shield_count */
 int user_state[4];
-/* 0: Up, 1: Down, 2: Left, 3: Right, 4: Bubble_Popped? 5:Challenger */
+
+/* Grid_State 0: Up, 1: Down, 2: Left, 3: Right, 4: Bubble_Popped? 5:Challenger */
+/* grid_state[][][4]==0: bubble not popped, 1: bubble popped */
+/* grid_state[][][5]==0: bubble, 1: hurdle, 2: heart, 3: bugs */
 int grid_state[5][5][6];
 
 sensorinfo sensor_info[3];
@@ -119,50 +122,48 @@ typedef struct appdata appdata_s;
 static void create_base_gui(appdata_s *ad);
 
 static void main_menu_cb(void *data, Evas_Object *obj, void *event_info);
-
 static void single_play_cb(void *data, Evas_Object *obj, void *event_info);
-
 static void network_play_cb(void *data, Evas_Object *obj, void *event_info);
-
 static void map_editor_cb(void *data, Evas_Object *obj, void *event_info);
-
 static void ranking_cb(void *data, Evas_Object *obj, void *event_info);
-
 static void tutorial_cb(void *data, Evas_Object *obj, void *event_info);
-
-static void show_is_supported(appdata_s *ad);
-
-static void _new_sensor_value(sensor_h sensor, sensor_event_s *sensor_data, void *user_data);
-
-static void start_acceleration_sensor(appdata_s *ad);
-
-static void start_gyroscope_sensor(appdata_s *ad);
-
-static void start_heartrate_sensor(appdata_s *ad);
-
 static void map_creater_cb(void *data, Evas_Object *obj, void *event_info);
-
 static void sensor_test_cb(void *data, Evas_Object *obj, void *event_info);
-
 static void sound_changed_cb(void *data, Evas_Object *obj, void *event_info);
-
 static void sound_cb(void *data, Evas_Object *obj, void *event_info);
 
 /* stage */
+static void stage_size_common(void *data, int stage_size);
 static void stage_size_3_cb(void *data, Evas_Object *obj, void *event_info);
 static void stage_size_4_cb(void *data, Evas_Object *obj, void *event_info);
 static void stage_size_5_cb(void *data, Evas_Object *obj, void *event_info);
 static void stage_size_6_cb(void *data, Evas_Object *obj, void *event_info);
 
+static void stage__common(void *data, int stage);
 static void stage1_cb(void *data, Evas_Object *obj, void *event_info);
 static void stage2_cb(void *data, Evas_Object *obj, void *event_info);
 static void stage3_cb(void *data, Evas_Object *obj, void *event_info);
 static void stage4_cb(void *data, Evas_Object *obj, void *event_info);
 static void stage5_cb(void *data, Evas_Object *obj, void *event_info);
+static void stage6_cb(void *data, Evas_Object *obj, void *event_info);
+static void stage7_cb(void *data, Evas_Object *obj, void *event_info);
+static void stage8_cb(void *data, Evas_Object *obj, void *event_info);
+static void stage9_cb(void *data, Evas_Object *obj, void *event_info);
+static void stage10_cb(void *data, Evas_Object *obj, void *event_info);
+static void stage11_cb(void *data, Evas_Object *obj, void *event_info);
+static void stage12_cb(void *data, Evas_Object *obj, void *event_info);
+static void stage13_cb(void *data, Evas_Object *obj, void *event_info);
+static void stage14_cb(void *data, Evas_Object *obj, void *event_info);
+static void stage15_cb(void *data, Evas_Object *obj, void *event_info);
 
-static void
-app_get_resource(const char *res_file_in, char *res_path_out, int res_path_max);
+static void app_get_resource(const char *res_file_in, char *res_path_out, int res_path_max);
 
+/* sensor */
+static void show_is_supported(appdata_s *ad);
+static void _new_sensor_value(sensor_h sensor, sensor_event_s *sensor_data, void *user_data);
+static void start_acceleration_sensor(appdata_s *ad);
+static void start_gyroscope_sensor(appdata_s *ad);
+static void start_heartrate_sensor(appdata_s *ad);
 static void move_test_cb(void *data, Evas_Object *obj, void *event_info);
 static void heart_rate_test_cb(void *data, Evas_Object *obj, void *event_info);
 static void jump_test_cb(void *data, Evas_Object *obj, void *event_info);
@@ -171,9 +172,10 @@ static void vibe_test_cb(void *data, Evas_Object *obj, void *event_info);
 static void check_obstacle(appdata_s *ad);
 static int start_jmp_sensor(appdata_s *ad);
 
+/* map creater */
 static void draw_map(appdata_s *ad);
 
-//map_editor
+/* map_editor */
 static void map_editor_size_3_cb(void *data, Evas_Object *obj, void *event_info);
 static void map_editor_size_4_cb(void *data, Evas_Object *obj, void *event_info);
 static void map_editor_size_5_cb(void *data, Evas_Object *obj, void *event_info);
@@ -210,7 +212,6 @@ static void stop_player(void *data, Evas_Object *obj, void *event_info);
 static inline const char* get_resource_path(const char *file_path);
 static void prepare_player(appdata_s* ad, int index);
 static void start_player(void *data, Evas_Object *obj, void *event_info);
-
 
 
 #endif /* bubble_H */
