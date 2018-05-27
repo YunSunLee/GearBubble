@@ -8,7 +8,6 @@
 #include "sensor_test.c"
 #include "make_map.c"
 #include "sound.c"
-#include "bubble_image.c"
 
 static void
 win_delete_request_cb(void *data, Evas_Object *obj, void *event_info)
@@ -24,11 +23,30 @@ appdata_s *ad = data;
 elm_win_lower(ad->win);
 }
 
-static void create_base_gui(appdata_s *ad);
+
 
 static void
 main_menu_cb(void *data, Evas_Object *obj, void *event_info){
 	appdata_s *ad = data;
+
+	if((ad->user_state[2] == ad->stage_size * ad->stage_size) &(ad->time>0)){
+		read_rank_file(ad); // get previous record
+
+		 /* store time */
+		int stage = ad->stage_num; // get stage
+
+		if (ad->ranking[5*stage-1] > ad->time){
+			 ad->ranking[5*stage-1] =  ad->time;
+
+			 for (int i = 5*stage-1 ; i>5*(stage-1); i--){
+				 if(ad->ranking[i-1] > ad->ranking[i]){
+					 swap(&ad->ranking[i-1], &ad->ranking[i]);
+				 }
+			 }
+		}
+		write_rank_file(ad);
+	}
+
 	ad->sensor_status[0] = -1;
 	ad->sensor_status[1] = -1;
 	ad->sensor_status[2] = -1;
@@ -36,7 +54,6 @@ main_menu_cb(void *data, Evas_Object *obj, void *event_info){
 	ecore_timer_del(ad->timer);
 	create_base_gui(ad);
 }
-
 
 static void
 create_base_gui(appdata_s *ad)
@@ -149,6 +166,12 @@ create_base_gui(appdata_s *ad)
 
 		/* Show window after base gui is set up */
 		evas_object_show(ad->win);
+
+		/* Create player */
+		ad->player = create_player();
+
+		/* Load audio file to Player */
+		prepare_player(ad, 0);
 }
 
 static bool

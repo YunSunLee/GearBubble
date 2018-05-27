@@ -76,6 +76,8 @@ static void stage_size_5_cb(void *data, Evas_Object *obj, void *event_info){
 static void stage1_cb(void *data, Evas_Object *obj, void *event_info){
 	appdata_s *ad = data;
 
+	ad-> stage_num = 1;
+
 	elm_object_text_set(ad->title, "<font_size = 50><align=center>stage1</align></font_size>");
 	evas_object_hide(ad->stage_list);
 	elm_box_unpack(ad->box, ad->stage_list);

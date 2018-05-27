@@ -11,11 +11,6 @@ build src/bubble.o.ast: build_c_fast_ast ../src/bubble.c
 build $sareportdir/src/bubble.o.xml: build_c_fast_sa src/bubble.o.ast || externalFnMap.txt
 build src/bubble.o.txt: build_c_api ../src/bubble.c 
 build $coveragedir/src/bubble.o.cov: build_cov ../src/bubble.c 
-build src/bubble_image.o: build_c ../src/bubble_image.c 
-build src/bubble_image.o.ast: build_c_fast_ast ../src/bubble_image.c 
-build $sareportdir/src/bubble_image.o.xml: build_c_fast_sa src/bubble_image.o.ast || externalFnMap.txt
-build src/bubble_image.o.txt: build_c_api ../src/bubble_image.c 
-build $coveragedir/src/bubble_image.o.cov: build_cov ../src/bubble_image.c 
 build src/make_map.o: build_c ../src/make_map.c 
 build src/make_map.o.ast: build_c_fast_ast ../src/make_map.c 
 build $sareportdir/src/make_map.o.xml: build_c_fast_sa src/make_map.o.ast || externalFnMap.txt
