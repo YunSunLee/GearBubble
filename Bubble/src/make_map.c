@@ -1,10 +1,3 @@
-/*
- * make_map.c
- *
- *  Created on: Apr 13, 2018
- *      Author: yunsun
- */
-
 #include "bubble.h"
 
 
@@ -35,7 +28,7 @@ static void	draw_map(appdata_s *ad){
 	elm_grid_pack(ad->grid, ad->title, 5, 10, 100, 20);
 	evas_object_show(ad->title);
 
-//	/* Map Design */
+	/* Map Design */
 	ad->canvas = evas_object_evas_get(ad->win);
 
 	ad->grid_width = (49-ad->stage_size)/ ad->stage_size;
@@ -77,7 +70,8 @@ static void	draw_map(appdata_s *ad){
 			rect_count++;
 
 			/* Place obstacles on the specific location of map */
-			if(((i==0 && j==0) || (i==4 && j==4)))
+			/* hurdle : grid_state[][][5] =1 */
+			if(ad->grid_state[i][j][5]==1)
 			{
 				app_get_resource("hurdle.png", img_path, PATH_MAX);
 				Evas_Object *img = evas_object_image_filled_add(ad->canvas);
@@ -90,7 +84,8 @@ static void	draw_map(appdata_s *ad){
 				app_get_resource("bubble_not_popped.png", img_path, PATH_MAX);
 				continue;
 			}
-			else if(i==1 && j==2)
+			/* heart : grid_state[][][5] =2 */
+			else if(ad->grid_state[i][j][5]==2)
 			{
 				app_get_resource("heart.png", img_path, PATH_MAX);
 				Evas_Object *img = evas_object_image_filled_add(ad->canvas);
@@ -103,7 +98,8 @@ static void	draw_map(appdata_s *ad){
 				app_get_resource("bubble_not_popped.png", img_path, PATH_MAX);
 				continue;
 			}
-			else if((i==2 && j==1)||(i==3 && j==3))
+			/* bug : grid_state[][][5] =3 */
+			else if(ad->grid_state[i][j][5]==3)
 			{
 				app_get_resource("bug.png", img_path, PATH_MAX);
 				Evas_Object *img = evas_object_image_filled_add(ad->canvas);
@@ -125,14 +121,10 @@ static void	draw_map(appdata_s *ad){
 				elm_grid_pack(ad->grid, img, 26+(ad->grid_width+1)*i, 31+(ad->grid_width+1)*j, ad->grid_width, ad->grid_width);
 				evas_object_show(img);
 			}
-
-
-
 		}
 	}
 
 	/* Place of User */
-
 	evas_object_color_set(ad->rect[ad->stage_size * ad->user_state[1] + ad->user_state[0]], 255, 255, 255, 255);
 
 	/* Bubble Popped */
@@ -146,7 +138,7 @@ static void	draw_map(appdata_s *ad){
 	ad->grid_state[ad->user_state[0]][ad->user_state[1]][4] = 1;
 
 
-	//popped already
+	/* popped already */
 	for (int j=0;j<ad->stage_size;j++){
 		for (int i=0;i<ad->stage_size;i++){
 			if(ad->grid_state[i][j][4] == 1){
@@ -210,6 +202,5 @@ map_creater_cb(void *data, Evas_Object *obj, void *event_info)
 
 	draw_map(ad);
 }
-
 
 

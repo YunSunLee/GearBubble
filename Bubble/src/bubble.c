@@ -23,7 +23,7 @@ appdata_s *ad = data;
 elm_win_lower(ad->win);
 }
 
-
+static void create_base_gui(appdata_s *ad);
 
 static void
 main_menu_cb(void *data, Evas_Object *obj, void *event_info){
@@ -36,13 +36,13 @@ main_menu_cb(void *data, Evas_Object *obj, void *event_info){
 		int stage = ad->stage_num; // get stage
 
 		if (ad->ranking[5*stage-1] > ad->time){
-			 ad->ranking[5*stage-1] =  ad->time;
+		 	 ad->ranking[5*stage-1] =  ad->time;
 
-			 for (int i = 5*stage-1 ; i>5*(stage-1); i--){
+		 	 for (int i = 5*stage-1 ; i>5*(stage-1); i--){
 				 if(ad->ranking[i-1] > ad->ranking[i]){
-					 swap(&ad->ranking[i-1], &ad->ranking[i]);
-				 }
-			 }
+		 			 swap(&ad->ranking[i-1], &ad->ranking[i]);
+		 		 }
+		 	 }
 		}
 		write_rank_file(ad);
 	}
@@ -54,6 +54,7 @@ main_menu_cb(void *data, Evas_Object *obj, void *event_info){
 	ecore_timer_del(ad->timer);
 	create_base_gui(ad);
 }
+
 
 static void
 create_base_gui(appdata_s *ad)
@@ -79,7 +80,6 @@ create_base_gui(appdata_s *ad)
 		evas_object_show(ad->conform);
 
 		/* Box */
-
 		ad->box = elm_box_add(ad->conform);
 		evas_object_size_hint_weight_set(ad->box, EVAS_HINT_EXPAND,	EVAS_HINT_EXPAND);
 		elm_object_content_set(ad->conform, ad->box);
@@ -90,8 +90,7 @@ create_base_gui(appdata_s *ad)
 		evas_object_show(ad->box_title);
 		elm_box_pack_end(ad->box, ad->box_title);
 
-		//title
-
+		/* Title */
 		ad->title = elm_label_add(ad->box_title);
 		elm_object_text_set(ad->title, "<font_size = 50><align=center>GEAR BUBBLE</align></font_size>");
 		elm_box_pack_end(ad->box_title, ad->title);
@@ -129,9 +128,6 @@ create_base_gui(appdata_s *ad)
 		evas_object_show(ad->box_bottom);
 		elm_box_pack_end(ad->box, ad->box_bottom);
 
-
-
-
 		ad->bottom = elm_label_add(ad->box_bottom);
 
 		if(ad->sound == 0)
@@ -147,15 +143,6 @@ create_base_gui(appdata_s *ad)
 		evas_object_size_hint_align_set(ad->back_list, EVAS_HINT_FILL, EVAS_HINT_FILL);
 		elm_list_item_append(ad->back_list, "MENU", NULL, NULL, main_menu_cb, ad);
 
-
-		ad->stage_list = elm_list_add(ad->box);
-		evas_object_size_hint_weight_set(ad->stage_list, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-		evas_object_size_hint_align_set(ad->stage_list, EVAS_HINT_FILL, EVAS_HINT_FILL);
-		elm_list_item_append(ad->stage_list, "STAGE 1", NULL, NULL, stage1_cb, ad);
-		elm_list_item_append(ad->stage_list, "STAGE 2", NULL, NULL, stage2_cb, ad);
-		elm_list_item_append(ad->stage_list, "STAGE 3", NULL, NULL, stage3_cb, ad);
-		elm_list_item_append(ad->stage_list, "STAGE 4", NULL, NULL, stage4_cb, ad);
-		elm_list_item_append(ad->stage_list, "STAGE 5", NULL, NULL, stage5_cb, ad);
 
 		ad->stage = elm_list_add(ad->box);
 		evas_object_size_hint_weight_set(ad->stage, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
