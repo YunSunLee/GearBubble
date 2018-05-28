@@ -457,25 +457,15 @@ custom_map1_cb(void *data, Evas_Object *obj, void *event_info)
 		fp = fopen(filepath, "r");
 	}
 	char *map_str;
-	map_str=fgets(str, sizeof(str), fp);
+	map_str=fgets(str, sizeof(str), fp);//read final_grid_info[] from file
 
 	//change format from final_grid_info[] to grid_state[][][]
 	int x=0;
 	while(x< strlen(map_str))//until the end of final_grid_info
-	{
 		for(int i=0;i<size;i++)
-		{
 			for(int j=0;j<size;j++)
-			{
 				for(int k=0;k<6;k++)
-				{
-					ad->grid_state[j][i][k]=map_str[x];
-
-					x++;
-				}
-			}
-		}
-	}
+					ad->grid_state[j][i][k]=map_str[x++];
 
 	//set stage_size
 	ad->stage_size = size;

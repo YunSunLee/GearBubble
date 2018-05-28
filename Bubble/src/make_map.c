@@ -161,8 +161,6 @@ map_creater_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	appdata_s *ad = data;
 
-
-
 	//start timer
 	ad->timer = ecore_timer_add(1.0, timer_cb, ad);
 	ad->time = 0;
