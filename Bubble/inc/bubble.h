@@ -38,6 +38,12 @@ Evas_Object *box_title;
 Evas_Object *box_content;
 Evas_Object *box_bottom;
 
+/* map_editor list */
+Evas_Object *box2; //main box
+Evas_Object *box_title2;
+Evas_Object *box_content2;
+Evas_Object *main_list2;
+
 /* List */
 Evas_Object *main_list;
 Evas_Object *single_mode_list;
@@ -137,7 +143,6 @@ static void stage_size_common(void *data, int stage_size);
 static void stage_size_3_cb(void *data, Evas_Object *obj, void *event_info);
 static void stage_size_4_cb(void *data, Evas_Object *obj, void *event_info);
 static void stage_size_5_cb(void *data, Evas_Object *obj, void *event_info);
-static void stage_size_6_cb(void *data, Evas_Object *obj, void *event_info);
 
 static void stage__common(void *data, int stage);
 static void stage1_cb(void *data, Evas_Object *obj, void *event_info);
@@ -174,11 +179,15 @@ static int start_jmp_sensor(appdata_s *ad);
 
 /* map creater */
 static void draw_map(appdata_s *ad);
+static Eina_Bool timer_cb(void *data EINA_UNUSED);
 
 /* map_editor */
 static void map_editor_size_3_cb(void *data, Evas_Object *obj, void *event_info);
 static void map_editor_size_4_cb(void *data, Evas_Object *obj, void *event_info);
 static void map_editor_size_5_cb(void *data, Evas_Object *obj, void *event_info);
+
+static void
+custom_map1_cb(void *data, Evas_Object *obj, void *event_info);
 
 /* ranking */
 static void app_get_data(const char *res_file_in, char *res_path_out, int res_path_max);

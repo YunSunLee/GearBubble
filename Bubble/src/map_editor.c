@@ -30,8 +30,12 @@ static int size;
 static char final_grid_info[200];
 static int position = 0;
 
+static int read_map_num=0;//for creating map(to know from which file to read final_grid_info)
+static int write_map_num=0;//for writing to file(to know to which file to write final_grid_info)
+
 static void _rotary_selector_create_wall(appdata_s *ad);
 static void _rotary_selector_create_obstacle(appdata_s *ad);
+
 
 static void map_editor_decode_3(appdata_s *ad, char grid_info[]){
 	//initial map create
@@ -343,16 +347,163 @@ _item_clicked_cb_obstacle(void *data, Evas_Object *obj, void *event_info)
 	   }
    }
    else if(selected_item == save_item){
+	   //maps are stored in map1.txt, map2.txt, map3.txt, map4.txt, map5.txt
+	   //will keep track of current map number by write_map_num
+	   write_map_num++;
+	   if(write_map_num==6)
+		   write_map_num=1;
 
-	   //여기에 파일을 저장하는 것을 구현
-	   //final_grid_info를 저장
+	   char filepath[PATH_MAX] = {0,};
+	   switch(write_map_num){
+	   	   case 1:
+	   		   app_get_data("map1.txt", filepath, PATH_MAX);
+	   		   break;
+	   	   case 2:
+	   		   app_get_data("map2.txt", filepath, PATH_MAX);
+	   		   break;
+	   	   case 3:
+	   		   app_get_data("map3.txt", filepath, PATH_MAX);
+	   		   break;
+	   	   case 4:
+	   		   app_get_data("map4.txt", filepath, PATH_MAX);
+	   		   break;
+	   	   case 5:
+	   		   app_get_data("map5.txt", filepath, PATH_MAX);
+	   		   break;
+	   }
 
-  	   create_base_gui(ad);
+	   //write to map.txt final_grid_info
+	   FILE *fp;
+	   fp = fopen(filepath, "w");
+	   fputs(final_grid_info, fp);
+	   fputs("\n", fp);
+	   fclose(fp);
+
+	   /* hide current display */
+	   evas_object_hide(ad->rotary_selector);
+	   for(int i=0;i<=size*size;i++)
+		   evas_object_hide(ad->map_editor_rect[i]);
+
+	   //show list of custom maps
+		/* Box */
+		ad->box2 = elm_box_add(ad->conform);
+		evas_object_size_hint_weight_set(ad->box2, EVAS_HINT_EXPAND,	EVAS_HINT_EXPAND);
+		elm_object_content_set(ad->conform, ad->box2);
+		evas_object_show(ad->box2);
+
+		ad->box_title2 = elm_box_add(ad->box2);
+		evas_object_size_hint_weight_set(ad->box_title2, EVAS_HINT_EXPAND, 0.3);
+		evas_object_show(ad->box_title2);
+		elm_box_pack_end(ad->box2, ad->box_title2);
+
+		/* Title */
+		ad->title2 = elm_label_add(ad->box_title2);
+		elm_object_text_set(ad->title2, "<font_size = 50><align=center>Select map</align></font_size>");
+		elm_box_pack_end(ad->box_title2, ad->title2);
+		evas_object_show(ad->title2);
+
+		ad->box_content2 = elm_box_add(ad->conform);
+		evas_object_size_hint_weight_set(ad->box_content2, EVAS_HINT_EXPAND, 0.5);
+		evas_object_show(ad->box_content2);
+
+
+		/* List */
+		/* Create the list */
+		ad->main_list2 = elm_list_add(ad->box2);
+		/* Set the list size */
+		evas_object_size_hint_weight_set(ad->main_list2, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+		evas_object_size_hint_align_set(ad->main_list2, EVAS_HINT_FILL, EVAS_HINT_FILL);
+
+		/* Add an item to the list */
+		elm_list_item_append(ad->main_list2, "MAP 1", NULL, NULL, custom_map1_cb, ad);
+		elm_list_item_append(ad->main_list2, "MAP 2", NULL, NULL, custom_map1_cb, ad);
+		elm_list_item_append(ad->main_list2, "MAP 3", NULL, NULL, custom_map1_cb, ad);
+		elm_list_item_append(ad->main_list2, "MAP 4", NULL, NULL, custom_map1_cb, ad);
+		elm_list_item_append(ad->main_list2, "MAP 5", NULL, NULL, custom_map1_cb, ad);
+
+		/* Show and add to box */
+		evas_object_show(ad->main_list2);
+		elm_box_pack_end(ad->box2, ad->main_list2);
+
    }
 
    else if(selected_item == exit_item){ //without save
 	   create_base_gui(ad);
    }
+}
+
+static void
+custom_map1_cb(void *data, Evas_Object *obj, void *event_info)
+{
+	read_map_num=1;
+
+	//display
+	appdata_s *ad = data;
+	elm_object_text_set(ad->title2, "<font_size = 50><align=center>MAP 1</align></font_size>");
+	evas_object_hide(ad->main_list2);
+	elm_box_unpack(ad->box, ad->main_list2);
+
+	//read from file
+	// open file
+	// get from data
+	FILE *fp;
+	char str[200];
+	char filepath[PATH_MAX] = {0,};
+	app_get_data("map1.txt", filepath, PATH_MAX);
+	fp = fopen(filepath, "r");
+	// get from res
+	if(fp==NULL){
+		app_get_resource("map1.txt", filepath, PATH_MAX);
+		fp = fopen(filepath, "r");
+	}
+	char *map_str;
+	map_str=fgets(str, sizeof(str), fp);
+
+	//change format from final_grid_info[] to grid_state[][][]
+	int x=0;
+	while(x< strlen(map_str))//until the end of final_grid_info
+	{
+		for(int i=0;i<size;i++)
+		{
+			for(int j=0;j<size;j++)
+			{
+				for(int k=0;k<6;k++)
+				{
+					ad->grid_state[j][i][k]=map_str[x];
+
+					x++;
+				}
+			}
+		}
+	}
+
+	//set stage_size
+	ad->stage_size = size;
+
+	//start timer
+	ad->timer = ecore_timer_add(1.0, timer_cb, ad);
+	ad->time = 0;
+
+	//create vibration
+	device_haptic_open(0, &ad->handle);
+
+	start_acceleration_sensor(ad);
+	start_gyroscope_sensor(ad);
+	start_heartrate_sensor(ad);
+	ad->sensor_status[0] = 2;
+	ad->sensor_status[1] = 2;
+	ad->sensor_status[2] = 2;
+
+	//initialize user_state and grid state
+	ad->user_state[0] = 0;
+	ad->user_state[1] = ad->stage_size-1;
+	ad->user_state[2] = 0;
+	ad->user_state[3] = 0;
+
+	ad->user_state[2] = 1;
+
+	//hand it over to make map
+	draw_map(ad);
 
 }
 

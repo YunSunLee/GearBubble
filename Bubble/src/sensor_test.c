@@ -199,6 +199,7 @@ static void check_obstacle(appdata_s *ad){
 			//connect accelerometer
 			ad->sensor_status[0] = 0;
 			jump_flag=1;
+			jmp_detect=0;
 			start_acceleration_sensor(ad);
 
 			ad->sensor_status[0] = 2; //play mode
