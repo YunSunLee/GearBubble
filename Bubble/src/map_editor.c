@@ -30,7 +30,6 @@ static int size;
 static char final_grid_info[200];
 static int position = 0;
 
-static int read_map_num=0;//for creating map(to know from which file to read final_grid_info)
 static int write_map_num=0;//for writing to file(to know to which file to write final_grid_info)
 
 static void _rotary_selector_create_wall(appdata_s *ad);
@@ -376,6 +375,16 @@ _item_clicked_cb_obstacle(void *data, Evas_Object *obj, void *event_info)
 	   //write to map.txt final_grid_info
 	   FILE *fp;
 	   fp = fopen(filepath, "w");
+	   //char tmp[size*size*6];
+/*	   //change int array(final_grid_info) to char array
+
+	   for(int i=0;i<size*size*6;i++)
+		   tmp[i] = final_grid_info[i]+'0';
+*/
+	   //elm_object_text_set(ad->title2, tmp);
+
+	   //itoa(final_grid_info, tmp,10);
+	   //fputs(tmp, fp);
 	   fputs(final_grid_info, fp);
 	   fputs("\n", fp);
 	   fclose(fp);
@@ -407,7 +416,6 @@ _item_clicked_cb_obstacle(void *data, Evas_Object *obj, void *event_info)
 		evas_object_size_hint_weight_set(ad->box_content2, EVAS_HINT_EXPAND, 0.5);
 		evas_object_show(ad->box_content2);
 
-
 		/* List */
 		/* Create the list */
 		ad->main_list2 = elm_list_add(ad->box2);
@@ -427,7 +435,6 @@ _item_clicked_cb_obstacle(void *data, Evas_Object *obj, void *event_info)
 		elm_box_pack_end(ad->box2, ad->main_list2);
 
    }
-
    else if(selected_item == exit_item){ //without save
 	   create_base_gui(ad);
    }
@@ -436,15 +443,13 @@ _item_clicked_cb_obstacle(void *data, Evas_Object *obj, void *event_info)
 static void
 custom_map1_cb(void *data, Evas_Object *obj, void *event_info)
 {
-	read_map_num=1;
-
 	//display
 	appdata_s *ad = data;
-	elm_object_text_set(ad->title2, "<font_size = 50><align=center>MAP 1</align></font_size>");
-	evas_object_hide(ad->main_list2);
-	elm_box_unpack(ad->box, ad->main_list2);
+	//elm_object_text_set(ad->title2, "<font_size = 50><align=center>MAP 1</align></font_size>");
+	//evas_object_hide(ad->main_list2);
+	//elm_box_unpack(ad->box, ad->main_list2);
 
-	//read from file
+	//read from file to char *map_str
 	// open file
 	// get from data
 	FILE *fp;
@@ -460,13 +465,19 @@ custom_map1_cb(void *data, Evas_Object *obj, void *event_info)
 	char *map_str;
 	map_str=fgets(str, sizeof(str), fp);//read final_grid_info[] from file
 
+	//elm_object_text_set(ad->title2, map_str);
+
 	//change format from final_grid_info[] to grid_state[][][]
 	int x=0;
 	while(x< strlen(map_str))//until the end of final_grid_info
 		for(int i=0;i<size;i++)
 			for(int j=0;j<size;j++)
 				for(int k=0;k<6;k++)
-					ad->grid_state[j][i][k]=map_str[x++];
+				{
+					int temp = map_str[x++]-'0';
+					ad->grid_state[j][i][k]=temp;
+				}
+	elm_object_text_set(ad->title2, map_str);
 
 	//set stage_size
 	ad->stage_size = size;
