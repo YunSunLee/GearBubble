@@ -27,7 +27,7 @@ Eext_Object_Item *items[5];
 Eext_Object_Item *exit_item;
 Eext_Object_Item *save_item;
 static int size;
-static char final_grid_info[200];
+static char final_grid_info[200] ="000000000000000000000000000000000000000000000000000000";
 static int position = 0;
 
 static int write_map_num=0;//for writing to file(to know to which file to write final_grid_info)
@@ -385,7 +385,8 @@ _item_clicked_cb_obstacle(void *data, Evas_Object *obj, void *event_info)
 
 	   //itoa(final_grid_info, tmp,10);
 	   //fputs(tmp, fp);
-	   fputs(final_grid_info, fp);
+	   //fputs(final_grid_info, fp);
+	   fprintf(fp,final_grid_info);
 	   fputs("\n", fp);
 	   fclose(fp);
 

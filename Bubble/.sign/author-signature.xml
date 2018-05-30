@@ -4,7 +4,7 @@
 <SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"></SignatureMethod>
 <Reference URI="bin%2Fbubble">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>8NAQfh8eMCItwFAZ3vsHq9XXjwzdlGIULOiglpyt0XM=</DigestValue>
+<DigestValue>UAIXhpbP3QttUaly9qredBZmsldu+MJw6PgSYzK50s4=</DigestValue>
 </Reference>
 <Reference URI="res%2F0.png">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
@@ -82,6 +82,26 @@
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
 <DigestValue>c5rTac7LemABF24DaTVLOSW/p6qR6qs8T/15xgLQdsc=</DigestValue>
 </Reference>
+<Reference URI="res%2Fmap1.txt">
+<DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
+<DigestValue>A8vfVFRVNtUmSBc1v7jE4l4ARpgr5zp3M4HsjFYx2pU=</DigestValue>
+</Reference>
+<Reference URI="res%2Fmap2.txt">
+<DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
+<DigestValue>47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=</DigestValue>
+</Reference>
+<Reference URI="res%2Fmap3.txt">
+<DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
+<DigestValue>47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=</DigestValue>
+</Reference>
+<Reference URI="res%2Fmap4.txt">
+<DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
+<DigestValue>47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=</DigestValue>
+</Reference>
+<Reference URI="res%2Fmap5.txt">
+<DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
+<DigestValue>47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=</DigestValue>
+</Reference>
 <Reference URI="res%2Fobstacle.png">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
 <DigestValue>iXAsWWo60y/W52Mxl0uSBBQTMw/95eRm1UgmABM+b5g=</DigestValue>
@@ -115,11 +135,11 @@
 </Reference>
 </SignedInfo>
 <SignatureValue>
-OsdkU/EqngH08Aim021kelPy8YsC8Y+X8StL6somggHFUyDw23nzPwhTwRQ8u9RVnHf01OuslsLJ
-f3zVmz5qHS48aUocfkzYsE1NXvLNETNaukbDbtSIlTTlE3N3raefhSrOG7CgKwcb8Q261OVWECq+
-xN4FZ1nvgYTAeO+oO04qylGjRGvtKaXD1duDjU5wjf14zKirvvkXMeq4DEPGw2v9Mt9XrbZEGNeJ
-/gaL7m2/HKa4LHD34iWnquBoCyP2FqK9c/ZXtDmQQYgrN4d1uOwtVfS+tsBLIiJu7/yJM/7rswsB
-DjQdY/VrRWjDS31UFFv16qxbyXokhiXUVL+6/A==
+D+boznJ5hxl99R7gUsoWVfW58zpQ2/PS0z3W51DxrukhuMJ+qnf4PAu3Cec+gFEpbFfG4vyVcWz9
+EHFt+RA4qkZc3tuaesrnehyhHCqc/HLVgon7YXPD4Pu7JbL8Uh2wFS2UYX3WpsZ27j8ZMG7+KoOL
+MRd4zrUiklc77pgAJIp0quqmT+IzHTxJ6PN89ZJE93Jt+xNQRuPKMorOXAWTLJRqkgp67N4cnATG
+ulI+7Jb2HX4mpH5O0dbN5PWVjA3i4jGTlWZoIKyAldCDAVheBpbZFXMY2FCfdN4UDOoPeNceEiqJ
+ePERXUDHXQGkH0dClvL1l0qm6umECgA3+fxjHw==
 </SignatureValue>
 <KeyInfo>
 <X509Data>
