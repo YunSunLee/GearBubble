@@ -349,6 +349,7 @@ _item_clicked_cb_obstacle(void *data, Evas_Object *obj, void *event_info)
    else if(selected_item == save_item){
 	   //maps are stored in map1.txt, map2.txt, map3.txt, map4.txt, map5.txt
 	   //will keep track of current map number by write_map_num
+	   //if 6th map needs to be made, it will overwrite map1.txt(maximum num of maps: 5)
 	   write_map_num++;
 	   if(write_map_num==6)
 		   write_map_num=1;
