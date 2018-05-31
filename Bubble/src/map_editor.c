@@ -287,25 +287,25 @@ _item_clicked_cb_obstacle(void *data, Evas_Object *obj, void *event_info)
 	   }
    }
    else if(selected_item == items[1] && position != size*(size-1)){ //bug
-	   if(final_grid_info[6 * position + 5] == '2'){
-		   evas_object_color_set(ad->map_editor_rect[position], 0, 0, 0, 255);
-		   final_grid_info[6 * position + 5] = '0';
-	   }
-	   else{
-		   evas_object_color_set(ad->map_editor_rect[position], 255, 255, 0, 100);
-		   final_grid_info[6 * position + 5] = '2';
-	   }
-   }
-   else if(selected_item == items[2] && position != size*(size-1)){ //heart
-	   if(final_grid_info[6 * position + 5] == '3'){
-		   evas_object_color_set(ad->map_editor_rect[position], 0, 0, 0, 255);
-		   final_grid_info[6 * position + 5] = '0';
-	   }
-	   else{
-		   evas_object_color_set(ad->map_editor_rect[position], 255, 0, 0, 100);
-		   final_grid_info[6 * position + 5] = '3';
-	   }
-   }
+   	   if(final_grid_info[6 * position + 5] == '2'){
+   		   evas_object_color_set(ad->map_editor_rect[position], 0, 0, 0, 255);
+   		   final_grid_info[6 * position + 5] = '0';
+   	   }
+   	   else{
+   		   evas_object_color_set(ad->map_editor_rect[position], 255, 255, 0, 100);
+   		   final_grid_info[6 * position + 5] = '2';
+   	   }
+      }
+      else if(selected_item == items[2] && position != size*(size-1)){ //heart
+   	   if(final_grid_info[6 * position + 5] == '3'){
+   		   evas_object_color_set(ad->map_editor_rect[position], 0, 0, 0, 255);
+   		   final_grid_info[6 * position + 5] = '0';
+   	   }
+   	   else{
+   		   evas_object_color_set(ad->map_editor_rect[position], 255, 0, 0, 100);
+   		   final_grid_info[6 * position + 5] = '3';
+   	   }
+      }
    else if(selected_item == items[3]){ //next
 	   position = (position + 1) % (size*size);
 
@@ -375,17 +375,6 @@ _item_clicked_cb_obstacle(void *data, Evas_Object *obj, void *event_info)
 	   //write to map.txt final_grid_info
 	   FILE *fp;
 	   fp = fopen(filepath, "w");
-	   //char tmp[size*size*6];
-/*	   //change int array(final_grid_info) to char array
-
-	   for(int i=0;i<size*size*6;i++)
-		   tmp[i] = final_grid_info[i]+'0';
-*/
-	   //elm_object_text_set(ad->title2, tmp);
-
-	   //itoa(final_grid_info, tmp,10);
-	   //fputs(tmp, fp);
-	   //fputs(final_grid_info, fp);
 	   fprintf(fp,final_grid_info);
 	   fputs("\n", fp);
 	   fclose(fp);
@@ -426,10 +415,10 @@ _item_clicked_cb_obstacle(void *data, Evas_Object *obj, void *event_info)
 
 		/* Add an item to the list */
 		elm_list_item_append(ad->main_list2, "MAP 1", NULL, NULL, custom_map1_cb, ad);
-		elm_list_item_append(ad->main_list2, "MAP 2", NULL, NULL, custom_map1_cb, ad);
-		elm_list_item_append(ad->main_list2, "MAP 3", NULL, NULL, custom_map1_cb, ad);
-		elm_list_item_append(ad->main_list2, "MAP 4", NULL, NULL, custom_map1_cb, ad);
-		elm_list_item_append(ad->main_list2, "MAP 5", NULL, NULL, custom_map1_cb, ad);
+		elm_list_item_append(ad->main_list2, "MAP 2", NULL, NULL, custom_map2_cb, ad);
+		elm_list_item_append(ad->main_list2, "MAP 3", NULL, NULL, custom_map3_cb, ad);
+		elm_list_item_append(ad->main_list2, "MAP 4", NULL, NULL, custom_map4_cb, ad);
+		elm_list_item_append(ad->main_list2, "MAP 5", NULL, NULL, custom_map5_cb, ad);
 
 		/* Show and add to box */
 		evas_object_show(ad->main_list2);
@@ -466,18 +455,15 @@ custom_map1_cb(void *data, Evas_Object *obj, void *event_info)
 	char *map_str;
 	map_str=fgets(str, sizeof(str), fp);//read final_grid_info[] from file
 
-	//elm_object_text_set(ad->title2, map_str);
-
 	//change format from final_grid_info[] to grid_state[][][]
 	int x=0;
-	while(x< strlen(map_str))//until the end of final_grid_info
-		for(int i=0;i<size;i++)
-			for(int j=0;j<size;j++)
-				for(int k=0;k<6;k++)
-				{
-					int temp = map_str[x++]-'0';
-					ad->grid_state[j][i][k]=temp;
-				}
+	for(int i=0;i<size;i++)
+		for(int j=0;j<size;j++)
+			for(int k=0;k<6;k++)
+			{
+				int temp = map_str[x++]-'0';
+				ad->grid_state[j][i][k]=temp;
+			}
 	elm_object_text_set(ad->title2, map_str);
 
 	//set stage_size
@@ -509,6 +495,274 @@ custom_map1_cb(void *data, Evas_Object *obj, void *event_info)
 	draw_map(ad);
 
 }
+
+static void
+custom_map2_cb(void *data, Evas_Object *obj, void *event_info)
+{
+	//display
+	appdata_s *ad = data;
+	//elm_object_text_set(ad->title2, "<font_size = 50><align=center>MAP 1</align></font_size>");
+	//evas_object_hide(ad->main_list2);
+	//elm_box_unpack(ad->box, ad->main_list2);
+
+	//read from file to char *map_str
+	// open file
+	// get from data
+	FILE *fp;
+	char str[200];
+	char filepath[PATH_MAX] = {0,};
+	app_get_data("map2.txt", filepath, PATH_MAX);
+	fp = fopen(filepath, "r");
+	// get from res
+	if(fp==NULL){
+		app_get_resource("map2.txt", filepath, PATH_MAX);
+		fp = fopen(filepath, "r");
+	}
+	char *map_str;
+	map_str=fgets(str, sizeof(str), fp);//read final_grid_info[] from file
+
+	//change format from final_grid_info[] to grid_state[][][]
+	int x=0;
+	for(int i=0;i<size;i++)
+		for(int j=0;j<size;j++)
+			for(int k=0;k<6;k++)
+			{
+				int temp = map_str[x++]-'0';
+				ad->grid_state[j][i][k]=temp;
+			}
+	elm_object_text_set(ad->title2, map_str);
+
+	//set stage_size
+	ad->stage_size = size;
+
+	//start timer
+	ad->timer = ecore_timer_add(1.0, timer_cb, ad);
+	ad->time = 0;
+
+	//create vibration
+	device_haptic_open(0, &ad->handle);
+
+	start_acceleration_sensor(ad);
+	start_gyroscope_sensor(ad);
+	start_heartrate_sensor(ad);
+	ad->sensor_status[0] = 2;
+	ad->sensor_status[1] = 2;
+	ad->sensor_status[2] = 2;
+
+	//initialize user_state and grid state
+	ad->user_state[0] = 0;
+	ad->user_state[1] = ad->stage_size-1;
+	ad->user_state[2] = 0;
+	ad->user_state[3] = 0;
+
+	ad->user_state[2] = 1;
+
+	//hand it over to make map
+	draw_map(ad);
+
+}
+
+
+static void
+custom_map3_cb(void *data, Evas_Object *obj, void *event_info)
+{
+	//display
+	appdata_s *ad = data;
+	//elm_object_text_set(ad->title2, "<font_size = 50><align=center>MAP 1</align></font_size>");
+	//evas_object_hide(ad->main_list2);
+	//elm_box_unpack(ad->box, ad->main_list2);
+
+	//read from file to char *map_str
+	// open file
+	// get from data
+	FILE *fp;
+	char str[200];
+	char filepath[PATH_MAX] = {0,};
+	app_get_data("map3.txt", filepath, PATH_MAX);
+	fp = fopen(filepath, "r");
+	// get from res
+	if(fp==NULL){
+		app_get_resource("map3.txt", filepath, PATH_MAX);
+		fp = fopen(filepath, "r");
+	}
+	char *map_str;
+	map_str=fgets(str, sizeof(str), fp);//read final_grid_info[] from file
+
+	//change format from final_grid_info[] to grid_state[][][]
+	int x=0;
+	for(int i=0;i<size;i++)
+		for(int j=0;j<size;j++)
+			for(int k=0;k<6;k++)
+			{
+				int temp = map_str[x++]-'0';
+				ad->grid_state[j][i][k]=temp;
+			}
+	elm_object_text_set(ad->title2, map_str);
+
+	//set stage_size
+	ad->stage_size = size;
+
+	//start timer
+	ad->timer = ecore_timer_add(1.0, timer_cb, ad);
+	ad->time = 0;
+
+	//create vibration
+	device_haptic_open(0, &ad->handle);
+
+	start_acceleration_sensor(ad);
+	start_gyroscope_sensor(ad);
+	start_heartrate_sensor(ad);
+	ad->sensor_status[0] = 2;
+	ad->sensor_status[1] = 2;
+	ad->sensor_status[2] = 2;
+
+	//initialize user_state and grid state
+	ad->user_state[0] = 0;
+	ad->user_state[1] = ad->stage_size-1;
+	ad->user_state[2] = 0;
+	ad->user_state[3] = 0;
+
+	ad->user_state[2] = 1;
+
+	//hand it over to make map
+	draw_map(ad);
+
+}
+
+
+static void
+custom_map4_cb(void *data, Evas_Object *obj, void *event_info)
+{
+	//display
+	appdata_s *ad = data;
+	//elm_object_text_set(ad->title2, "<font_size = 50><align=center>MAP 1</align></font_size>");
+	//evas_object_hide(ad->main_list2);
+	//elm_box_unpack(ad->box, ad->main_list2);
+
+	//read from file to char *map_str
+	// open file
+	// get from data
+	FILE *fp;
+	char str[200];
+	char filepath[PATH_MAX] = {0,};
+	app_get_data("map4.txt", filepath, PATH_MAX);
+	fp = fopen(filepath, "r");
+	// get from res
+	if(fp==NULL){
+		app_get_resource("map4.txt", filepath, PATH_MAX);
+		fp = fopen(filepath, "r");
+	}
+	char *map_str;
+	map_str=fgets(str, sizeof(str), fp);//read final_grid_info[] from file
+
+	//change format from final_grid_info[] to grid_state[][][]
+	int x=0;
+	for(int i=0;i<size;i++)
+		for(int j=0;j<size;j++)
+			for(int k=0;k<6;k++)
+			{
+				int temp = map_str[x++]-'0';
+				ad->grid_state[j][i][k]=temp;
+			}
+	elm_object_text_set(ad->title2, map_str);
+
+	//set stage_size
+	ad->stage_size = size;
+
+	//start timer
+	ad->timer = ecore_timer_add(1.0, timer_cb, ad);
+	ad->time = 0;
+
+	//create vibration
+	device_haptic_open(0, &ad->handle);
+
+	start_acceleration_sensor(ad);
+	start_gyroscope_sensor(ad);
+	start_heartrate_sensor(ad);
+	ad->sensor_status[0] = 2;
+	ad->sensor_status[1] = 2;
+	ad->sensor_status[2] = 2;
+
+	//initialize user_state and grid state
+	ad->user_state[0] = 0;
+	ad->user_state[1] = ad->stage_size-1;
+	ad->user_state[2] = 0;
+	ad->user_state[3] = 0;
+
+	ad->user_state[2] = 1;
+
+	//hand it over to make map
+	draw_map(ad);
+
+}
+
+
+static void
+custom_map5_cb(void *data, Evas_Object *obj, void *event_info)
+{
+	//display
+	appdata_s *ad = data;
+	//elm_object_text_set(ad->title2, "<font_size = 50><align=center>MAP 1</align></font_size>");
+	//evas_object_hide(ad->main_list2);
+	//elm_box_unpack(ad->box, ad->main_list2);
+
+	//read from file to char *map_str
+	// open file
+	// get from data
+	FILE *fp;
+	char str[200];
+	char filepath[PATH_MAX] = {0,};
+	app_get_data("map5.txt", filepath, PATH_MAX);
+	fp = fopen(filepath, "r");
+	// get from res
+	if(fp==NULL){
+		app_get_resource("map5.txt", filepath, PATH_MAX);
+		fp = fopen(filepath, "r");
+	}
+	char *map_str;
+	map_str=fgets(str, sizeof(str), fp);//read final_grid_info[] from file
+
+	//change format from final_grid_info[] to grid_state[][][]
+	int x=0;
+	for(int i=0;i<size;i++)
+		for(int j=0;j<size;j++)
+			for(int k=0;k<6;k++)
+			{
+				int temp = map_str[x++]-'0';
+				ad->grid_state[j][i][k]=temp;
+			}
+	elm_object_text_set(ad->title2, map_str);
+
+	//set stage_size
+	ad->stage_size = size;
+
+	//start timer
+	ad->timer = ecore_timer_add(1.0, timer_cb, ad);
+	ad->time = 0;
+
+	//create vibration
+	device_haptic_open(0, &ad->handle);
+
+	start_acceleration_sensor(ad);
+	start_gyroscope_sensor(ad);
+	start_heartrate_sensor(ad);
+	ad->sensor_status[0] = 2;
+	ad->sensor_status[1] = 2;
+	ad->sensor_status[2] = 2;
+
+	//initialize user_state and grid state
+	ad->user_state[0] = 0;
+	ad->user_state[1] = ad->stage_size-1;
+	ad->user_state[2] = 0;
+	ad->user_state[3] = 0;
+
+	ad->user_state[2] = 1;
+
+	//hand it over to make map
+	draw_map(ad);
+
+}
+
 
 static void
 _item_selected_cb_obstacle(void *data, Evas_Object *obj, void *event_info) //not really important cb

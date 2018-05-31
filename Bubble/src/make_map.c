@@ -82,7 +82,7 @@ static void	draw_map(appdata_s *ad){
 				evas_object_show(img);
 			}
 			/* heart : grid_state[][][5] =2 */
-			else if(ad->grid_state[i][j][5]==2)
+			else if(ad->grid_state[i][j][5]==3)
 			{
 				app_get_resource("heart.png", img_path, PATH_MAX);
 				Evas_Object *img = evas_object_image_filled_add(ad->canvas);
@@ -93,7 +93,7 @@ static void	draw_map(appdata_s *ad){
 				evas_object_show(img);
 			}
 			/* bug : grid_state[][][5] =3 */
-			else if(ad->grid_state[i][j][5]==3)
+			else if(ad->grid_state[i][j][5]==2)
 			{
 				app_get_resource("bug.png", img_path, PATH_MAX);
 				Evas_Object *img = evas_object_image_filled_add(ad->canvas);

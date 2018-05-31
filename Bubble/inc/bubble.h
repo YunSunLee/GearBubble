@@ -186,8 +186,11 @@ static void map_editor_size_3_cb(void *data, Evas_Object *obj, void *event_info)
 static void map_editor_size_4_cb(void *data, Evas_Object *obj, void *event_info);
 static void map_editor_size_5_cb(void *data, Evas_Object *obj, void *event_info);
 
-static void
-custom_map1_cb(void *data, Evas_Object *obj, void *event_info);
+static void custom_map1_cb(void *data, Evas_Object *obj, void *event_info);
+static void custom_map2_cb(void *data, Evas_Object *obj, void *event_info);
+static void custom_map3_cb(void *data, Evas_Object *obj, void *event_info);
+static void custom_map4_cb(void *data, Evas_Object *obj, void *event_info);
+static void custom_map5_cb(void *data, Evas_Object *obj, void *event_info);
 
 /* ranking */
 static void app_get_data(const char *res_file_in, char *res_path_out, int res_path_max);

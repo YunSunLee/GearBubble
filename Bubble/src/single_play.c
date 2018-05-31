@@ -103,8 +103,8 @@ static void stage1_cb(void *data, Evas_Object *obj, void *event_info){
 	elm_object_text_set(ad->title, "<font_size = 50><align=center>STAGE1</align></font_size>");
 	/* challenger */
 	ad->grid_state[0][0][5] = 1; /* hurdle */
-	//ad->grid_state[0][0][5] = 2; /* heart */
-	ad->grid_state[1][1][5] = 3; /* bug */
+	ad->grid_state[0][0][5] = 2; /* bug */
+	//ad->grid_state[1][1][5] = 3; /* heart */
 	stage_common(ad, 1);
 }
 static void stage2_cb(void *data, Evas_Object *obj, void *event_info){
@@ -112,8 +112,8 @@ static void stage2_cb(void *data, Evas_Object *obj, void *event_info){
 	elm_object_text_set(ad->title, "<font_size = 50><align=center>STAGE2</align></font_size>");
 	/* challenger */
 	ad->grid_state[1][1][5] = 1; /* hurdle */
-	//ad->grid_state[0][0][5]= 2; /* heart */
-	ad->grid_state[2][1][5] = 3; /* bug */
+	ad->grid_state[0][0][5]= 2;/* bug */
+	//ad->grid_state[2][1][5] = 3;  /* heart */
 	stage_common(ad, 2);
 }
 static void stage3_cb(void *data, Evas_Object *obj, void *event_info){
@@ -121,8 +121,8 @@ static void stage3_cb(void *data, Evas_Object *obj, void *event_info){
 	elm_object_text_set(ad->title, "<font_size = 50><align=center>STAGE3</align></font_size>");
 	/* challenger */
 	ad->grid_state[2][0][5] = 1; /* hurdle */
-	//ad->grid_state[0][0][5] = 2; /* heart */
-	ad->grid_state[2][1][5] = 3; /* bug */
+	ad->grid_state[0][0][5] = 2;  /* bug */
+	//ad->grid_state[2][1][5] = 3;/* heart */
 	stage_common(ad, 3);
 }
 static void stage4_cb(void *data, Evas_Object *obj, void *event_info){
@@ -130,8 +130,8 @@ static void stage4_cb(void *data, Evas_Object *obj, void *event_info){
 	elm_object_text_set(ad->title, "<font_size = 50><align=center>STAGE4</align></font_size>");
 	/* challenger */
 	ad->grid_state[2][2][5] = 1; /* hurdle */
-	//ad->grid_state[0][0][5] = 2; /* heart */
-	ad->grid_state[1][1][5] = 3; /* bug */
+	ad->grid_state[0][0][5] = 2;  /* bug */
+	//ad->grid_state[1][1][5] = 3;/* heart */
 	stage_common(ad, 4);
 }
 static void stage5_cb(void *data, Evas_Object *obj, void *event_info){
@@ -139,8 +139,8 @@ static void stage5_cb(void *data, Evas_Object *obj, void *event_info){
 	elm_object_text_set(ad->title, "<font_size = 50><align=center>STAGE5</align></font_size>");
 	/* challenger */
 	ad->grid_state[0][1][5] = 1; /* hurdle */
-	//ad->grid_state[0][0][5] = 2; /* heart */
-	ad->grid_state[1][2][5] = 3; /* bug */
+	ad->grid_state[0][0][5] = 2; /* bug */
+	//ad->grid_state[1][2][5] = 3; /* heart */
 	stage_common(ad, 5);
 }
 
@@ -149,8 +149,8 @@ static void stage6_cb(void *data, Evas_Object *obj, void *event_info){
 	elm_object_text_set(ad->title, "<font_size = 50><align=center>STAGE6</align></font_size>");
 	/* challenger */
 	ad->grid_state[0][1][5] = 1; /* hurdle */
-	//ad->grid_state[0][0][5] = 2; /* heart */
-	ad->grid_state[1][2][5] = 3; /* bug */
+	ad->grid_state[0][0][5] = 2;/* bug */
+	//ad->grid_state[1][2][5] = 3; /* heart */
 	stage_common(ad, 1);
 }
 static void stage7_cb(void *data, Evas_Object *obj, void *event_info){
@@ -159,8 +159,8 @@ static void stage7_cb(void *data, Evas_Object *obj, void *event_info){
 	/* challenger */
 	ad->grid_state[0][1][5] = 1; /* hurdle */
 	ad->grid_state[4][4][5] = 1;
-	//ad->grid_state[0][0][5]= 2; /* heart */
-	ad->grid_state[1][2][5] = 3; /* bug */
+	ad->grid_state[0][0][5]= 2; /* bug */
+	//ad->grid_state[1][2][5] = 3; /* heart */
 	stage_common(ad, 2);
 }
 static void stage8_cb(void *data, Evas_Object *obj, void *event_info){
@@ -169,8 +169,8 @@ static void stage8_cb(void *data, Evas_Object *obj, void *event_info){
 	/* challenger */
 	ad->grid_state[0][1][5] = 1; /* hurdle */
 	ad->grid_state[1][1][5] = 1;
-	//ad->grid_state[0][0][5]= 2; /* heart */
-	ad->grid_state[1][2][5] = 3; /* bug */
+	ad->grid_state[0][0][5]= 2; /* bug */
+	//ad->grid_state[1][2][5] = 3; /* heart */
 	stage_common(ad, 3);
 }
 static void stage9_cb(void *data, Evas_Object *obj, void *event_info){
@@ -179,8 +179,8 @@ static void stage9_cb(void *data, Evas_Object *obj, void *event_info){
 	/* challenger */
 	ad->grid_state[0][1][5] = 1; /* hurdle */
 	ad->grid_state[2][2][5] = 1;
-	//ad->grid_state[0][0][5]= 2; /* heart */
-	ad->grid_state[1][2][5] = 3; /* bug */
+	ad->grid_state[0][0][5]= 2;/* bug */
+	//ad->grid_state[1][2][5] = 3; /* heart */
 	stage_common(ad, 4);
 }
 static void stage10_cb(void *data, Evas_Object *obj, void *event_info){
@@ -189,8 +189,8 @@ static void stage10_cb(void *data, Evas_Object *obj, void *event_info){
 	/* challenger */
 	ad->grid_state[0][1][5] = 1; /* hurdle */
 	ad->grid_state[3][3][5] = 1;
-	//ad->grid_state[0][0][5]= 2; /* heart */
-	ad->grid_state[1][2][5] = 3; /* bug */
+	ad->grid_state[0][0][5]= 2;  /* bug */
+	//ad->grid_state[1][2][5] = 3;/* heart */
 	stage_common(ad, 5);
 }
 
@@ -200,8 +200,8 @@ static void stage11_cb(void *data, Evas_Object *obj, void *event_info){
 	/* challenger */
 	ad->grid_state[0][1][5] = 1; /* hurdle */
 	ad->grid_state[4][4][5] = 1;
-	//ad->grid_state[0][0][5]= 2; /* heart */
-	ad->grid_state[1][2][5] = 3; /* bug */
+	ad->grid_state[0][0][5]= 2; /* bug */
+	//ad->grid_state[1][2][5] = 3; /* heart */
 	ad->grid_state[2][1][5] = 3;
 	stage_common(ad, 1);
 }
@@ -211,8 +211,8 @@ static void stage12_cb(void *data, Evas_Object *obj, void *event_info){
 	/* challenger */
 	ad->grid_state[0][1][5] = 1; /* hurdle */
 	ad->grid_state[1][3][5] = 1;
-	//ad->grid_state[0][0][5]= 2; /* heart */
-	ad->grid_state[1][2][5] = 3; /* bug */
+	ad->grid_state[0][0][5]= 2; /* bug */
+	//ad->grid_state[1][2][5] = 3; //* heart */
 	ad->grid_state[2][3][5] = 3;
 	stage_common(ad, 2);
 }
@@ -222,8 +222,8 @@ static void stage13_cb(void *data, Evas_Object *obj, void *event_info){
 	/* challenger */
 	ad->grid_state[0][1][5] = 1; /* hurdle */
 	ad->grid_state[2][3][5] = 1;
-	//ad->grid_state[0][0][5]= 2; /* heart */
-	ad->grid_state[1][2][5] = 3; /* bug */
+	ad->grid_state[0][0][5]= 2; /* bug */
+	//ad->grid_state[1][2][5] = 3; /* heart */
 	ad->grid_state[2][4][5] = 3;
 	stage_common(ad, 3);
 }
@@ -233,8 +233,8 @@ static void stage14_cb(void *data, Evas_Object *obj, void *event_info){
 	/* challenger */
 	ad->grid_state[0][1][5] = 1; /* hurdle */
 	ad->grid_state[2][4][5] = 1;
-	//ad->grid_state[0][0][5]= 2; /* heart */
-	ad->grid_state[1][2][5] = 3; /* bug */
+	ad->grid_state[0][0][5]= 2; /* bug */
+	//ad->grid_state[1][2][5] = 3; /* heart */
 	ad->grid_state[2][1][5] = 3;
 	stage_common(ad, 4);
 }
@@ -244,8 +244,8 @@ static void stage15_cb(void *data, Evas_Object *obj, void *event_info){
 	/* challenger */
 	ad->grid_state[0][1][5] = 1; /* hurdle */
 	ad->grid_state[3][4][5] = 1;
-	//ad->grid_state[0][0][5]= 2; /* heart */
-	ad->grid_state[1][2][5] = 3; /* bug */
+	ad->grid_state[0][0][5]= 2; /* bug */
+	//ad->grid_state[1][2][5] = 3;/* heart */
 	ad->grid_state[2][1][5] = 3;
 	stage_common(ad, 5);
 }
