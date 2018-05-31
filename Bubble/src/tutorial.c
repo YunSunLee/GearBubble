@@ -8,7 +8,7 @@
 #include "bubble.h"
 
 #define PAGE_CHANGED_EVENT "active_page,changed"
-static const int PAGES_COUNT = 5;
+static const int PAGES_COUNT = 6;
 
 static const char *even_style[] = {
 	"item/even_1",

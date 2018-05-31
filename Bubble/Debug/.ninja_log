@@ -57,3 +57,6 @@
 1	254	0	src/single_play.o	9d892ecdb16298d7
 1	424	0	src/bubble.o	e8d02dbb5d10d4bc
 424	507	0	bubble	13bdcbc65c78498b
+1	192	0	src/tutorial.o	4c0774a0e7bef2da
+1	369	0	src/bubble.o	e8d02dbb5d10d4bc
+369	450	0	bubble	13bdcbc65c78498b

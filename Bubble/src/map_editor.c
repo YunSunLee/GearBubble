@@ -455,6 +455,8 @@ custom_map1_cb(void *data, Evas_Object *obj, void *event_info)
 	char *map_str;
 	map_str=fgets(str, sizeof(str), fp);//read final_grid_info[] from file
 
+	fclose(fp);
+
 	//change format from final_grid_info[] to grid_state[][][]
 	int x=0;
 	for(int i=0;i<size;i++)
@@ -520,6 +522,8 @@ custom_map2_cb(void *data, Evas_Object *obj, void *event_info)
 	}
 	char *map_str;
 	map_str=fgets(str, sizeof(str), fp);//read final_grid_info[] from file
+
+	fclose(fp);
 
 	//change format from final_grid_info[] to grid_state[][][]
 	int x=0;
@@ -588,6 +592,8 @@ custom_map3_cb(void *data, Evas_Object *obj, void *event_info)
 	char *map_str;
 	map_str=fgets(str, sizeof(str), fp);//read final_grid_info[] from file
 
+	fclose(fp);
+
 	//change format from final_grid_info[] to grid_state[][][]
 	int x=0;
 	for(int i=0;i<size;i++)
@@ -655,6 +661,8 @@ custom_map4_cb(void *data, Evas_Object *obj, void *event_info)
 	char *map_str;
 	map_str=fgets(str, sizeof(str), fp);//read final_grid_info[] from file
 
+	fclose(fp);
+
 	//change format from final_grid_info[] to grid_state[][][]
 	int x=0;
 	for(int i=0;i<size;i++)
@@ -721,6 +729,8 @@ custom_map5_cb(void *data, Evas_Object *obj, void *event_info)
 	}
 	char *map_str;
 	map_str=fgets(str, sizeof(str), fp);//read final_grid_info[] from file
+
+	fclose(fp);
 
 	//change format from final_grid_info[] to grid_state[][][]
 	int x=0;
