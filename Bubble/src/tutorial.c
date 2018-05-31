@@ -8,7 +8,7 @@
 #include "bubble.h"
 
 #define PAGE_CHANGED_EVENT "active_page,changed"
-static const int PAGES_COUNT = 7;
+static const int PAGES_COUNT = 6;
 
 static const char *even_style[] = {
 	"item/even_1",
@@ -211,7 +211,7 @@ _active_page_changed_cb(void *data, Evas_Object *index, void *event)
 
 	elm_scroller_current_page_get(ad->scroller, &cur_h_page, NULL);
 
-	if(cur_h_page == 6)
+	if(cur_h_page == 5)
 		create_base_gui(ad);
 
 	_page_indicator_selected_set(ad->index, cur_h_page);

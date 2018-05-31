@@ -459,6 +459,7 @@ custom_map1_cb(void *data, Evas_Object *obj, void *event_info)
 
 	//change format from final_grid_info[] to grid_state[][][]
 	int x=0;
+	size = sqrt((strlen(map_str) - 1) / 6 ) ;
 	for(int i=0;i<size;i++)
 		for(int j=0;j<size;j++)
 			for(int k=0;k<6;k++)
@@ -527,6 +528,7 @@ custom_map2_cb(void *data, Evas_Object *obj, void *event_info)
 
 	//change format from final_grid_info[] to grid_state[][][]
 	int x=0;
+	size = sqrt((strlen(map_str) - 1) / 6 ) ;
 	for(int i=0;i<size;i++)
 		for(int j=0;j<size;j++)
 			for(int k=0;k<6;k++)
@@ -596,6 +598,7 @@ custom_map3_cb(void *data, Evas_Object *obj, void *event_info)
 
 	//change format from final_grid_info[] to grid_state[][][]
 	int x=0;
+	size = sqrt((strlen(map_str) - 1) / 6 ) ;
 	for(int i=0;i<size;i++)
 		for(int j=0;j<size;j++)
 			for(int k=0;k<6;k++)
@@ -665,6 +668,7 @@ custom_map4_cb(void *data, Evas_Object *obj, void *event_info)
 
 	//change format from final_grid_info[] to grid_state[][][]
 	int x=0;
+	size = sqrt((strlen(map_str) - 1) / 6 ) ;
 	for(int i=0;i<size;i++)
 		for(int j=0;j<size;j++)
 			for(int k=0;k<6;k++)
@@ -734,6 +738,7 @@ custom_map5_cb(void *data, Evas_Object *obj, void *event_info)
 
 	//change format from final_grid_info[] to grid_state[][][]
 	int x=0;
+	size = sqrt((strlen(map_str) - 1) / 6 ) ;
 	for(int i=0;i<size;i++)
 		for(int j=0;j<size;j++)
 			for(int k=0;k<6;k++)
