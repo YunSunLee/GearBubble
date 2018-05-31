@@ -60,3 +60,12 @@
 1	192	0	src/tutorial.o	4c0774a0e7bef2da
 1	369	0	src/bubble.o	e8d02dbb5d10d4bc
 369	450	0	bubble	13bdcbc65c78498b
+1	213	0	src/map_editor.o	5f7505a759e55ce4
+1	390	0	src/bubble.o	e8d02dbb5d10d4bc
+391	472	0	bubble	13bdcbc65c78498b
+1	211	0	src/tutorial.o	4c0774a0e7bef2da
+0	375	0	src/bubble.o	e8d02dbb5d10d4bc
+375	456	0	bubble	13bdcbc65c78498b
+1	211	0	src/tutorial.o	4c0774a0e7bef2da
+1	380	0	src/bubble.o	e8d02dbb5d10d4bc
+380	462	0	bubble	13bdcbc65c78498b
