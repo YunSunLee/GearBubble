@@ -1,4 +1,4 @@
-build main_build: phony bubble
+build main_build: phony bubble res
 build all: phony main_build
 default all
 edje-cc-dep-options = -deps $out.d

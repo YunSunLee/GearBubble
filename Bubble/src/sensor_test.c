@@ -1,16 +1,12 @@
 #include <sensor.h>
 #include "bubble.h"
 
-#define MIN_ACC_DATA 4
-
-
 static int wait = 0;
 static float gyro[3];
-static float recent_acc_x[10000];
-static float recent_acc_y[10000];
-static int recent_acc_x_count = 0;
-static int recent_acc_y_count = 0;
 static int maybe_stop_count = 0;
+static int ready = 1;
+static float px = 0;
+static float py = 0;
 
 static int shake_flag=0;
 static int initial_flag=1;
@@ -70,109 +66,19 @@ static void bubble_pop(appdata_s *ad, int x, int y){
 
 
 
-static char* direction(appdata_s *ad, float x[], float y[]){
+static char* direction(float x, float px, float y, float py){
 
-	char buf[1024];
-
-	float max_x = 0, min_x = 0, max_y = 0, min_y = 0;
-	float max_abs_x = 0, max_abs_y = 0;
-	int max_x_index = 0, min_x_index = 0, max_y_index = 0, min_y_index = 0;
-	float positive_index_sum_x = 0, positive_index_count_x = 0, negative_index_sum_x = 0, negative_index_count_x = 0;
-	float positive_index_sum_y = 0, positive_index_count_y = 0, negative_index_sum_y = 0, negative_index_count_y = 0;
-
-	if(recent_acc_x_count >= MIN_ACC_DATA-1){
-		for(int i = 0; i < recent_acc_x_count; i++){
-			if(x[i] > max_x){
-				max_x = x[i];
-				max_x_index = i;
-			}
-			else if(x[i] < min_x){
-				min_x = x[i];
-				min_x_index = i;
-			}
-			if(x[i] > 0){
-				positive_index_sum_x += i;
-				positive_index_count_x++;
-			}
-			else{
-				negative_index_sum_x += i;
-				negative_index_count_x++;
-			}
-		}
-		if(fabsf(max_x) >= fabsf(min_x))
-			max_abs_x = fabsf(max_x);
-		else
-			max_abs_x = fabsf(min_x);
+	if(fabsf(x * px) > fabsf(y * py)){
+		if(x > 0 && px < 0) return "LEFT";
+		else if(x < 0 && px > 0) return "RIGHT";
+		else return "?";
 	}
-
-	if(recent_acc_y_count >= MIN_ACC_DATA-1){
-		for(int i = 0; i < recent_acc_y_count; i++){
-			if(y[i] > max_y){
-				max_y = y[i];
-				max_y_index = i;
-			}
-
-			else if(y[i] < min_y){
-				min_y = y[i];
-				min_y_index = i;
-			}
-			if(y[i] > 0){
-				positive_index_sum_y += i;
-				positive_index_count_y++;
-			}
-			else{
-				negative_index_sum_y += i;
-				negative_index_count_y++;
-			}
-		}
-		if(fabsf(max_y) >= fabsf(min_y))
-			max_abs_y = fabsf(max_y);
-		else
-			max_abs_y = fabsf(min_y);
+	else if(fabsf(x * px) < fabsf(y * py)){
+		if(y > 0 && py < 0)	return "DOWN";
+		else if(y < 0 && py > 0) return "UP";
+		else return "?";
 	}
-
-	int type; //0: x, 1: y
-
-	if(recent_acc_x_count >= recent_acc_y_count)
-		type = 0;
-	else
-		type = 1;
-
-	if(type == 0){
-		if( /*max_x_index > min_x_index*/ positive_index_sum_x / positive_index_count_x > negative_index_sum_x / negative_index_count_x)
-			sprintf(buf, "LEFT");
-		else
-			sprintf(buf, "RIGHT");
-	}
-	else{
-		if( /*max_y_index > min_y_index*/ positive_index_sum_y / positive_index_count_y > negative_index_sum_y / negative_index_count_y)
-			sprintf(buf, "DOWN");
-		else
-			sprintf(buf, "UP");
-	}
-
-	char s1[100] = "<font_size=20><align=center>";
-	char s2[100] = "<font_size=20><align=center>";
-	//sprintf(s1, "X: %d / Y: %d", recent_acc_x_count, recent_acc_y_count);
-	//sprintf(s2, "MAX X: %0.1f / MAX Y: %0.1f", max_x - min_x, max_y - min_y);
-	for (int i = 0; i < recent_acc_x_count; i++){
-		char temp[10];
-		sprintf(temp, "%0.1f ", x[i]);
-		strcat(s1, temp);
-	}
-	for (int i = 0; i < recent_acc_y_count; i++){
-		char temp[10];
-		sprintf(temp, "%0.1f ", y[i]);
-		strcat(s2, temp);
-	}
-//	sprintf(s1, "<font_size=20><align=center>%s</align></font_size>", s1);
-//	sprintf(s2, "<font_size=20><align=center>%s</align></font_size>", s2);
-	strcat(s1, "</align></font_size>");
-	strcat(s2, "</align></font_size>");
-	elm_object_text_set(ad->sensor_label[1], s1);
-	elm_object_text_set(ad->sensor_label[2], s2);
-
-	return buf;
+	else return "?";
 }
 
 static void show_is_supported(appdata_s *ad)
@@ -206,7 +112,7 @@ static void check_obstacle(appdata_s *ad){
 			is_obstacle=1;
 		}
 		/* heart */
-		else if(ad->grid_state[x][y][5]==2)
+		else if(ad->grid_state[x][y][5]==3)
 		{	//show Heart image
 
 
@@ -222,11 +128,14 @@ static void check_obstacle(appdata_s *ad){
 			is_obstacle=1;
 		}
 		/* bug */
-		else if(ad->grid_state[x][y][5]==3)
+		else if(ad->grid_state[x][y][5]==2)
 		{	//show Bug image
 
 			//connect shake sensor(accelerometer)
 			shake_flag=1;
+			bug_num = 10;
+			shake_cnt = 0;
+			shake_detect = 0;
 			ad->sensor_status[0] = 0;
 			start_acceleration_sensor(ad);
 
@@ -293,6 +202,7 @@ _new_sensor_value_acc_jump(sensor_h sensor, sensor_event_s *sensor_data, void *u
 
 
 
+
 static void
 _new_sensor_value_acc_shake(sensor_h sensor, sensor_event_s *sensor_data, void *user_data)
 {
@@ -349,6 +259,14 @@ _new_sensor_value_acc_shake(sensor_h sensor, sensor_event_s *sensor_data, void *
 	 }
 }
 
+static int gyro_check(){
+	if(gyro[0] < 20 && gyro[1] < 20 && gyro[2] < 20)
+		return 1;
+	else
+		return 0;
+}
+
+
 static void
 _new_sensor_value_acc(sensor_h sensor, sensor_event_s *sensor_data, void *user_data)
 {
@@ -391,31 +309,23 @@ _new_sensor_value_acc(sensor_h sensor, sensor_event_s *sensor_data, void *user_d
 			 elm_object_text_set(ad->sensor_label[0], buf);
 		 }
 
-
-
-		 if(fabsf(x) >= 1.5 && fabsf(x) > fabsf(y) && fabsf(gyro[0]) < 20 && fabsf(gyro[1]) < 10){
-			 recent_acc_x[recent_acc_x_count] = x;
-			 recent_acc_x_count++;
-			 maybe_stop_count = 0;
-		 }
-		 if((y >= 1.5 || y <= -1) && fabsf(x) < fabsf(y) && fabsf(gyro[0]) < 20 && fabsf(gyro[1]) < 10){
-			 recent_acc_y[recent_acc_y_count] = y;
-			 recent_acc_y_count++;
-			 maybe_stop_count = 0;
-		 }
 		 if(fabsf(x) < 0.5 && fabsf(y) < 0.5){
 			 maybe_stop_count++;
 		 }
-		 if(maybe_stop_count == 3 && (recent_acc_x_count >= MIN_ACC_DATA || recent_acc_y_count >= MIN_ACC_DATA)){
-			 sprintf(buf, direction(ad, recent_acc_x, recent_acc_y));
-			 elm_object_text_set(ad->sensor_label[3], buf);
+		 else
+			 maybe_stop_count = 0;
+
+		 if(ready == 1 && (fabsf(x) >= 1 || fabsf(y) >= 1) && gyro_check() == 1){
+			 sprintf(buf, direction(x, px, y, py));
+			 //elm_object_text_set(ad->sensor_label[3], buf);
 
 			 maybe_stop_count = 0;
-			 recent_acc_x_count = 0;
-			 recent_acc_y_count = 0;
 
 			 //play mode
 			 if(ad->sensor_status[0] == 2  && is_obstacle == 0){
+
+				 ready = 0;
+
 				 if(strcmp(buf, "UP") == 0 && can_move(ad, 1) == 1){
 					 move(ad, ad->stage_size * ad->user_state[1] + ad->user_state[0], ad->stage_size * (ad->user_state[1] - 1) + ad->user_state[0]);
 					 ad->user_state[1]--;
@@ -448,17 +358,23 @@ _new_sensor_value_acc(sensor_h sensor, sensor_event_s *sensor_data, void *user_d
 					 if(!is_obstacle)
 						 bubble_pop(ad, ad->user_state[0], ad->user_state[1]);
 				 }
+				 else
+					 ready = 1;
 				 //is_obstacle=0;
 			 }
-
-
 		 }
+
 		 if(maybe_stop_count >= 3){
-			 recent_acc_x_count = 0;
-			 recent_acc_y_count = 0;
+			 ready = 1;
+			 px = 0;
+			 py = 0;
 		 }
 
+		 if(fabsf(x) >= 1 && gyro_check() == 1)
+			 px = x;
 
+		 if(fabsf(y) >= 1 && gyro_check() == 1)
+			 py = y;
 	 }
 	 wait = 0;
 }

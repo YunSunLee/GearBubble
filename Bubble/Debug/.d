@@ -1,0 +1,1 @@
+res/edje/create_server.edj:

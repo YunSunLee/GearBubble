@@ -13,6 +13,7 @@ sareportdir = ../SA_Report
 sa_checkers = cplusplus,core,deadcode,resourceLeak,security,unix
 coveragedir = ../Coverage_Report
 
+subninja ../Debug/res/edje/subdir.ninja
 subninja ../Debug/src/subdir.ninja
 
 targettool = clang++.exe
@@ -24,4 +25,5 @@ build externalFnMap.txt: fast_ext_fn src/bt_chat.o.ast src/bt_chat_room.o.ast sr
 build sa: phony $sareportdir/src/bt_chat.o.xml $sareportdir/src/bt_chat_room.o.xml $sareportdir/src/bt_genlist.o.xml $sareportdir/src/bt_mgr.o.xml $sareportdir/src/bt_noti.o.xml $sareportdir/src/bubble.o.xml $sareportdir/src/make_map.o.xml $sareportdir/src/map_editor.o.xml $sareportdir/src/network.o.xml $sareportdir/src/ranking.o.xml $sareportdir/src/sensor_test.o.xml $sareportdir/src/single_play.o.xml $sareportdir/src/sound.o.xml $sareportdir/src/tutorial.o.xml
 build apichecker: unusedapi_rule src/bt_chat.o.txt src/bt_chat_room.o.txt src/bt_genlist.o.txt src/bt_mgr.o.txt src/bt_noti.o.txt src/bubble.o.txt src/make_map.o.txt src/map_editor.o.txt src/network.o.txt src/ranking.o.txt src/sensor_test.o.txt src/single_play.o.txt src/sound.o.txt src/tutorial.o.txt
 build cov: cov_report $coveragedir/src/bt_chat.o.cov $coveragedir/src/bt_chat_room.o.cov $coveragedir/src/bt_genlist.o.cov $coveragedir/src/bt_mgr.o.cov $coveragedir/src/bt_noti.o.cov $coveragedir/src/bubble.o.cov $coveragedir/src/make_map.o.cov $coveragedir/src/map_editor.o.cov $coveragedir/src/network.o.cov $coveragedir/src/ranking.o.cov $coveragedir/src/sensor_test.o.cov $coveragedir/src/single_play.o.cov $coveragedir/src/sound.o.cov $coveragedir/src/tutorial.o.cov
+build res: phony res/edje/bt_chat.edj res/edje/create_server.edj
 
