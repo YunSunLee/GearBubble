@@ -6,6 +6,7 @@
  */
 
 #include "bubble.h"
+#include "bt_chat.c"
 
 static void
 network_play_cb(void *data, Evas_Object *obj, void *event_info)
@@ -23,4 +24,6 @@ network_play_cb(void *data, Evas_Object *obj, void *event_info)
 
 	evas_object_show(ad->back_list);
 	elm_box_pack_end(ad->box, ad->back_list);
+
+	_create_base_gui(ad);
 }

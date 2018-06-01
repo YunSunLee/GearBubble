@@ -9,6 +9,7 @@
 #include "make_map.c"
 #include "sound.c"
 
+
 static void
 win_delete_request_cb(void *data, Evas_Object *obj, void *event_info)
 {
@@ -55,8 +56,7 @@ main_menu_cb(void *data, Evas_Object *obj, void *event_info){
 	create_base_gui(ad);
 }
 
-static void
-create_base_gui(appdata_s *ad)
+void create_base_gui(appdata_s *ad)
 {
 	/* Window */
 		ad->win = elm_win_util_standard_add(PACKAGE, PACKAGE);

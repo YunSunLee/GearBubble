@@ -1,0 +1,57 @@
+collections {
+   group {
+      name: "chat_room";
+      parts {
+         part {
+            name: "bg";
+            type: SPACER;
+            mouse_events: 0;
+            description {
+               state: "default" 0.0;
+            }
+         }
+         part {
+            name: "sw.scroller";
+            type: SWALLOW;
+            description {
+               state: "default" 0.0;
+               align: 0.0 0.0;
+               rel1 { relative: 0.0 0.0; to: "bg"; }
+               rel2 { relative: 1.0 0.0; to_x: "bg"; to_y: "sw.entry"; }
+            }
+         }
+         part {
+            name: "sw.btn.send";
+            type: SWALLOW;
+            description {
+               state: "default" 0.0;
+               align: 0.0 1.0;
+               fixed: 1 1;
+               rel1 { relative: 0.0 1.0; to: "bg"; }
+               rel2 { relative: 1.0 1.0; to: "bg"; }
+            }
+         }
+         part {
+            name: "bg.entry";
+            type: RECT;
+            description {
+               state: "default" 0.0;
+               color: 120 220 220 255;
+               rel1 { relative: 0.0 0.0; to_x: "bg"; to_y: "sw.entry"; }
+               rel2 { relative: 1.0 1.0; to_x: "bg"; to_y: "sw.entry"; }
+            }
+         }
+         part {
+            name: "sw.entry";
+            type: SWALLOW;
+            description {
+               state: "default" 0.0;
+               align: 0.0 1.0;
+               fixed: 1 1;
+               rel1 { relative: 0.1 0.0; to_x: "bg"; to_y: "sw.btn.send"; }
+               rel2 { relative: 0.9 0.0; to_x: "bg"; to_y: "sw.btn.send"; }
+            }
+         }
+      }
+   }
+}
