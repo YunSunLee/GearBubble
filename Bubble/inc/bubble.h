@@ -103,7 +103,7 @@ int user_state[4];
 
 /* Grid_State 0: Up, 1: Down, 2: Left, 3: Right, 4: Bubble_Popped? 5:Challenger */
 /* grid_state[][][4]==0: bubble not popped, 1: bubble popped */
-/* grid_state[][][5]==0: bubble, 1: hurdle, 2: heart, 3: bugs */
+/* grid_state[][][5]==0: bubble, 1: hurdle, 2: bug, 3: heart */
 int grid_state[5][5][6];
 
 sensorinfo sensor_info[3];

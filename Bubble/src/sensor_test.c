@@ -116,11 +116,12 @@ static void check_obstacle(appdata_s *ad){
 		{	//show Heart image
 
 
-			elm_object_text_set(ad->title, "<font_size = 50><align=center>Raise heart rate!</align></font_size>");
+			//elm_object_text_set(ad->title, "<font_size = 50><align=center>Raise heart rate!</align></font_size>");
 
 
 			//connect heart rate monitor
 			heart_flag = 1;
+			initial_flag = 1;
 			ad->sensor_status[2] = 0;
 			start_heartrate_sensor(ad);
 
@@ -193,6 +194,8 @@ _new_sensor_value_acc_jump(sensor_h sensor, sensor_event_s *sensor_data, void *u
 
 		 ad->user_state[2]++;
 
+		 ad->grid_state[ad->user_state[0]][ad->user_state[1]][5] = 0;
+
 		 start_acceleration_sensor(ad);
 
 		 draw_map(ad);
@@ -253,6 +256,8 @@ _new_sensor_value_acc_shake(sensor_h sensor, sensor_event_s *sensor_data, void *
 
 		 ad->user_state[2]++;
 
+		 ad->grid_state[ad->user_state[0]][ad->user_state[1]][5] = 0;
+
 		 start_acceleration_sensor(ad);
 
 		 draw_map(ad);
@@ -260,7 +265,7 @@ _new_sensor_value_acc_shake(sensor_h sensor, sensor_event_s *sensor_data, void *
 }
 
 static int gyro_check(){
-	if(gyro[0] < 20 && gyro[1] < 20 && gyro[2] < 20)
+	if(fabsf(gyro[0]) < 20 && fabsf(gyro[1]) < 20 && fabsf(gyro[2]) < 20)
 		return 1;
 	else
 		return 0;
@@ -314,6 +319,15 @@ _new_sensor_value_acc(sensor_h sensor, sensor_event_s *sensor_data, void *user_d
 		 }
 		 else
 			 maybe_stop_count = 0;
+
+		 //ready to move?? ------- move when green light.....
+		 if(ready == 0)
+			 evas_object_color_set(ad->rect[ad->stage_size * ad->user_state[1] + ad->user_state[0]], 200, 0, 0, 100);
+		 else if(ready == 1)
+			 evas_object_color_set(ad->rect[ad->stage_size * ad->user_state[1] + ad->user_state[0]], 0, 200, 0, 100);
+
+
+
 
 		 if(ready == 1 && (fabsf(x) >= 1 || fabsf(y) >= 1) && gyro_check() == 1){
 			 sprintf(buf, direction(x, px, y, py));
@@ -419,7 +433,7 @@ _new_sensor_value_heart(sensor_h sensor, sensor_event_s *sensor_data, void *user
 		 evas_object_show(ad->title2);
 		 //elm_object_text_set(ad->title2, "<font_size = 50><align=center>Raise heart rate!</align></font_size>");
 		 char temp[100];
-		 sprintf(temp, "%d / %d", hr, initial_beat+5);
+		 sprintf(temp, "<font_size = 50><align=center>%d / %d</align></font_size>", hr, initial_beat+5);
 		 elm_object_text_set(ad->title2, temp);
 
 		 char buf[1024];
@@ -459,6 +473,8 @@ _new_sensor_value_heart(sensor_h sensor, sensor_event_s *sensor_data, void *user
 			 is_obstacle = 0;
 
 			 ad->user_state[2]++;
+
+			 ad->grid_state[ad->user_state[0]][ad->user_state[1]][5] = 0;
 
 			 start_acceleration_sensor(ad);
 

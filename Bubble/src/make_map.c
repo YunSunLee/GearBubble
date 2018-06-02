@@ -24,7 +24,7 @@ static void	draw_map(appdata_s *ad){
 
 	/* Information_ Popped Bubble, Timer */
 	ad->title = elm_label_add(ad->grid);
-	elm_object_text_set(ad->title, "Wait...");
+	elm_object_text_set(ad->title, "<align=center>No Sensor!</align>");
 	elm_grid_pack(ad->grid, ad->title, 5, 10, 100, 20);
 	evas_object_show(ad->title);
 
