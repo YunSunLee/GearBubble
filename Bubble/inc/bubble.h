@@ -148,6 +148,8 @@ bt_socket_role_e role;
 
 int win_w;
 int win_h;
+	
+int hr_test; //remove later
 
 int friend_pop_num;
 int is_network;

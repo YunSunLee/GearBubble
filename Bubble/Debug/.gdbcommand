@@ -1,0 +1,5 @@
+set sysroot /Users/june/tizen-studio/tools/smart-build-interface/../../platforms/tizen-2.3.2/wearable/rootstraps/wearable-2.3.2-device.core
+set debug-file-directory /Users/june/tizen-studio/tools/smart-build-interface/../../platforms/tizen-2.3.2/wearable/rootstraps/wearable-2.3.2-device.core/usr/lib/debug
+set solib-search-path /Users/june/GearBubble/Bubble/Debug
+dir /Users/june/tizen-studio/tools/smart-build-interface/../../platforms/tizen-2.3.2/wearable/rootstraps/wearable-2.3.2-device.core/usr/src/debug
+sharedlibrary

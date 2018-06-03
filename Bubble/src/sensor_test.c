@@ -301,8 +301,10 @@ _new_sensor_value_acc(sensor_h sensor, sensor_event_s *sensor_data, void *user_d
 			 }
 			 else if(ad->user_state[2] < ad->stage_size * ad->stage_size && ad->is_network == 0)
 				 sprintf(buf_title, "<font_size=20><align=center>TIME: %d <br>BUBBLE: %d/%d</align></font_size>", ad->time, ad->user_state[2], ad->stage_size * ad->stage_size);
-			 else if(ad->is_network == 1)
+			 else if(ad->is_network == 1){
+				 _message_send(ad);
 				 sprintf(buf_title, "<font_size=20><align=center>YOU: %d <br>FRIEND: %d</align></font_size>", ad->user_state[2], ad->friend_pop_num);
+			 }
 
 			 elm_object_text_set(ad->title, buf_title);
 		 }
@@ -419,6 +421,8 @@ _new_sensor_value_heart(sensor_h sensor, sensor_event_s *sensor_data, void *user
 	int hr = sensor_data->values[0];
 
 	 appdata_s *ad = user_data;
+	
+	 ad->hr_test = hr;
 
 
 	 if(ad->sensor_status[2] == 2 && heart_flag == 1){ //play mode

@@ -234,10 +234,13 @@ void _message_send(appdata_s *ad)
 	ret_if(!ad);
 	ret_if(!s_info.input_field_entry);
 
+	//char temp[10];
+
+	//sprintf(temp, "%d", ad->user_state[2]);
+
 	//main_text = elm_entry_entry_get(s_info.input_field_entry);
-	char temp[10];
-	sprintf(temp, "%d", ad->user_state[2]);
-	main_text = temp;
+	main_text = "test";
+
 	ret_if(!main_text || (strlen(main_text) == 0));
 
 	ret = bt_socket_send_data(ad->socket_fd, main_text, strlen(main_text) + 1);
@@ -384,23 +387,26 @@ static void _socket_data_received_cb(bt_socket_received_data_s *data, void *user
 
 	appdata_s *ad = user_data;
 
+	ad->friend_pop_num++;
+
 	Evas_Object *bubble_table = NULL;
 	char *message = NULL;
 
 	ret_if(!data);
 
 	message = strndup(data->data, data->data_size);
+
 	goto_if(!message, ERROR);
 
-	//bubble_table = _bubble_table_create(s_info.bubble_box, MESSAGE_BUBBLE_RECEIVE, message, _current_time_get());
-	//goto_if(!bubble_table, ERROR);
+	bubble_table = _bubble_table_create(s_info.bubble_box, MESSAGE_BUBBLE_RECEIVE, message, _current_time_get());
+	goto_if(!bubble_table, ERROR);
 
-	//evas_object_show(bubble_table);
-	//elm_box_pack_end(s_info.bubble_box, bubble_table);
+	evas_object_show(bubble_table);
+	elm_box_pack_end(s_info.bubble_box, bubble_table);
 
-	//evas_object_event_callback_add(s_info.bubble_box, EVAS_CALLBACK_RESIZE, _bubble_box_resize_cb, NULL);
+	evas_object_event_callback_add(s_info.bubble_box, EVAS_CALLBACK_RESIZE, _bubble_box_resize_cb, NULL);
 
-	ad->friend_pop_num = atoi(message);
+
 
 	free(message);
 
@@ -426,7 +432,7 @@ HAPI void bt_chat_room_layout_create(appdata_s *ad)
 	Elm_Object_Item *navi_it = NULL;
 	int ret = -1;
 
-	bt_socket_set_data_received_cb(_socket_data_received_cb, NULL);
+	bt_socket_set_data_received_cb(_socket_data_received_cb, ad);
 
 	ret = bt_socket_unset_connection_state_changed_cb();
 	ret_if(ret != BT_ERROR_NONE);
