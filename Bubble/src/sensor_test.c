@@ -417,6 +417,8 @@ _new_sensor_value_heart(sensor_h sensor, sensor_event_s *sensor_data, void *user
 	int hr = sensor_data->values[0];
 
 	 appdata_s *ad = user_data;
+	
+	 ad->hr_test = hr;
 
 
 	 if(ad->sensor_status[2] == 2 && heart_flag == 1){ //play mode
