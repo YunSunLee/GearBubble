@@ -21,6 +21,8 @@ static int jmp_detect=0;
 static int shake_detect=0;
 //static int heart_detect=0;
 
+int hr_test = 0;
+
 Evas_Object *jmp;
 
 //1: up, 2: down, 3:left, 4:right
@@ -420,7 +422,8 @@ _new_sensor_value_heart(sensor_h sensor, sensor_event_s *sensor_data, void *user
 
 	 appdata_s *ad = user_data;
 
-
+	 ad->hr_test = hr;
+	
 	 if(ad->sensor_status[2] == 2 && heart_flag == 1){ //play mode
 
 		 ad->grid2 = elm_grid_add(ad->win);
