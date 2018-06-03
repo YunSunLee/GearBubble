@@ -40,20 +40,6 @@ void draw_map(appdata_s *ad){
 	evas_object_show(rect);
 	elm_grid_pack(ad->grid, rect, 25, 30, (ad->grid_width+1)*ad->stage_size+1, (ad->grid_width+1)*ad->stage_size+1);
 
-	/* challenger _ wall */
-	/* Rect- Red Wall_ horizontal */
-	/*
-	rect = evas_object_rectangle_add(canvas);
-	evas_object_color_set(rect, 255, 0, 0, 255);
-	evas_object_show(rect);
-	elm_grid_pack(grid, rect, 26, 30, ad->grid_width, 1);*/
-
-	/* Rect- Red Wall_ vertical
-	rect = evas_object_rectangle_add(canvas);
-	evas_object_color_set(rect, 255, 0, 0, 255);
-	evas_object_show(rect);
-	elm_grid_pack(grid, rect, 25, 31, 1, ad->grid_width);*/
-
 	/* Bubble Image */
 	char img_path[PATH_MAX] = "";
 	app_get_resource("bubble_not_popped.png", img_path, PATH_MAX);

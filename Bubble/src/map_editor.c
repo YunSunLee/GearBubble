@@ -6,22 +6,26 @@
  */
 
 #include "bubble.h"
-
+////////////////012345012345012345012345012345012345012345012345012345
 #define WALL30 "000000000000000000000000000000000000000000000000000000"
-#define WALL31 "010000000100000000000000000000000000000000000000000000"
+#define WALL31 "010000000100001000100000000000000000000000000000000000"
 #define WALL32 "000000010000000000000100010000000000000000000000000000"
 #define WALL33 "000000010000000000010000000100000000000000000000000000"
 #define WALL34 "010000000100000000000000000000000000000100000000000000"
+////////////////012345012345012345012345012345012345012345012345012345012345012345012345012345012345012345012345
 #define WALL40 "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
 #define WALL41 "010000000100000000000000000000000000000000000000000000010000000100000000000000000000000000000000"
 #define WALL42 "000000010000000000000000010000000000000000000000000000000000010000000000000100000000000000000000"
 #define WALL43 "010000000100000000000000000000000000000000010000000000010000000100000000000000000000000000000000"
 #define WALL44 "010000000100000000000000000000000000000100000000000000010000000100000000000000000000000000000000"
+////////////////012345012345012345012345012345012345012345012345012345012345012345012345012345012345012345012345012345012345012345012345012345012345012345012345012345
 #define WALL50 "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
 #define WALL51 "010000000100000000000000000000000000000000000000000000010000000100000000000000000000000000000000000000000000010000000000000000000000000000000000000000"
 #define WALL52 "000000010000000000000000010000000000000000000000000000000000010000000000000100010000000000000000000000000000000000010000000000000100000000000000000000"
 #define WALL53 "000000010000000000010000000100000000000000000000000000010000000100000000000000000000000000000000000100000000010000010000000000000000000000000000000000"
 #define WALL54 "010000000100000000000000000000000000000100000000000000010000000100000000000000000000000000000100000000000000010000000000000000000000000000000000000000"
+
+
 
 Eext_Object_Item *items[5];
 Eext_Object_Item *exit_item;
@@ -123,8 +127,7 @@ static void map_editor_decode_5(appdata_s *ad, char grid_info[]){
 	}
 }
 
-static void
-_item_clicked_cb_wall(void *data, Evas_Object *obj, void *event_info)
+static void _item_clicked_cb_wall(void *data, Evas_Object *obj, void *event_info)
 {
 	if (!data) return;
 	appdata_s *ad = data;
@@ -824,23 +827,220 @@ _item_selected_cb_obstacle(void *data, Evas_Object *obj, void *event_info) //not
 
 }
 
-static void
-_rotary_selector_create_wall(appdata_s *ad)
+static void _rotary_selector_create_wall(appdata_s *ad)
 {
    ad->rotary_selector = eext_rotary_selector_add(ad->conform);
 
-   const int items_count = 5;
-   for (int i = 0; i < items_count; ++i)
-     {
-        Eext_Object_Item *item = eext_rotary_selector_item_append(ad->rotary_selector);
-        items[i] = item;
+   char img_path[PATH_MAX] = "";
 
+   const int items_count = 5;
+   if(size==3){
+     for (int i = 0; i < items_count; ++i)
+       {
+          Eext_Object_Item *item = eext_rotary_selector_item_append(ad->rotary_selector);
+          items[i] = item;
+
+          char img_path[PATH_MAX] = "";
+
+
+          if(i == 0){
+          	eext_rotary_selector_item_part_color_set(item, "item,bg_image", EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL, 255,255,255,255);
+
+  			Evas_Object *img = elm_image_add(ad->rotary_selector);
+  			app_get_resource("WALL30.png", img_path, PATH_MAX);
+  			elm_image_file_set(img, "WALL30.png", NULL);
+  			evas_object_image_file_set(img, img_path, NULL);
+  			evas_object_show(img);
+
+          	eext_rotary_selector_item_part_content_set(item, "item,icon", EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL, img);
+          }
+          else if(i == 1){
+          	eext_rotary_selector_item_part_color_set(item, "item,bg_image", EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL, 255,255,255,255);
+
+          	Evas_Object *img = elm_image_add(ad->rotary_selector);
+          	app_get_resource("WALL31.png", img_path, PATH_MAX);
+          	elm_image_file_set(img, "WALL31.png", NULL);
+          	evas_object_image_file_set(img, img_path, NULL);
+          	evas_object_show(img);
+
+  			eext_rotary_selector_item_part_content_set(item, "item,icon", EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL, img);
+          }
+          else if(i == 2){
+          	eext_rotary_selector_item_part_color_set(item, "item,bg_image", EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL, 255,255,255,255);
+
+          	Evas_Object *img = elm_image_add(ad->rotary_selector);
+          	app_get_resource("WALL32.png", img_path, PATH_MAX);
+          	elm_image_file_set(img, "WALL32.png", NULL);
+          	evas_object_image_file_set(img, img_path, NULL);
+          	evas_object_show(img);
+
+  			eext_rotary_selector_item_part_content_set(item, "item,icon", EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL, img);
+          }
+          else if(i == 3){
+  			eext_rotary_selector_item_part_color_set(item, "item,bg_image", EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL, 255,255,255,255);
+
+  			Evas_Object *img = elm_image_add(ad->rotary_selector);
+  			app_get_resource("WALL33.png", img_path, PATH_MAX);
+  			elm_image_file_set(img, "WALL33.png", NULL);
+  			evas_object_image_file_set(img, img_path, NULL);
+  			evas_object_show(img);
+
+  			eext_rotary_selector_item_part_content_set(item, "item,icon", EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL, img);
+  		}
+          else if(i == 4){
+  			eext_rotary_selector_item_part_color_set(item, "item,bg_image", EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL, 255,255,255,255);
+
+  			Evas_Object *img = elm_image_add(ad->rotary_selector);
+  			app_get_resource("WALL34.png", img_path, PATH_MAX);
+  			elm_image_file_set(img, "WALL34.png", NULL);
+  			evas_object_image_file_set(img, img_path, NULL);
+  			evas_object_show(img);
+
+  			eext_rotary_selector_item_part_content_set(item, "item,icon", EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL, img);
+  		}
         const char MAX_TEXT_SIZE = 20;
         char item_text[MAX_TEXT_SIZE] = {'\0',};
         snprintf(item_text, MAX_TEXT_SIZE, "Element %d", i + 1);
-        //eext_rotary_selector_item_part_text_set(item, "selector,main_text", item_text);
-        //eext_rotary_selector_item_part_text_set(item, "selector,sub_text", "Additional information");
      }
+   }
+     else if(size==4){
+         for (int i = 0; i < items_count; ++i)
+           {
+              Eext_Object_Item *item = eext_rotary_selector_item_append(ad->rotary_selector);
+              items[i] = item;
+
+              char img_path[PATH_MAX] = "";
+
+
+              if(i == 0){
+              	eext_rotary_selector_item_part_color_set(item, "item,bg_image", EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL, 255,255,255,255);
+
+      			Evas_Object *img = elm_image_add(ad->rotary_selector);
+      			app_get_resource("WALL40.png", img_path, PATH_MAX);
+      			elm_image_file_set(img, "WALL40.png", NULL);
+      			evas_object_image_file_set(img, img_path, NULL);
+      			evas_object_show(img);
+
+              	eext_rotary_selector_item_part_content_set(item, "item,icon", EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL, img);
+              }
+              else if(i == 1){
+              	eext_rotary_selector_item_part_color_set(item, "item,bg_image", EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL, 255,255,255,255);
+
+              	Evas_Object *img = elm_image_add(ad->rotary_selector);
+              	app_get_resource("WALL41.png", img_path, PATH_MAX);
+              	elm_image_file_set(img, "WALL41.png", NULL);
+              	evas_object_image_file_set(img, img_path, NULL);
+              	evas_object_show(img);
+
+      			eext_rotary_selector_item_part_content_set(item, "item,icon", EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL, img);
+              }
+              else if(i == 2){
+              	eext_rotary_selector_item_part_color_set(item, "item,bg_image", EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL, 255,255,255,255);
+
+              	Evas_Object *img = elm_image_add(ad->rotary_selector);
+              	app_get_resource("WALL42.png", img_path, PATH_MAX);
+              	elm_image_file_set(img, "WALL42.png", NULL);
+              	evas_object_image_file_set(img, img_path, NULL);
+              	evas_object_show(img);
+
+      			eext_rotary_selector_item_part_content_set(item, "item,icon", EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL, img);
+              }
+              else if(i == 3){
+      			eext_rotary_selector_item_part_color_set(item, "item,bg_image", EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL, 255,255,255,255);
+
+      			Evas_Object *img = elm_image_add(ad->rotary_selector);
+      			app_get_resource("WALL43.png", img_path, PATH_MAX);
+      			elm_image_file_set(img, "WALL43.png", NULL);
+      			evas_object_image_file_set(img, img_path, NULL);
+      			evas_object_show(img);
+
+      			eext_rotary_selector_item_part_content_set(item, "item,icon", EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL, img);
+      		}
+              else if(i == 4){
+      			eext_rotary_selector_item_part_color_set(item, "item,bg_image", EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL, 255,255,255,255);
+
+      			Evas_Object *img = elm_image_add(ad->rotary_selector);
+      			app_get_resource("WALL44.png", img_path, PATH_MAX);
+      			elm_image_file_set(img, "WALL44.png", NULL);
+      			evas_object_image_file_set(img, img_path, NULL);
+      			evas_object_show(img);
+
+      			eext_rotary_selector_item_part_content_set(item, "item,icon", EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL, img);
+      		}
+            const char MAX_TEXT_SIZE = 20;
+            char item_text[MAX_TEXT_SIZE] = {'\0',};
+            snprintf(item_text, MAX_TEXT_SIZE, "Element %d", i + 1);
+           }
+     }
+      else {
+             for (int i = 0; i < items_count; ++i)
+               {
+                  Eext_Object_Item *item = eext_rotary_selector_item_append(ad->rotary_selector);
+                  items[i] = item;
+
+                  char img_path[PATH_MAX] = "";
+
+
+                  if(i == 0){
+                  	eext_rotary_selector_item_part_color_set(item, "item,bg_image", EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL, 255,255,255,255);
+
+          			Evas_Object *img = elm_image_add(ad->rotary_selector);
+          			app_get_resource("WALL50.png", img_path, PATH_MAX);
+          			elm_image_file_set(img, "WALL50.png", NULL);
+          			evas_object_image_file_set(img, img_path, NULL);
+          			evas_object_show(img);
+
+                  	eext_rotary_selector_item_part_content_set(item, "item,icon", EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL, img);
+                  }
+                  else if(i == 1){
+                  	eext_rotary_selector_item_part_color_set(item, "item,bg_image", EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL, 255,255,255,255);
+
+                  	Evas_Object *img = elm_image_add(ad->rotary_selector);
+                  	app_get_resource("WALL51.png", img_path, PATH_MAX);
+                  	elm_image_file_set(img, "WALL51.png", NULL);
+                  	evas_object_image_file_set(img, img_path, NULL);
+                  	evas_object_show(img);
+
+          			eext_rotary_selector_item_part_content_set(item, "item,icon", EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL, img);
+                  }
+                  else if(i == 2){
+                  	eext_rotary_selector_item_part_color_set(item, "item,bg_image", EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL, 255,255,255,255);
+
+                  	Evas_Object *img = elm_image_add(ad->rotary_selector);
+                  	app_get_resource("WALL52.png", img_path, PATH_MAX);
+                  	elm_image_file_set(img, "WALL52.png", NULL);
+                  	evas_object_image_file_set(img, img_path, NULL);
+                  	evas_object_show(img);
+
+          			eext_rotary_selector_item_part_content_set(item, "item,icon", EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL, img);
+                  }
+                  else if(i == 3){
+          			eext_rotary_selector_item_part_color_set(item, "item,bg_image", EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL, 255,255,255,255);
+
+          			Evas_Object *img = elm_image_add(ad->rotary_selector);
+          			app_get_resource("WALL53.png", img_path, PATH_MAX);
+          			elm_image_file_set(img, "WALL53.png", NULL);
+          			evas_object_image_file_set(img, img_path, NULL);
+          			evas_object_show(img);
+
+          			eext_rotary_selector_item_part_content_set(item, "item,icon", EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL, img);
+          		}
+                  else if(i == 4){
+          			eext_rotary_selector_item_part_color_set(item, "item,bg_image", EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL, 255,255,255,255);
+
+          			Evas_Object *img = elm_image_add(ad->rotary_selector);
+          			app_get_resource("WALL54.png", img_path, PATH_MAX);
+          			elm_image_file_set(img, "WALL54.png", NULL);
+          			evas_object_image_file_set(img, img_path, NULL);
+          			evas_object_show(img);
+
+          			eext_rotary_selector_item_part_content_set(item, "item,icon", EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL, img);
+          		}
+                const char MAX_TEXT_SIZE = 20;
+                char item_text[MAX_TEXT_SIZE] = {'\0',};
+                snprintf(item_text, MAX_TEXT_SIZE, "Element %d", i + 1);
+               }
+         }
 
    Eext_Object_Item *item = eext_rotary_selector_item_append(ad->rotary_selector);
    const char MAX_TEXT_SIZE = 20;
@@ -849,7 +1049,6 @@ _rotary_selector_create_wall(appdata_s *ad)
    eext_rotary_selector_item_part_text_set(item, "selector,main_text", item_text);
    eext_rotary_selector_item_part_text_set(item, "selector,sub_text", "main menu");
 
-   char img_path[PATH_MAX] = "";
    Evas_Object *img = elm_image_add(ad->rotary_selector);
    app_get_resource("exit.png", img_path, PATH_MAX);
    elm_image_file_set(img, "exit.png", NULL);
@@ -899,8 +1098,7 @@ _rotary_selector_create_wall(appdata_s *ad)
 
 }
 
-static void
-_rotary_selector_create_obstacle(appdata_s *ad)
+static void _rotary_selector_create_obstacle(appdata_s *ad)
 {
    ad->rotary_selector = eext_rotary_selector_add(ad->conform);
 
