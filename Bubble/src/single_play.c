@@ -1,5 +1,29 @@
 #include "bubble.h"
 
+static void stage_size_common(void *data, int stage_size);
+static void stage_size_3_cb(void *data, Evas_Object *obj, void *event_info);
+static void stage_size_4_cb(void *data, Evas_Object *obj, void *event_info);
+static void stage_size_5_cb(void *data, Evas_Object *obj, void *event_info);
+
+
+static void stage_common(void *data, int stage);
+static void stage1_cb(void *data, Evas_Object *obj, void *event_info);
+static void stage2_cb(void *data, Evas_Object *obj, void *event_info);
+static void stage3_cb(void *data, Evas_Object *obj, void *event_info);
+static void stage4_cb(void *data, Evas_Object *obj, void *event_info);
+static void stage5_cb(void *data, Evas_Object *obj, void *event_info);
+static void stage6_cb(void *data, Evas_Object *obj, void *event_info);
+static void stage7_cb(void *data, Evas_Object *obj, void *event_info);
+static void stage8_cb(void *data, Evas_Object *obj, void *event_info);
+static void stage9_cb(void *data, Evas_Object *obj, void *event_info);
+static void stage10_cb(void *data, Evas_Object *obj, void *event_info);
+static void stage11_cb(void *data, Evas_Object *obj, void *event_info);
+static void stage12_cb(void *data, Evas_Object *obj, void *event_info);
+static void stage13_cb(void *data, Evas_Object *obj, void *event_info);
+static void stage14_cb(void *data, Evas_Object *obj, void *event_info);
+static void stage15_cb(void *data, Evas_Object *obj, void *event_info);
+
+
 void single_play_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	appdata_s *ad = data;
