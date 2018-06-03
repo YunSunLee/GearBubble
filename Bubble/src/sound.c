@@ -78,6 +78,8 @@ stop_player(void *data, Evas_Object *obj, void *event_info)
 	}
 }
 
+
+
 /* Get full path of source file */
 static inline const char*
 get_resource_path(const char *file_path)
@@ -91,6 +93,7 @@ get_resource_path(const char *file_path)
 }
 
 /* Load file to Player */
+
 void
 prepare_player(appdata_s* ad, int index)
 {
@@ -111,10 +114,11 @@ prepare_player(appdata_s* ad, int index)
 }
 
 /* Start play */
-void
+/*void
 start_player(void *data, Evas_Object *obj, void *event_info)
 {
 	appdata_s *ad = data;
 	if( get_player_state(ad->player) != PLAYER_STATE_PLAYING)
 		player_start(ad->player);
 }
+*/

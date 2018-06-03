@@ -35,6 +35,16 @@ static int write_map_num=0;//for writing to file(to know to which file to write 
 static void _rotary_selector_create_wall(appdata_s *ad);
 static void _rotary_selector_create_obstacle(appdata_s *ad);
 
+static void map_editor_size_3_cb(void *data, Evas_Object *obj, void *event_info);
+static void map_editor_size_4_cb(void *data, Evas_Object *obj, void *event_info);
+static void map_editor_size_5_cb(void *data, Evas_Object *obj, void *event_info);
+
+static void custom_map1_cb(void *data, Evas_Object *obj, void *event_info);
+static void custom_map2_cb(void *data, Evas_Object *obj, void *event_info);
+static void custom_map3_cb(void *data, Evas_Object *obj, void *event_info);
+static void custom_map4_cb(void *data, Evas_Object *obj, void *event_info);
+static void custom_map5_cb(void *data, Evas_Object *obj, void *event_info);
+
 
 static void map_editor_decode_3(appdata_s *ad, char grid_info[]){
 	//initial map create

@@ -10,6 +10,25 @@
 #include <stdlib.h>
 #include <string.h>
 
+
+static void ranking_common(void *data, int stage);
+static void ranking_1_cb(void *data, Evas_Object *obj, void *event_info);
+static void ranking_2_cb(void *data, Evas_Object *obj, void *event_info);
+static void ranking_3_cb(void *data, Evas_Object *obj, void *event_info);
+static void ranking_4_cb(void *data, Evas_Object *obj, void *event_info);
+static void ranking_5_cb(void *data, Evas_Object *obj, void *event_info);
+static void ranking_6_cb(void *data, Evas_Object *obj, void *event_info);
+static void ranking_7_cb(void *data, Evas_Object *obj, void *event_info);
+static void ranking_8_cb(void *data, Evas_Object *obj, void *event_info);
+static void ranking_9_cb(void *data, Evas_Object *obj, void *event_info);
+static void ranking_10_cb(void *data, Evas_Object *obj, void *event_info);
+static void ranking_11_cb(void *data, Evas_Object *obj, void *event_info);
+static void ranking_12_cb(void *data, Evas_Object *obj, void *event_info);
+static void ranking_13_cb(void *data, Evas_Object *obj, void *event_info);
+static void ranking_14_cb(void *data, Evas_Object *obj, void *event_info);
+static void ranking_15_cb(void *data, Evas_Object *obj, void *event_info);
+static void *itoa(int number, char *str, int radix);
+
 void ranking_cb(void *data, Evas_Object *obj, void *event_info){
 	appdata_s *ad = data;
 

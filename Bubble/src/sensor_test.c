@@ -23,6 +23,13 @@ static int shake_detect=0;
 
 Evas_Object *jmp;
 
+static void move_test_cb(void *data, Evas_Object *obj, void *event_info);
+static void heart_rate_test_cb(void *data, Evas_Object *obj, void *event_info);
+static void jump_test_cb(void *data, Evas_Object *obj, void *event_info);
+static void shake_test_cb(void *data, Evas_Object *obj, void *event_info);
+static void vibe_test_cb(void *data, Evas_Object *obj, void *event_info);
+static void check_obstacle(appdata_s *ad);
+
 //1: up, 2: down, 3:left, 4:right
 static int can_move(appdata_s *ad, int direction){
 	if(direction == 1 && ad->user_state[1] != 0)
@@ -79,15 +86,6 @@ static char* direction(float x, float px, float y, float py){
 		else return "?";
 	}
 	else return "?";
-}
-
-static void show_is_supported(appdata_s *ad)
-{
-	char buf[PATH_MAX];
-	bool is_supported = false;
-	sensor_is_supported(SENSOR_ACCELEROMETER, &is_supported);
-	//sprintf(buf, "Acceleration Sensor is %s", is_supported ? "support" : "not support");
-	//elm_object_text_set(ad->sensor_label[0], buf);
 }
 
 static void check_obstacle(appdata_s *ad){
@@ -419,6 +417,8 @@ _new_sensor_value_heart(sensor_h sensor, sensor_event_s *sensor_data, void *user
 	int hr = sensor_data->values[0];
 
 	 appdata_s *ad = user_data;
+	
+	 ad->hr_test = hr;
 
 
 	 if(ad->sensor_status[2] == 2 && heart_flag == 1){ //play mode
