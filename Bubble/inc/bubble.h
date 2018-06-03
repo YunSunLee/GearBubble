@@ -149,6 +149,9 @@ bt_socket_role_e role;
 int win_w;
 int win_h;
 
+
+int hr_test; //remove later
+
 };
 typedef struct appdata appdata_s;
 

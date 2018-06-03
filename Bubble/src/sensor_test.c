@@ -23,6 +23,8 @@ static int shake_detect=0;
 
 Evas_Object *jmp;
 
+
+
 //1: up, 2: down, 3:left, 4:right
 static int can_move(appdata_s *ad, int direction){
 	if(direction == 1 && ad->user_state[1] != 0)
@@ -418,7 +420,11 @@ _new_sensor_value_heart(sensor_h sensor, sensor_event_s *sensor_data, void *user
 {
 	int hr = sensor_data->values[0];
 
+
+
 	 appdata_s *ad = user_data;
+
+	 ad->hr_test = hr;
 
 
 	 if(ad->sensor_status[2] == 2 && heart_flag == 1){ //play mode
