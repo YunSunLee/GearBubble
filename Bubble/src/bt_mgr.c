@@ -27,20 +27,61 @@ HAPI static void app_resource_get(const char *edj_file_in, char *edj_path_out, i
 }
 
 static void _socket_conn_state_changed_cb(int result, bt_socket_connection_state_e connection_state, bt_socket_connection_s *connection, void *user_data)
-{
+{//연결 기다렷다가 채팅 방 레이아웃 부르기
+
 	appdata_s *ad = (appdata_s *) user_data;
 	ret_if(!ad);
 
 	ret_if(result != BT_ERROR_NONE);
-
-	draw_map(ad);
 
 	if (connection_state == BT_SOCKET_CONNECTED) {
 		if (connection != NULL) {
 			_D("Connected %d %d", ad->socket_fd, connection->socket_fd);
 			ad->role = connection->local_role;
 			ad->socket_fd = connection->socket_fd;
-			bt_chat_room_layout_create(ad);
+
+			/*
+			// draw 3*3 map
+			//appdata_s *ad = data;
+
+			//start timer
+			ad->timer = ecore_timer_add(1.0, timer_cb, ad);
+			ad->time = 0;
+
+			//create vibration
+			device_haptic_open(0, &ad->handle);
+
+			start_acceleration_sensor(ad);
+			start_gyroscope_sensor(ad);
+			start_heartrate_sensor(ad);
+			ad->sensor_status[0] = 2;
+			ad->sensor_status[1] = 2;
+			ad->sensor_status[2] = 2;
+
+
+			//initialize user_state and grid state
+			ad->user_state[0] = 0;
+			ad->user_state[1] = ad->stage_size-1;
+			ad->user_state[2] = 0;
+			ad->user_state[3] = 0;
+
+			for (int j=0;j<ad->stage_size;j++){ //i,j order change
+				for (int i=0;i<ad->stage_size;i++){
+					ad->grid_state[i][j][4] = 0;
+				}
+			}
+
+			ad->user_state[2] = 1;
+			*/
+
+
+			create_base_gui(ad);
+			single_play_cb(ad, NULL, NULL);
+			ad->stage_size = 3;
+			map_creater_cb(ad, NULL, NULL);
+
+
+			//bt_chat_room_layout_create(ad);
 			if (s_info.noti) {
 				evas_object_del(s_info.noti);
 				s_info.noti = NULL;

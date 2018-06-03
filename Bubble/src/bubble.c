@@ -43,6 +43,7 @@ void main_menu_cb(void *data, Evas_Object *obj, void *event_info){
 	ad->sensor_status[2] = -1;
 	ad->user_state[2] = 0;
 	ecore_timer_del(ad->timer);
+	ad->is_network = 0;
 	create_base_gui(ad);
 }
 

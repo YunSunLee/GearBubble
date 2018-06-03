@@ -149,6 +149,9 @@ bt_socket_role_e role;
 int win_w;
 int win_h;
 
+int friend_pop_num;
+int is_network;
+
 };
 typedef struct appdata appdata_s;
 
@@ -216,6 +219,10 @@ player_h create_player();
 static inline const char* get_resource_path(const char *file_path);
 void prepare_player(appdata_s* ad, int index);
 void start_player(void *data, Evas_Object *obj, void *event_info);
+
+
+/*network*/
+void _message_send(appdata_s *ad);
 
 
 
