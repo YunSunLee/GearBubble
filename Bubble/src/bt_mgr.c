@@ -17,7 +17,7 @@ static struct _s_info {
 	.list = NULL,
 };
 
-HAPI void app_resource_get(const char *edj_file_in, char *edj_path_out, int edj_path_max)
+HAPI static void app_resource_get(const char *edj_file_in, char *edj_path_out, int edj_path_max)
 {
 	char *res_path = app_get_resource_path();
 	if (res_path) {
@@ -32,6 +32,8 @@ static void _socket_conn_state_changed_cb(int result, bt_socket_connection_state
 	ret_if(!ad);
 
 	ret_if(result != BT_ERROR_NONE);
+
+	draw_map(ad);
 
 	if (connection_state == BT_SOCKET_CONNECTED) {
 		if (connection != NULL) {

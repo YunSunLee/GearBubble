@@ -1,17 +1,8 @@
 #include "bubble.h"
 #include <sensor.h>
-#include "single_play.c"
-#include "network.c"
-#include "map_editor.c"
-#include "ranking.c"
-#include "tutorial.c"
-#include "sensor_test.c"
-#include "make_map.c"
-#include "sound.c"
 
 
-static void
-win_delete_request_cb(void *data, Evas_Object *obj, void *event_info)
+void win_delete_request_cb(void *data, Evas_Object *obj, void *event_info)
 {
 ui_app_exit();
 }
@@ -26,8 +17,7 @@ elm_win_lower(ad->win);
 
 
 
-static void
-main_menu_cb(void *data, Evas_Object *obj, void *event_info){
+void main_menu_cb(void *data, Evas_Object *obj, void *event_info){
 	appdata_s *ad = data;
 
 	if((ad->user_state[2] == ad->stage_size * ad->stage_size) &(ad->time>0)){
@@ -147,7 +137,7 @@ void create_base_gui(appdata_s *ad)
 		evas_object_size_hint_align_set(ad->back_list, EVAS_HINT_FILL, EVAS_HINT_FILL);
 		elm_list_item_append(ad->back_list, "MENU", NULL, NULL, main_menu_cb, ad);
 
-
+/*
 		ad->stage_list = elm_list_add(ad->box);
 		evas_object_size_hint_weight_set(ad->stage_list, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 		evas_object_size_hint_align_set(ad->stage_list, EVAS_HINT_FILL, EVAS_HINT_FILL);
@@ -156,6 +146,7 @@ void create_base_gui(appdata_s *ad)
 		elm_list_item_append(ad->stage_list, "STAGE 3", NULL, NULL, stage3_cb, ad);
 		elm_list_item_append(ad->stage_list, "STAGE 4", NULL, NULL, stage4_cb, ad);
 		elm_list_item_append(ad->stage_list, "STAGE 5", NULL, NULL, stage5_cb, ad);
+*/
 
 		ad->stage = elm_list_add(ad->box);
 		evas_object_size_hint_weight_set(ad->stage, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);

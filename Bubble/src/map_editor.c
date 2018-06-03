@@ -1037,8 +1037,7 @@ _rotary_selector_create_obstacle(appdata_s *ad)
 }
 
 
-static void
-map_editor_cb(void *data, Evas_Object *obj, void *event_info)
+void map_editor_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	appdata_s *ad = data;
 

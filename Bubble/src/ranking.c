@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-static void ranking_cb(void *data, Evas_Object *obj, void *event_info){
+void ranking_cb(void *data, Evas_Object *obj, void *event_info){
 	appdata_s *ad = data;
 
 	elm_object_text_set(ad->title, "<font_size = 50><align=center>RANKING</align></font_size>");
@@ -165,7 +165,7 @@ static void ranking_common(void *data, int stage){
 	elm_box_pack_after(ad->box, ad->ranking_stage_list, ad->box_title);
 }
 
-static void read_rank_file(void *data){
+void read_rank_file(void *data){
 	appdata_s *ad = data;
 
 	FILE *fp;
@@ -192,7 +192,7 @@ static void read_rank_file(void *data){
 	fclose(fp);
 }
 
-static void write_rank_file(void *data){
+void write_rank_file(void *data){
 	appdata_s *ad = data;
 	char buf[100];
 
@@ -229,7 +229,7 @@ static void *itoa(int number, char *str, int radix){
     *(str + index) = '\0';
 }
 
-static void app_get_data(const char *res_file_in, char *res_path_out, int res_path_max){
+void app_get_data(const char *res_file_in, char *res_path_out, int res_path_max){
 	char *res_path = app_get_data_path();
 	if(res_path){
 		snprintf(res_path_out, res_path_max, "%s%s", res_path, res_file_in);
@@ -237,7 +237,7 @@ static void app_get_data(const char *res_file_in, char *res_path_out, int res_pa
 	}
 }
 
-static void app_get_resource(const char *res_file_in, char *res_path_out, int res_path_max){
+void app_get_resource(const char *res_file_in, char *res_path_out, int res_path_max){
 	char *res_path = app_get_resource_path();
 	if (res_path) {
 		snprintf(res_path_out, res_path_max, "%s%s", res_path, res_file_in);
@@ -245,7 +245,7 @@ static void app_get_resource(const char *res_file_in, char *res_path_out, int re
 	}
 }
 
-static void swap(int *x, int *y){
+void swap(int *x, int *y){
 	int temp = *x;
 	*x = *y;
 	*y = temp;

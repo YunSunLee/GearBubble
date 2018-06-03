@@ -265,8 +265,7 @@ _layout_create(appdata_s *ad)
 	evas_object_show(ad->layout);
 }
 
-static void
-tutorial_cb(void *data, Evas_Object *obj, void *event_info)
+void tutorial_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	appdata_s *ad = data;
 

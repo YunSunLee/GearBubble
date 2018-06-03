@@ -1,7 +1,7 @@
 #include "bubble.h"
 
 
-static Eina_Bool timer_cb(void *data EINA_UNUSED){
+Eina_Bool timer_cb(void *data EINA_UNUSED){
 	appdata_s *ad = data;
 
 	ad->time++;
@@ -9,7 +9,7 @@ static Eina_Bool timer_cb(void *data EINA_UNUSED){
 	return ECORE_CALLBACK_RENEW;
 }
 
-static void	draw_map(appdata_s *ad){
+void draw_map(appdata_s *ad){
 
 	evas_object_hide(ad->box);
 	evas_object_hide(ad->box_content);
@@ -156,8 +156,7 @@ static void	draw_map(appdata_s *ad){
 	evas_object_show(ad->back_list);
 }
 
-static void
-map_creater_cb(void *data, Evas_Object *obj, void *event_info)
+void map_creater_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	appdata_s *ad = data;
 

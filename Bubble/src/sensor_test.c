@@ -483,8 +483,7 @@ _new_sensor_value_heart(sensor_h sensor, sensor_event_s *sensor_data, void *user
 	 }
 }
 
-static void
-start_acceleration_sensor(appdata_s *ad)
+void start_acceleration_sensor(appdata_s *ad)
 {
 	if(ad->sensor_status[0] != -1 && ad->sensor_status[0] != 1 && ad->sensor_status[0] != 2){
 		sensor_error_e err = SENSOR_ERROR_NONE;
@@ -525,8 +524,7 @@ start_acceleration_sensor(appdata_s *ad)
 	}
 }
 
-static void
-start_gyroscope_sensor(appdata_s *ad)
+void start_gyroscope_sensor(appdata_s *ad)
 {
 	if(ad->sensor_status[1] != -1 && ad->sensor_status[1] != 1 && ad->sensor_status[1] != 2){
 		sensor_error_e err = SENSOR_ERROR_NONE;
@@ -561,8 +559,7 @@ start_gyroscope_sensor(appdata_s *ad)
 	}
 }
 
-static void
-start_heartrate_sensor(appdata_s *ad)
+void start_heartrate_sensor(appdata_s *ad)
 {
 	if(ad->sensor_status[2] != -1 && ad->sensor_status[2] != 1 && ad->sensor_status[2] != 2){
 		sensor_error_e err = SENSOR_ERROR_NONE;
@@ -597,8 +594,7 @@ start_heartrate_sensor(appdata_s *ad)
 	}
 }
 
-static void
-sensor_test_cb(void *data, Evas_Object *obj, void *event_info)
+void sensor_test_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	appdata_s *ad = data;
 

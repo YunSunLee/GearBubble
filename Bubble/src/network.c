@@ -8,8 +8,7 @@
 #include "bubble.h"
 #include "bt_chat.c"
 
-static void
-network_play_cb(void *data, Evas_Object *obj, void *event_info)
+void network_play_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	appdata_s *ad = data;
 

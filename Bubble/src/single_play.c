@@ -1,8 +1,6 @@
 #include "bubble.h"
 
-
-static void
-single_play_cb(void *data, Evas_Object *obj, void *event_info)
+void single_play_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	appdata_s *ad = data;
 

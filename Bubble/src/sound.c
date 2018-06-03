@@ -11,8 +11,7 @@ sound_changed_cb(void *data, Evas_Object *obj, void *event_info)
 		ad->sound = 0;
 }
 
-static void
-sound_cb(void *data, Evas_Object *obj, void *event_info)
+void sound_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	appdata_s *ad = data;
 
@@ -44,8 +43,7 @@ sound_cb(void *data, Evas_Object *obj, void *event_info)
 
 
 /* Get player state */
-static player_state_e
-get_player_state(player_h player)
+player_state_e get_player_state(player_h player)
 {
 	player_state_e state;
 	player_get_state(player, &state);
@@ -61,8 +59,7 @@ on_player_completed(player_h* player)
 }
 
 /* Create Player */
-static player_h
-create_player()
+player_h create_player()
 {
 	player_h player;
 	player_create(&player);
@@ -94,7 +91,7 @@ get_resource_path(const char *file_path)
 }
 
 /* Load file to Player */
-static void
+void
 prepare_player(appdata_s* ad, int index)
 {
 	// Stop play
@@ -114,7 +111,7 @@ prepare_player(appdata_s* ad, int index)
 }
 
 /* Start play */
-static void
+void
 start_player(void *data, Evas_Object *obj, void *event_info)
 {
 	appdata_s *ad = data;

@@ -161,29 +161,29 @@ typedef enum {
 static void app_resource_get(const char *edj_file_in, char *edj_path_out, int edj_path_max);
 void cr_layout(appdata_s *ad);
 
-static void win_delete_request_cb(void *data, Evas_Object *obj, void *event_info);
+void win_delete_request_cb(void *data, Evas_Object *obj, void *event_info);
 
 void create_base_gui(appdata_s *ad);
 
-static void main_menu_cb(void *data, Evas_Object *obj, void *event_info);
+void main_menu_cb(void *data, Evas_Object *obj, void *event_info);
 
-static void single_play_cb(void *data, Evas_Object *obj, void *event_info);
+void single_play_cb(void *data, Evas_Object *obj, void *event_info);
 
-static void network_play_cb(void *data, Evas_Object *obj, void *event_info);
+void network_play_cb(void *data, Evas_Object *obj, void *event_info);
 
-static void map_editor_cb(void *data, Evas_Object *obj, void *event_info);
+void map_editor_cb(void *data, Evas_Object *obj, void *event_info);
 
-static void ranking_cb(void *data, Evas_Object *obj, void *event_info);
+void ranking_cb(void *data, Evas_Object *obj, void *event_info);
 
-static void tutorial_cb(void *data, Evas_Object *obj, void *event_info);
+void tutorial_cb(void *data, Evas_Object *obj, void *event_info);
 
-static void map_creater_cb(void *data, Evas_Object *obj, void *event_info);
+void map_creater_cb(void *data, Evas_Object *obj, void *event_info);
 
-static void sensor_test_cb(void *data, Evas_Object *obj, void *event_info);
+void sensor_test_cb(void *data, Evas_Object *obj, void *event_info);
 
 static void sound_changed_cb(void *data, Evas_Object *obj, void *event_info);
 
-static void sound_cb(void *data, Evas_Object *obj, void *event_info);
+void sound_cb(void *data, Evas_Object *obj, void *event_info);
 
 /* stage */
 static void stage_size_common(void *data, int stage_size);
@@ -209,14 +209,14 @@ static void stage13_cb(void *data, Evas_Object *obj, void *event_info);
 static void stage14_cb(void *data, Evas_Object *obj, void *event_info);
 static void stage15_cb(void *data, Evas_Object *obj, void *event_info);
 
-static void app_get_resource(const char *res_file_in, char *res_path_out, int res_path_max);
+void app_get_resource(const char *res_file_in, char *res_path_out, int res_path_max);
 
 /* sensor */
 static void show_is_supported(appdata_s *ad);
 static void _new_sensor_value(sensor_h sensor, sensor_event_s *sensor_data, void *user_data);
-static void start_acceleration_sensor(appdata_s *ad);
-static void start_gyroscope_sensor(appdata_s *ad);
-static void start_heartrate_sensor(appdata_s *ad);
+void start_acceleration_sensor(appdata_s *ad);
+void start_gyroscope_sensor(appdata_s *ad);
+void start_heartrate_sensor(appdata_s *ad);
 static void move_test_cb(void *data, Evas_Object *obj, void *event_info);
 static void heart_rate_test_cb(void *data, Evas_Object *obj, void *event_info);
 static void jump_test_cb(void *data, Evas_Object *obj, void *event_info);
@@ -226,8 +226,8 @@ static void check_obstacle(appdata_s *ad);
 static int start_jmp_sensor(appdata_s *ad);
 
 /* map creater */
-static void draw_map(appdata_s *ad);
-static Eina_Bool timer_cb(void *data EINA_UNUSED);
+void draw_map(appdata_s *ad);
+Eina_Bool timer_cb(void *data EINA_UNUSED);
 
 /* map_editor */
 static void map_editor_size_3_cb(void *data, Evas_Object *obj, void *event_info);
@@ -241,10 +241,10 @@ static void custom_map4_cb(void *data, Evas_Object *obj, void *event_info);
 static void custom_map5_cb(void *data, Evas_Object *obj, void *event_info);
 
 /* ranking */
-static void app_get_data(const char *res_file_in, char *res_path_out, int res_path_max);
-static void read_rank_file(void *data);
-static void write_rank_file(void *data);
-static void ranking_cb(void *data, Evas_Object *obj, void *event_info);
+void app_get_data(const char *res_file_in, char *res_path_out, int res_path_max);
+void read_rank_file(void *data);
+void write_rank_file(void *data);
+void ranking_cb(void *data, Evas_Object *obj, void *event_info);
 static void ranking_common(void *data, int stage);
 static void ranking_1_cb(void *data, Evas_Object *obj, void *event_info);
 static void ranking_2_cb(void *data, Evas_Object *obj, void *event_info);
@@ -262,16 +262,16 @@ static void ranking_13_cb(void *data, Evas_Object *obj, void *event_info);
 static void ranking_14_cb(void *data, Evas_Object *obj, void *event_info);
 static void ranking_15_cb(void *data, Evas_Object *obj, void *event_info);
 static void *itoa(int number, char *str, int radix);
-static void swap(int *x, int *y);
+void swap(int *x, int *y);
 
 /* player */
-static player_state_e get_player_state(player_h player);
+player_state_e get_player_state(player_h player);
 static void on_player_completed(player_h* player);
-static player_h create_player();
+player_h create_player();
 static void stop_player(void *data, Evas_Object *obj, void *event_info);
 static inline const char* get_resource_path(const char *file_path);
-static void prepare_player(appdata_s* ad, int index);
-static void start_player(void *data, Evas_Object *obj, void *event_info);
+void prepare_player(appdata_s* ad, int index);
+void start_player(void *data, Evas_Object *obj, void *event_info);
 
 
 
