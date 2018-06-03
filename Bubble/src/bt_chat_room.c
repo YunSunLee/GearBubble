@@ -234,7 +234,10 @@ static void _message_send(appdata_s *ad)
 	ret_if(!ad);
 	ret_if(!s_info.input_field_entry);
 
-	main_text = elm_entry_entry_get(s_info.input_field_entry);
+	//main_text = elm_entry_entry_get(s_info.input_field_entry);
+	char temp[10];
+	sprintf(temp, "%d", ad->hr_test );
+	main_text = temp;
 	ret_if(!main_text || (strlen(main_text) == 0));
 
 	ret = bt_socket_send_data(ad->socket_fd, main_text, strlen(main_text) + 1);
