@@ -224,7 +224,7 @@ static void _bubble_box_resize_cb(void *data, Evas *e, Evas_Object *obj, void *e
 	evas_object_event_callback_del(s_info.bubble_box, EVAS_CALLBACK_RESIZE, _bubble_box_resize_cb);
 }
 
-void _message_send(appdata_s *ad)
+static void _message_send(appdata_s *ad)
 {
 	Evas_Object *bubble_table = NULL;
 	Evas_Object *noti = NULL;
@@ -234,10 +234,13 @@ void _message_send(appdata_s *ad)
 	ret_if(!ad);
 	ret_if(!s_info.input_field_entry);
 
-	//main_text = elm_entry_entry_get(s_info.input_field_entry);
 	char temp[10];
-	sprintf(temp, "%d", ad->user_state[2]);
+
+	sprintf(temp, "%d", ad->hr_test);
+
+	//main_text = elm_entry_entry_get(s_info.input_field_entry);
 	main_text = temp;
+
 	ret_if(!main_text || (strlen(main_text) == 0));
 
 	ret = bt_socket_send_data(ad->socket_fd, main_text, strlen(main_text) + 1);
@@ -264,7 +267,7 @@ static void _send_button_clicked_cb(void *data, Evas_Object *obj, void *event_in
 	appdata_s *ad = (appdata_s *) data;
 	ret_if(!ad);
 
-	//_message_send(ad);
+	_message_send(ad);
 }
 
 static Evas_Object *_main_view_create(appdata_s *ad)
@@ -381,9 +384,6 @@ static void _socket_conn_state_changed_cb(int result, bt_socket_connection_state
 
 static void _socket_data_received_cb(bt_socket_received_data_s *data, void *user_data)
 {
-
-	appdata_s *ad = user_data;
-
 	Evas_Object *bubble_table = NULL;
 	char *message = NULL;
 
@@ -392,15 +392,13 @@ static void _socket_data_received_cb(bt_socket_received_data_s *data, void *user
 	message = strndup(data->data, data->data_size);
 	goto_if(!message, ERROR);
 
-	//bubble_table = _bubble_table_create(s_info.bubble_box, MESSAGE_BUBBLE_RECEIVE, message, _current_time_get());
-	//goto_if(!bubble_table, ERROR);
+	bubble_table = _bubble_table_create(s_info.bubble_box, MESSAGE_BUBBLE_RECEIVE, message, _current_time_get());
+	goto_if(!bubble_table, ERROR);
 
-	//evas_object_show(bubble_table);
-	//elm_box_pack_end(s_info.bubble_box, bubble_table);
+	evas_object_show(bubble_table);
+	elm_box_pack_end(s_info.bubble_box, bubble_table);
 
-	//evas_object_event_callback_add(s_info.bubble_box, EVAS_CALLBACK_RESIZE, _bubble_box_resize_cb, NULL);
-
-	ad->friend_pop_num = atoi(message);
+	evas_object_event_callback_add(s_info.bubble_box, EVAS_CALLBACK_RESIZE, _bubble_box_resize_cb, NULL);
 
 	free(message);
 

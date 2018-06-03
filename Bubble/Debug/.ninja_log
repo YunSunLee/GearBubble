@@ -19,6 +19,7 @@
 234	5852	0	src/bt_chat.o	b54e7bf5c613a27c
 37	1328	0	res/edje/bt_chat.edj	a3bdc40afb2d1e19
 44	1394	0	res/edje/create_server.edj	a951ab5d5f2e0d11
+<<<<<<< HEAD
 252	5992	0	src/single_play.o	75f674fb98ec3bd4
 284	6136	0	src/sensor_test.o	d044bf4733744df
 7	6158	0	src/bt_chat.o	b54e7bf5c613a27c
@@ -61,3 +62,42 @@
 11458	14081	0	src/make_map.o	74a2e50efcffdb6a
 11431	14221	0	src/bt_chat_room.o	61f7657c26274a82
 14226	14838	0	bubble	37a49f0890fa532a
+=======
+0	5	0	clean_cov	b3de405e02eb7ca8
+5	10	0	clean_sa	46ab9549445ac981
+10	17	0	clean	d59b6dac04fa9b5d
+2	217	0	res/edje/bt_chat.edj	b89433d0b091319e
+3	228	0	res/edje/create_server.edj	16965fae3b0aa845
+2	376	0	src/bt_chat.o	611d0164a7dc3eb2
+4	397	0	src/bt_genlist.o	c07353439dbdc722
+1	404	0	src/bt_chat_room.o	b36a6f7ad9991dcf
+7	571	0	src/bt_mgr.o	de3243cabcc7b7a3
+217	574	0	src/bt_noti.o	a2872f37996ddae4
+373	843	0	src/bubble.o	e8d02dbb5d10d4bc
+392	851	0	src/make_map.o	3c0f72817618bf20
+401	854	0	src/map_editor.o	5f7505a759e55ce4
+572	873	0	src/ranking.o	425fa3b5bef30de
+418	896	0	src/network.o	a0ffea1ef4954604
+575	915	0	src/sensor_test.o	7dffd883a8ead03e
+852	1102	0	src/sound.o	543e2ac201c611b3
+849	1112	0	src/single_play.o	9d892ecdb16298d7
+864	1113	0	src/tutorial.o	4c0774a0e7bef2da
+1113	1205	0	bubble	3a6db5c176b8922d
+1	207	0	src/bt_mgr.o	de3243cabcc7b7a3
+207	298	0	bubble	3a6db5c176b8922d
+>>>>>>> 5c52426e30b88b8c516cdd0c27079e2e9e243762
+52	2372	0	res/edje/create_server.edj	a951ab5d5f2e0d11
+14	2398	0	res/edje/bt_chat.edj	a3bdc40afb2d1e19
+158	5368	0	src/sensor_test.o	d044bf4733744df
+290	5627	0	src/ranking.o	b593c0cbdf7abb8f
+196	5769	0	src/single_play.o	75f674fb98ec3bd4
+79	6056	0	src/bt_chat.o	b54e7bf5c613a27c
+2399	7542	0	src/map_editor.o	7929d950f390ca30
+2373	7911	0	src/network.o	4682e3c24f5464cd
+5628	11307	0	src/sound.o	91ccb2c5d9ec5cc6
+5369	11829	0	src/tutorial.o	7f2513e8f14e9923
+5769	12279	0	src/bt_mgr.o	80d12b67cbb3e3b
+6112	12313	0	src/bt_genlist.o	a6ea4e94c5b0d336
+7543	13133	0	src/bubble.o	98a31a2835a238e
+11307	14730	0	src/bt_noti.o	3e0a0701b0e790a3
+11830	14978	0	src/make_map.o	74a2e50efcffdb6a
