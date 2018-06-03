@@ -125,8 +125,13 @@ static void stage1_cb(void *data, Evas_Object *obj, void *event_info){
 	elm_object_text_set(ad->title, "<font_size = 50><align=center>STAGE1</align></font_size>");
 	/* challenger */
 	ad->grid_state[0][0][5] = 1; /* hurdle */
-	ad->grid_state[0][0][5] = 2; /* bug */
+	ad->grid_state[0][1][5] = 2; /* bug */
 	//ad->grid_state[1][1][5] = 3; /* heart */
+
+	/* wall */
+	ad->grid_state[0][2][3] = 1;
+	ad->grid_state[1][2][2] = 1;
+
 	stage_common(ad, 1);
 }
 static void stage2_cb(void *data, Evas_Object *obj, void *event_info){

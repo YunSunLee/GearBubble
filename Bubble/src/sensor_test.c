@@ -23,16 +23,43 @@ static int shake_detect=0;
 
 Evas_Object *jmp;
 
+Evas_Object *wall;
+
 static void move_test_cb(void *data, Evas_Object *obj, void *event_info);
 static void heart_rate_test_cb(void *data, Evas_Object *obj, void *event_info);
 static void jump_test_cb(void *data, Evas_Object *obj, void *event_info);
 static void shake_test_cb(void *data, Evas_Object *obj, void *event_info);
 static void vibe_test_cb(void *data, Evas_Object *obj, void *event_info);
 static void check_obstacle(appdata_s *ad);
+static void make_wall_popup(void *data);
+static void popup_timeout(void *data, Evas_Object *obj, void *event_info);
 
-//1: up, 2: down, 3:left, 4:right
+// direction - 1: up, 2: down, 3:left, 4:right
+// grid_state[x][y][] - 0: up, 1: down, 2:left, 3:right
 static int can_move(appdata_s *ad, int direction){
-	if(direction == 1 && ad->user_state[1] != 0)
+	/* user_state*/
+	int x, y;
+	x= ad->user_state[0];
+	y= ad->user_state[1];
+
+	/* wall */
+	if(direction == 1 && ad->grid_state[x][y][0]==1){
+		make_wall_popup(ad);
+		return 0;
+	}
+	else if(direction == 2 && ad->grid_state[x][y][1]==1){
+		make_wall_popup(ad);
+		return 0;
+	}
+	else if(direction == 3 && ad->grid_state[x][y][2]==1){
+		make_wall_popup(ad);
+		return 0;
+	}
+	else if(direction == 4 && ad->grid_state[x][y][3]==1){
+		make_wall_popup(ad);
+		return 0;
+	}
+	else if  (direction == 1 && ad->user_state[1] != 0)
 		return 1;
 	else if(direction == 2 && ad->user_state[1] != ad->stage_size - 1)
 		return 1;
@@ -40,8 +67,38 @@ static int can_move(appdata_s *ad, int direction){
 		return 1;
 	else if(direction == 4 && ad->user_state[0] != ad->stage_size - 1)
 		return 1;
+
 	else
 		return 0;
+}
+
+static void make_wall_popup(void *data)
+{
+	appdata_s *ad = data;
+	ad->popup = elm_popup_add(ad->grid);
+	elm_popup_align_set(ad->popup, ELM_NOTIFY_ALIGN_FILL, 1.0);
+	evas_object_size_hint_weight_set(ad->popup, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+
+	elm_object_text_set(ad->popup, "<font_size = 50><align=center>Wall!</align></font_size>");
+	evas_object_show(ad->popup);
+
+	char img_path[PATH_MAX] = "";
+	app_get_resource("wall.png", img_path, PATH_MAX);
+	wall= evas_object_image_filled_add(ad->popup);
+	evas_object_image_file_set(wall, img_path, NULL);
+	elm_grid_pack(ad->grid, wall, 15, 25, 75, 75);
+	evas_object_show(wall);
+
+	elm_popup_timeout_set(ad->popup, 2.0);
+	evas_object_smart_callback_add(ad->popup, "timeout", popup_timeout, ad);
+}
+
+static void
+popup_timeout(void *data, Evas_Object *obj, void *event_info)
+{
+	appdata_s *ad = data;
+	evas_object_del(obj);
+	elm_object_text_set(ad->label, "Time out");
 }
 
 static void move(appdata_s *ad, int from, int dest){

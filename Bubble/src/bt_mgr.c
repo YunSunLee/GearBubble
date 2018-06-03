@@ -40,9 +40,8 @@ static void _socket_conn_state_changed_cb(int result, bt_socket_connection_state
 			ad->role = connection->local_role;
 			ad->socket_fd = connection->socket_fd;
 
-			/*
-			// draw 3*3 map
-			//appdata_s *ad = data;
+			/* draw 3*3 map */
+/*			//appdata_s *ad = data;
 
 			//start timer
 			ad->timer = ecore_timer_add(1.0, timer_cb, ad);
@@ -72,12 +71,12 @@ static void _socket_conn_state_changed_cb(int result, bt_socket_connection_state
 			}
 
 			ad->user_state[2] = 1;
-			*/
-
+*/
+			//draw_map(ad);
 
 			create_base_gui(ad);
 			single_play_cb(ad, NULL, NULL);
-			ad->stage_size = 3;
+			ad -> stage_size =3;
 			map_creater_cb(ad, NULL, NULL);
 
 
@@ -94,6 +93,7 @@ static void _socket_conn_state_changed_cb(int result, bt_socket_connection_state
 		_D("Disconnected");
 	}
 }
+
 
 static void _device_bond_created_cb(int result, bt_device_info_s *device_info, void *user_data)
 {

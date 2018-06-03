@@ -40,8 +40,9 @@ void draw_map(appdata_s *ad){
 	evas_object_show(rect);
 	elm_grid_pack(ad->grid, rect, 25, 30, (ad->grid_width+1)*ad->stage_size+1, (ad->grid_width+1)*ad->stage_size+1);
 
-	// Need Revision
-	/* Rect- Red Wall_ horizontal
+	/* challenger _ wall */
+	/* Rect- Red Wall_ horizontal */
+	/*
 	rect = evas_object_rectangle_add(canvas);
 	evas_object_color_set(rect, 255, 0, 0, 255);
 	evas_object_show(rect);

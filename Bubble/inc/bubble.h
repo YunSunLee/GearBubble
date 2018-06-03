@@ -98,6 +98,8 @@ Evas_Object *rect[25]; //added
 Evas *canvas; //added
 int grid_width;
 
+Evas_Object *popup;
+
 /* Initial User_State 0: grid_x, 1: grid_y, 2: bubble_count, 3: shield_count */
 int user_state[4];
 
