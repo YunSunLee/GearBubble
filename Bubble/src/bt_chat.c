@@ -5,8 +5,6 @@
 #include "bt_genlist.h"
 #include "log.h"
 
-
-
 HAPI static void app_resource_get(const char *edj_file_in, char *edj_path_out, int edj_path_max)
 {
 	char *res_path = app_get_resource_path();
