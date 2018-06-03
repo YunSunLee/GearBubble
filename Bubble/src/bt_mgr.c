@@ -41,7 +41,7 @@ static void _socket_conn_state_changed_cb(int result, bt_socket_connection_state
 			ad->socket_fd = connection->socket_fd;
 
 			/* draw 3*3 map */
-			//appdata_s *ad = data;
+/*			//appdata_s *ad = data;
 
 			//start timer
 			ad->timer = ecore_timer_add(1.0, timer_cb, ad);
@@ -71,11 +71,16 @@ static void _socket_conn_state_changed_cb(int result, bt_socket_connection_state
 			}
 
 			ad->user_state[2] = 1;
-
+*/
 			//draw_map(ad);
 
+			create_base_gui(ad);
+			single_play_cb(ad, NULL, NULL);
+			ad -> stage_size =3;
+			map_creater_cb(ad, NULL, NULL);
 
-			bt_chat_room_layout_create(ad);
+
+			//bt_chat_room_layout_create(ad);
 			if (s_info.noti) {
 				evas_object_del(s_info.noti);
 				s_info.noti = NULL;
