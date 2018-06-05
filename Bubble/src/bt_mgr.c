@@ -57,8 +57,12 @@ static void _socket_conn_state_changed_cb(int result, bt_socket_connection_state
 
 	create_base_gui(ad);
 	single_play_cb(ad, NULL, NULL);
-	ad->stage_size = 3;
+	ad->stage_size = 5;
+
+	stage_size_5_cb(ad, NULL, NULL);
+	stage11_cb(ad, NULL, NULL);
 	map_creater_cb(ad, NULL, NULL);
+
 }
 
 static void _device_bond_created_cb(int result, bt_device_info_s *device_info, void *user_data)

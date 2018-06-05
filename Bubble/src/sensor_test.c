@@ -290,9 +290,10 @@ _new_sensor_value_acc(sensor_h sensor, sensor_event_s *sensor_data, void *user_d
 
 	 if(ad->sensor_status[0] >= 1){
 
-
+		 int total = ad->stage_size * ad->stage_size;
 		 //play mode
 		 if(ad->sensor_status[0] == 2){
+
 			 char buf_title[100];
 			 if(ad->user_state[2] == ad->stage_size * ad->stage_size && ad->is_network == 0){
 				 sprintf(buf_title, "<font_size=20><align=center>TIME: %d <br>CLEAR!!!</align></font_size>", ad->time);
@@ -301,11 +302,15 @@ _new_sensor_value_acc(sensor_h sensor, sensor_event_s *sensor_data, void *user_d
 			 }
 			 else if(ad->user_state[2] < ad->stage_size * ad->stage_size && ad->is_network == 0)
 				 sprintf(buf_title, "<font_size=20><align=center>TIME: %d <br>BUBBLE: %d/%d</align></font_size>", ad->time, ad->user_state[2], ad->stage_size * ad->stage_size);
-			 else if(ad->is_network == 1){
-				 _message_send(ad);
+			 else if(ad->is_network == 1 && ad->user_state[2] < total && ad->friend_pop_num < total){
 				 sprintf(buf_title, "<font_size=20><align=center>YOU: %d <br>FRIEND: %d</align></font_size>", ad->user_state[2], ad->friend_pop_num);
 			 }
-
+			 else if(ad->is_network == 1 && ad->user_state[2] == total && ad->friend_pop_num <= total){
+				 sprintf(buf_title, "<font_size=40><align=center>YOU WIN!:)</align></font_size>");
+			 }
+			 else if(ad->is_network == 1 && ad->user_state[2] < total && ad->friend_pop_num == total){
+				 sprintf(buf_title, "<font_size=40><align=center>YOU LOSE!ㅠㅠ</align></font_size>");
+			 }
 			 elm_object_text_set(ad->title, buf_title);
 		 }
 
