@@ -234,12 +234,30 @@ void _message_send(appdata_s *ad)
 	ret_if(!ad);
 	ret_if(!s_info.input_field_entry);
 
-	//char temp[10];
+	if(ad-> network_start == 0){
+		main_text = elm_entry_entry_get(s_info.input_field_entry);
+		if(ad->is_network == 1 && strcmp(main_text, "start")==0){
+			ad->network_start = 1;
 
-	//sprintf(temp, "%d", ad->user_state[2]);
+			int temp = ad->is_network;
 
-	//main_text = elm_entry_entry_get(s_info.input_field_entry);
-	main_text = "test";
+			//play start: call map
+			create_base_gui(ad);
+			single_play_cb(ad, NULL, NULL);
+			ad->stage_size = 5;
+
+			stage_size_5_cb(ad, NULL, NULL);
+			stage11_cb(ad, NULL, NULL);
+			map_creater_cb(ad, NULL, NULL);
+
+			ad->is_network = temp;
+		}
+	}
+	else if(ad-> network_start == 1){
+		char temp[10];
+		sprintf(temp, "%d", ad->user_state[2]);
+		main_text = temp;
+	}
 
 	ret_if(!main_text || (strlen(main_text) == 0));
 
@@ -267,7 +285,7 @@ static void _send_button_clicked_cb(void *data, Evas_Object *obj, void *event_in
 	appdata_s *ad = (appdata_s *) data;
 	ret_if(!ad);
 
-	//_message_send(ad);
+	_message_send(ad);
 }
 
 static Evas_Object *_main_view_create(appdata_s *ad)
@@ -387,7 +405,7 @@ static void _socket_data_received_cb(bt_socket_received_data_s *data, void *user
 
 	appdata_s *ad = user_data;
 
-	ad->friend_pop_num++;
+
 
 	Evas_Object *bubble_table = NULL;
 	char *message = NULL;
@@ -406,7 +424,25 @@ static void _socket_data_received_cb(bt_socket_received_data_s *data, void *user
 
 	evas_object_event_callback_add(s_info.bubble_box, EVAS_CALLBACK_RESIZE, _bubble_box_resize_cb, NULL);
 
+	if(ad->network_start == 1){
+		ad->friend_pop_num =atoi(message);
+	}
+	else if(ad->network_start == 0 && ad->is_network == 2 && strcmp(message, "start")==0){
+		ad->network_start =1;
 
+		int temp = ad->is_network;
+
+		//play start: call map
+		create_base_gui(ad);
+		single_play_cb(ad, NULL, NULL);
+		ad->stage_size = 5;
+
+		stage_size_5_cb(ad, NULL, NULL);
+		stage11_cb(ad, NULL, NULL);
+		map_creater_cb(ad, NULL, NULL);
+
+		ad->is_network = temp;
+	}
 
 	free(message);
 

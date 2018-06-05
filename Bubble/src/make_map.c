@@ -5,7 +5,7 @@ Eina_Bool timer_cb(void *data EINA_UNUSED){
 	appdata_s *ad = data;
 
 	ad->time++;
-
+	_message_send(ad);
 	return ECORE_CALLBACK_RENEW;
 }
 

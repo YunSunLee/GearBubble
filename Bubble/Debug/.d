@@ -1,1 +1,1 @@
-res/edje/bt_chat.edj:
+res/edje/create_server.edj:

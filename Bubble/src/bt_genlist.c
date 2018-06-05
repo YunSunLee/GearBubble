@@ -6,12 +6,15 @@
 
 static void _search_cb(void *data, Evas_Object *obj, void *event_info)
 {
+
+
 	_D("%s", __func__);
 
 	appdata_s *ad = (appdata_s *) data;
 	ret_if(!ad);
 
 	bt_mgr_initialize(ad, BT_MGR_SEARCH);
+	ad->is_network=2;
 }
 
 static void _wait_cb(void *data, Evas_Object *obj, void *event_info)
@@ -22,6 +25,7 @@ static void _wait_cb(void *data, Evas_Object *obj, void *event_info)
 	ret_if(!ad);
 
 	bt_mgr_initialize(ad, BT_MGR_WAIT);
+	ad->is_network=1;
 }
 
 static void _exit_cb(void *data, Evas_Object *obj, void *event_info)

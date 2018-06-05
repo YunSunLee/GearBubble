@@ -54,11 +54,6 @@ static void _socket_conn_state_changed_cb(int result, bt_socket_connection_state
 		ad->socket_fd = -1;
 		_D("Disconnected");
 	}
-
-	create_base_gui(ad);
-	single_play_cb(ad, NULL, NULL);
-	ad->stage_size = 3;
-	map_creater_cb(ad, NULL, NULL);
 }
 
 static void _device_bond_created_cb(int result, bt_device_info_s *device_info, void *user_data)

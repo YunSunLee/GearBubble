@@ -12,7 +12,7 @@ void network_play_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	appdata_s *ad = data;
 
-	ad->is_network = 1;
+	ad->network_start = 0;
 
 	elm_object_text_set(ad->title, "<font_size = 50><align=center>2PLAYERS</align></font_size>");
 	evas_object_hide(ad->main_list);

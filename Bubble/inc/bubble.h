@@ -152,7 +152,9 @@ int win_h;
 int hr_test; //remove later
 
 int friend_pop_num;
-int is_network;
+int is_network;//0 : 1player, 1: server, 2:client
+
+int network_start; //0: chat mode, 1: game mode
 
 };
 typedef struct appdata appdata_s;
@@ -193,6 +195,28 @@ void sound_cb(void *data, Evas_Object *obj, void *event_info);
 /* stage */
 
 void app_get_resource(const char *res_file_in, char *res_path_out, int res_path_max);
+
+
+void stage_size_3_cb(void *data, Evas_Object *obj, void *event_info);
+void stage_size_4_cb(void *data, Evas_Object *obj, void *event_info);
+void stage_size_5_cb(void *data, Evas_Object *obj, void *event_info);
+
+void stage1_cb(void *data, Evas_Object *obj, void *event_info);
+void stage2_cb(void *data, Evas_Object *obj, void *event_info);
+void stage3_cb(void *data, Evas_Object *obj, void *event_info);
+void stage4_cb(void *data, Evas_Object *obj, void *event_info);
+void stage5_cb(void *data, Evas_Object *obj, void *event_info);
+void stage6_cb(void *data, Evas_Object *obj, void *event_info);
+void stage7_cb(void *data, Evas_Object *obj, void *event_info);
+void stage8_cb(void *data, Evas_Object *obj, void *event_info);
+void stage9_cb(void *data, Evas_Object *obj, void *event_info);
+void stage10_cb(void *data, Evas_Object *obj, void *event_info);
+void stage11_cb(void *data, Evas_Object *obj, void *event_info);
+void stage12_cb(void *data, Evas_Object *obj, void *event_info);
+void stage13_cb(void *data, Evas_Object *obj, void *event_info);
+void stage14_cb(void *data, Evas_Object *obj, void *event_info);
+void stage15_cb(void *data, Evas_Object *obj, void *event_info);
+
 
 /* sensor */
 
