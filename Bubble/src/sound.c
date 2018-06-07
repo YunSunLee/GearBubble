@@ -67,18 +67,6 @@ player_h create_player()
 	return player;
 }
 
-/* Stop play */
-static void
-stop_player(void *data, Evas_Object *obj, void *event_info)
-{
-	appdata_s *ad = data;
-	if( get_player_state(ad->player) == PLAYER_STATE_PLAYING || get_player_state(ad->player) == PLAYER_STATE_PAUSED)
-	{
-		player_stop(ad->player);
-	}
-}
-
-
 
 /* Get full path of source file */
 static inline const char*
@@ -98,7 +86,7 @@ void
 prepare_player(appdata_s* ad, int index)
 {
 	// Stop play
-	stop_player(ad, NULL, NULL);
+	stop_player(ad);
 	// Close file
 	player_unprepare(ad->player);
 	const char* file_name[] = { "bubble_pop.wav" };
@@ -114,11 +102,10 @@ prepare_player(appdata_s* ad, int index)
 }
 
 /* Start play */
-/*void
-start_player(void *data, Evas_Object *obj, void *event_info)
+void
+start_player(void *data)
 {
 	appdata_s *ad = data;
 	if( get_player_state(ad->player) != PLAYER_STATE_PLAYING)
 		player_start(ad->player);
 }
-*/

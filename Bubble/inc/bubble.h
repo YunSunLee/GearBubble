@@ -220,7 +220,8 @@ player_state_e get_player_state(player_h player);
 player_h create_player();
 static inline const char* get_resource_path(const char *file_path);
 void prepare_player(appdata_s* ad, int index);
-void start_player(void *data, Evas_Object *obj, void *event_info);
+void stop_player(void *data);
+void start_player(void *data);
 
 
 /*network*/

@@ -122,8 +122,14 @@ static void bubble_pop(appdata_s *ad, int x, int y){
 		device_haptic_vibrate(ad->handle, 200, 50, &ad->effect_handle); //vibration
 
 		/* Pop sound */
-		if( get_player_state(ad->player) != PLAYER_STATE_PLAYING)
-			player_start(ad->player);
+		if(ad->sound==1){
+			/* Create player */
+			ad->player = create_player();
+
+			/* Load audio file to Player */
+			prepare_player(ad, 0);
+			start_player(ad);
+		}
 	}
 }
 
