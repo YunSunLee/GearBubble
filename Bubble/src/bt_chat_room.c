@@ -10,6 +10,10 @@
 #define BUBBLE_MAIN_TEXT_STYLE "<font_size=30>%s</font_size>"
 #define BUBBLE_SUB_TEXT_STYLE "<font_size=20 font_weight=Bold color=#454545>%s</font_size>"
 
+
+static 	int friend_x=0;
+static int friend_y=0;
+
 typedef enum _Message_Bubble_Style {
 	MESSAGE_BUBBLE_NONE = 0,
 	MESSAGE_BUBBLE_SENT,
@@ -224,7 +228,7 @@ static void _bubble_box_resize_cb(void *data, Evas *e, Evas_Object *obj, void *e
 	evas_object_event_callback_del(s_info.bubble_box, EVAS_CALLBACK_RESIZE, _bubble_box_resize_cb);
 }
 
-void _message_send(appdata_s *ad)
+void _message_send_chat(appdata_s *ad)
 {
 	Evas_Object *bubble_table = NULL;
 	Evas_Object *noti = NULL;
@@ -234,7 +238,7 @@ void _message_send(appdata_s *ad)
 	ret_if(!ad);
 	ret_if(!s_info.input_field_entry);
 
-	if(ad-> network_start == 0){
+	if(ad-> network_start == 0){//chatting mode
 		main_text = elm_entry_entry_get(s_info.input_field_entry);
 		if(ad->is_network == 1 && strcmp(main_text, "start")==0){
 			ad->network_start = 1;
@@ -244,19 +248,14 @@ void _message_send(appdata_s *ad)
 			//play start: call map
 			create_base_gui(ad);
 			single_play_cb(ad, NULL, NULL);
-			ad->stage_size = 5;
+			ad->stage_size = 4;
 
-			stage_size_5_cb(ad, NULL, NULL);
-			stage11_cb(ad, NULL, NULL);
+			stage_size_4_cb(ad, NULL, NULL);
+			stage6_cb(ad, NULL, NULL);
 			map_creater_cb(ad, NULL, NULL);
 
 			ad->is_network = temp;
 		}
-	}
-	else if(ad-> network_start == 1){
-		char temp[10];
-		sprintf(temp, "%d", ad->user_state[2]);
-		main_text = temp;
 	}
 
 	ret_if(!main_text || (strlen(main_text) == 0));
@@ -280,12 +279,46 @@ void _message_send(appdata_s *ad)
 	}
 }
 
+void _message_send_game(appdata_s *ad, char* message)
+{
+	Evas_Object *bubble_table = NULL;
+	Evas_Object *noti = NULL;
+	const char *main_text = NULL;
+	int ret = 0;
+
+	ret_if(!ad);
+	ret_if(!s_info.input_field_entry);
+
+	main_text = message;
+
+	ret_if(!main_text || (strlen(main_text) == 0));
+
+	ret = bt_socket_send_data(ad->socket_fd, main_text, strlen(main_text) + 1);
+	if (ret == -1) {
+		_E("[bt_socket_send_data] send to fail : %s", main_text);
+		noti = bt_noti_popup_create(ad->navi, "Send Failed");
+		if (!noti) {
+			_E("Failed to create popup noti");
+		}
+	} else {
+		bubble_table = _bubble_table_create(s_info.bubble_box, MESSAGE_BUBBLE_SENT, elm_entry_entry_get(s_info.input_field_entry), _current_time_get());
+		ret_if(!bubble_table);
+
+		evas_object_show(bubble_table);
+		elm_box_pack_end(s_info.bubble_box, bubble_table);
+		elm_entry_entry_set(s_info.input_field_entry, "");
+
+		evas_object_event_callback_add(s_info.bubble_box, EVAS_CALLBACK_RESIZE, _bubble_box_resize_cb, NULL);
+	}
+}
+
+
 static void _send_button_clicked_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	appdata_s *ad = (appdata_s *) data;
 	ret_if(!ad);
 
-	_message_send(ad);
+	_message_send_chat(ad);
 }
 
 static Evas_Object *_main_view_create(appdata_s *ad)
@@ -425,7 +458,16 @@ static void _socket_data_received_cb(bt_socket_received_data_s *data, void *user
 	evas_object_event_callback_add(s_info.bubble_box, EVAS_CALLBACK_RESIZE, _bubble_box_resize_cb, NULL);
 
 	if(ad->network_start == 1){
-		ad->friend_pop_num =atoi(message);
+		evas_object_color_set(ad->rect[ad->stage_size * friend_y + friend_x], 0, 0, 0, 255);
+		ad->friend_pop_num =atoi(message) / 100;
+		friend_x = (atoi(message) %100)/10;
+		friend_y = atoi(message)%10;
+
+		if(friend_x != ad->user_state[0] || friend_y != ad->user_state[1])
+		{
+			evas_object_color_set(ad->rect[ad->stage_size * friend_y + friend_x], 100, 100, 100, 100);
+			bubble_pop(ad, friend_x, friend_y, 1);
+		}
 	}
 	else if(ad->network_start == 0 && ad->is_network == 2 && strcmp(message, "start")==0){
 		ad->network_start =1;
@@ -435,10 +477,10 @@ static void _socket_data_received_cb(bt_socket_received_data_s *data, void *user
 		//play start: call map
 		create_base_gui(ad);
 		single_play_cb(ad, NULL, NULL);
-		ad->stage_size = 5;
+		ad->stage_size = 4;
 
-		stage_size_5_cb(ad, NULL, NULL);
-		stage11_cb(ad, NULL, NULL);
+		stage_size_4_cb(ad, NULL, NULL);
+		stage6_cb(ad, NULL, NULL);
 		map_creater_cb(ad, NULL, NULL);
 
 		ad->is_network = temp;
