@@ -222,6 +222,9 @@ void start_acceleration_sensor(appdata_s *ad);
 void start_gyroscope_sensor(appdata_s *ad);
 void start_heartrate_sensor(appdata_s *ad);
 
+void bubble_pop(appdata_s *ad, int x, int y, int who);
+
+
 
 /* map creater */
 void draw_map(appdata_s *ad);
@@ -244,7 +247,8 @@ void stop_player(void *data);
 
 
 /*network*/
-void _message_send(appdata_s *ad);
+void _message_send_chat(appdata_s *ad);
+void _message_send_game(appdata_s *ad, char* message);
 
 
 
