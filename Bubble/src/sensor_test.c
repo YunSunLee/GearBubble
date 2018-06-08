@@ -1,3 +1,5 @@
+
+
 #include <sensor.h>
 #include "bubble.h"
 
@@ -19,10 +21,9 @@ static int is_obstacle=0;
 
 static int jmp_detect=0;
 static int shake_detect=0;
+//static int heart_detect=0;
 
 Evas_Object *jmp;
-
-Evas_Object *wall;
 
 static void move_test_cb(void *data, Evas_Object *obj, void *event_info);
 static void heart_rate_test_cb(void *data, Evas_Object *obj, void *event_info);
@@ -30,35 +31,10 @@ static void jump_test_cb(void *data, Evas_Object *obj, void *event_info);
 static void shake_test_cb(void *data, Evas_Object *obj, void *event_info);
 static void vibe_test_cb(void *data, Evas_Object *obj, void *event_info);
 static void check_obstacle(appdata_s *ad);
-static void make_wall_popup(void *data);
-static void popup_timeout(void *data, Evas_Object *obj, void *event_info);
 
-// direction - 1: up, 2: down, 3:left, 4:right
-// grid_state[x][y][] - 0: up, 1: down, 2:left, 3:right
+//1: up, 2: down, 3:left, 4:right
 static int can_move(appdata_s *ad, int direction){
-	/* user_state*/
-	int x, y;
-	x= ad->user_state[0];
-	y= ad->user_state[1];
-
-	/* wall */
-	if(direction == 1 && ad->grid_state[x][y][0]==1){
-		make_wall_popup(ad);
-		return 0;
-	}
-	else if(direction == 2 && ad->grid_state[x][y][1]==1){
-		make_wall_popup(ad);
-		return 0;
-	}
-	else if(direction == 3 && ad->grid_state[x][y][2]==1){
-		make_wall_popup(ad);
-		return 0;
-	}
-	else if(direction == 4 && ad->grid_state[x][y][3]==1){
-		make_wall_popup(ad);
-		return 0;
-	}
-	else if  (direction == 1 && ad->user_state[1] != 0)
+	if(direction == 1 && ad->user_state[1] != 0)
 		return 1;
 	else if(direction == 2 && ad->user_state[1] != ad->stage_size - 1)
 		return 1;
@@ -66,38 +42,8 @@ static int can_move(appdata_s *ad, int direction){
 		return 1;
 	else if(direction == 4 && ad->user_state[0] != ad->stage_size - 1)
 		return 1;
-
 	else
 		return 0;
-}
-
-static void make_wall_popup(void *data)
-{
-	appdata_s *ad = data;
-	ad->popup = elm_popup_add(ad->grid);
-	elm_popup_align_set(ad->popup, ELM_NOTIFY_ALIGN_FILL, 1.0);
-	evas_object_size_hint_weight_set(ad->popup, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-
-	elm_object_text_set(ad->popup, "<font_size = 50><align=center>Wall!</align></font_size>");
-	evas_object_show(ad->popup);
-
-	char img_path[PATH_MAX] = "";
-	app_get_resource("wall.png", img_path, PATH_MAX);
-	wall= evas_object_image_filled_add(ad->popup);
-	evas_object_image_file_set(wall, img_path, NULL);
-	elm_grid_pack(ad->grid, wall, 15, 25, 75, 75);
-	evas_object_show(wall);
-
-	elm_popup_timeout_set(ad->popup, 2.0);
-	evas_object_smart_callback_add(ad->popup, "timeout", popup_timeout, ad);
-}
-
-static void
-popup_timeout(void *data, Evas_Object *obj, void *event_info)
-{
-	appdata_s *ad = data;
-	evas_object_del(obj);
-	elm_object_text_set(ad->label, "Time out");
 }
 
 static void move(appdata_s *ad, int from, int dest){
@@ -105,11 +51,14 @@ static void move(appdata_s *ad, int from, int dest){
 	evas_object_color_set(ad->rect[dest], 255, 255, 255, 255);
 }
 
-static void bubble_pop(appdata_s *ad, int x, int y){
+void bubble_pop(appdata_s *ad, int x, int y, int who){//who ==0: me, ==1:friend
 	if(ad->grid_state[x][y][4] == 0){
 		char img_path[PATH_MAX] = "";
 		/* Bubble Popped */
-		app_get_resource("bubble_popped.png", img_path, PATH_MAX);
+		if(who ==0)
+			app_get_resource("bubble_popped.png", img_path, PATH_MAX);
+		else if(who ==1)
+			app_get_resource("bubble_popped_green.png", img_path, PATH_MAX);
 		Evas_Object *img2 = evas_object_image_filled_add(ad->canvas);
 
 		img2 = evas_object_image_filled_add(ad->canvas);
@@ -117,19 +66,22 @@ static void bubble_pop(appdata_s *ad, int x, int y){
 		elm_grid_pack(ad->grid, img2, 26+(ad->grid_width+1)*x, 31+(ad->grid_width+1)*y, ad->grid_width, ad->grid_width);
 		evas_object_show(img2);
 		ad->grid_state[x][y][4] = 1;
-		ad->user_state[2]++;
-		device_haptic_vibrate(ad->handle, 200, 50, &ad->effect_handle); //vibration
 
-		/* Pop sound */
-		if(ad->sound==1){
-			/* Create player */
-			ad->player = create_player();
+		if(who ==0)
+		{
+			ad->user_state[2]++;
+			device_haptic_vibrate(ad->handle, 200, 50, &ad->effect_handle); //vibration
 
-			/* Load audio file to Player */
-			prepare_player(ad, 0);
+			/* Pop sound */
+			if( get_player_state(ad->player) != PLAYER_STATE_PLAYING)
+				player_start(ad->player);
 
-			/* Play sound */
-			start_player(ad);
+			if(ad->is_network >= 1)
+			{
+				 char temp[10];
+				 sprintf(temp, "%d%d%d", ad->user_state[2], x, y);
+				 _message_send_game(ad, temp);
+			}
 		}
 	}
 }
@@ -177,7 +129,9 @@ static void check_obstacle(appdata_s *ad){
 		else if(ad->grid_state[x][y][5]==3)
 		{	//show Heart image
 
+
 			//elm_object_text_set(ad->title, "<font_size = 50><align=center>Raise heart rate!</align></font_size>");
+
 
 			//connect heart rate monitor
 			heart_flag = 1;
@@ -204,6 +158,7 @@ static void check_obstacle(appdata_s *ad){
 			is_obstacle=1;
 		}
 	}
+	//return 0;
 }
 
 
@@ -235,6 +190,10 @@ _new_sensor_value_acc_jump(sensor_h sensor, sensor_event_s *sensor_data, void *u
 		evas_object_image_file_set(jmp, img_path, NULL);
 		elm_grid_pack(ad->grid2, jmp, 15, 25, 75, 75);
 		evas_object_show(jmp);
+		//evas_object_hide(jmp);
+		//elm_grid_unpack(ad->grid, jmp);
+
+
 	}
 	else{
 		evas_object_show(ad->grid);
@@ -244,6 +203,7 @@ _new_sensor_value_acc_jump(sensor_h sensor, sensor_event_s *sensor_data, void *u
 		 elm_object_text_set(ad->title2, "<font_size = 50><align=center>JUMP detected!</align></font_size>");
 		 jmp_detect=1;
 		 jump_flag = 0;
+
 		 is_obstacle = 0;
 
 		 ad->user_state[2]++;
@@ -254,7 +214,10 @@ _new_sensor_value_acc_jump(sensor_h sensor, sensor_event_s *sensor_data, void *u
 
 		 draw_map(ad);
 	 }
+
 }
+
+
 
 
 static void
@@ -301,6 +264,8 @@ _new_sensor_value_acc_shake(sensor_h sensor, sensor_event_s *sensor_data, void *
 		 shake_cnt = 0;
 		 shake_flag = 0;
 
+		 //elm_grid_pack(ad->grid, bug, 15, 25, 75, 75);
+		 //evas_object_show(bug);
 		 is_obstacle = 0;
 
 		 ad->user_state[2]++;
@@ -340,23 +305,31 @@ _new_sensor_value_acc(sensor_h sensor, sensor_event_s *sensor_data, void *user_d
 	 }
 
 	 if(ad->sensor_status[0] >= 1){
+		 int total = ad->stage_size * ad->stage_size;
 
 		 //play mode
 		 if(ad->sensor_status[0] == 2){
 			 char buf_title[100];
-			 if(ad->user_state[2] == ad->stage_size * ad->stage_size && ad->is_network == 0){
-				 sprintf(buf_title, "<font_size=20><align=center>TIME: %d <br>CLEAR!!!</align></font_size>", ad->time);
-				 ecore_timer_del(ad->timer);
-			 	 device_haptic_vibrate(ad->handle, 1000, 100, &ad->effect_handle); //vibration
-			 }
-			 else if(ad->user_state[2] < ad->stage_size * ad->stage_size && ad->is_network == 0)
-				 sprintf(buf_title, "<font_size=20><align=center>TIME: %d <br>BUBBLE: %d/%d</align></font_size>", ad->time, ad->user_state[2], ad->stage_size * ad->stage_size);
-			 else if(ad->is_network == 1)
-				 sprintf(buf_title, "<font_size=20><align=center>YOU: %d <br>FRIEND: %d</align></font_size>", ad->user_state[2], ad->friend_pop_num);
+				   if(ad->user_state[2] == ad->stage_size * ad->stage_size && ad->is_network == 0){
+					  sprintf(buf_title, "<font_size=20><align=center>TIME: %d <br>CLEAR!!!</align></font_size>", ad->time);
+					  ecore_timer_del(ad->timer);
+					   device_haptic_vibrate(ad->handle, 1000, 100, &ad->effect_handle); //vibration
+				   }
+				   else if(ad->user_state[2] < ad->stage_size * ad->stage_size && ad->is_network == 0){
+					  sprintf(buf_title, "<font_size=20><align=center>TIME: %d <br>BUBBLE: %d/%d</align></font_size>", ad->time, ad->user_state[2], ad->stage_size * ad->stage_size);
+				   }
+				   else if(ad->is_network >= 1 && ad->user_state[2] + ad->friend_pop_num == total + 1 && ad->user_state[2] > ad->friend_pop_num){
+					  sprintf(buf_title, "<font_size=40><align=center>YOU WIN!:)</align></font_size>");
+				   }
+				   else if(ad->is_network >= 1 && ad->user_state[2] + ad->friend_pop_num == total + 1 && ad->user_state[2] < ad->friend_pop_num){
+					  sprintf(buf_title, "<font_size=40><align=center>YOU LOSE!ㅠㅠ</align></font_size>");
+				   }
+				   else if(ad->is_network >= 1 && ad->user_state[2] < total && ad->friend_pop_num < total){
+					  sprintf(buf_title, "<font_size=20><align=center>YOU: %d <br>FRIEND: %d</align></font_size>", ad->user_state[2], ad->friend_pop_num);
+				   }
 
-			 elm_object_text_set(ad->title, buf_title);
+				   elm_object_text_set(ad->title, buf_title);
 		 }
-
 
 		//test mode
 		 else{
@@ -376,6 +349,9 @@ _new_sensor_value_acc(sensor_h sensor, sensor_event_s *sensor_data, void *user_d
 		 else if(ready == 1)
 			 evas_object_color_set(ad->rect[ad->stage_size * ad->user_state[1] + ad->user_state[0]], 0, 200, 0, 100);
 
+
+
+
 		 if(ready == 1 && (fabsf(x) >= 1 || fabsf(y) >= 1) && gyro_check() == 1){
 			 sprintf(buf, direction(x, px, y, py));
 			 //elm_object_text_set(ad->sensor_label[3], buf);
@@ -393,7 +369,7 @@ _new_sensor_value_acc(sensor_h sensor, sensor_event_s *sensor_data, void *user_d
 					 sprintf(buf, "?");
 					 check_obstacle(ad);
 					 if(!is_obstacle)
-						 bubble_pop(ad, ad->user_state[0], ad->user_state[1]);
+						 bubble_pop(ad, ad->user_state[0], ad->user_state[1], 0);
 				 }
 				 else if(strcmp(buf, "DOWN") == 0 && can_move(ad, 2) == 1){
 					 move(ad, ad->stage_size * ad->user_state[1] + ad->user_state[0], ad->stage_size * (ad->user_state[1] + 1) + ad->user_state[0]);
@@ -401,7 +377,7 @@ _new_sensor_value_acc(sensor_h sensor, sensor_event_s *sensor_data, void *user_d
 					 sprintf(buf, "?");
 					 check_obstacle(ad);
 					 if(!is_obstacle)
-						 bubble_pop(ad, ad->user_state[0], ad->user_state[1]);
+						 bubble_pop(ad, ad->user_state[0], ad->user_state[1], 0);
 				 }
 				 else if(strcmp(buf, "LEFT") == 0 && can_move(ad, 3) == 1){
 					 move(ad, ad->stage_size * ad->user_state[1] + ad->user_state[0], ad->stage_size * ad->user_state[1] + (ad->user_state[0] - 1));
@@ -409,7 +385,7 @@ _new_sensor_value_acc(sensor_h sensor, sensor_event_s *sensor_data, void *user_d
 					 sprintf(buf, "?");
 					 check_obstacle(ad);
 					 if(!is_obstacle)
-						 bubble_pop(ad, ad->user_state[0], ad->user_state[1]);
+						 bubble_pop(ad, ad->user_state[0], ad->user_state[1], 0);
 				 }
 				 else if(strcmp(buf, "RIGHT") == 0 && can_move(ad, 4) == 1){
 					 move(ad, ad->stage_size * ad->user_state[1] + ad->user_state[0], ad->stage_size * ad->user_state[1] + (ad->user_state[0] + 1));
@@ -417,7 +393,7 @@ _new_sensor_value_acc(sensor_h sensor, sensor_event_s *sensor_data, void *user_d
 					 sprintf(buf, "?");
 					 check_obstacle(ad);
 					 if(!is_obstacle)
-						 bubble_pop(ad, ad->user_state[0], ad->user_state[1]);
+						 bubble_pop(ad, ad->user_state[0], ad->user_state[1], 0);
 				 }
 				 else
 					 ready = 1;
@@ -455,6 +431,9 @@ _new_sensor_value_gyro(sensor_h sensor, sensor_event_s *sensor_data, void *user_
 		 elm_object_text_set(ad->sensor_label[1], "Gathering data...");
 		 return;
 	 }
+
+	 //snprintf(buf, sizeof(buf), "<font_size = 10>X:%0.1f/Y:%0.1f/Z:%0.1f</font_size>", gyro[0], gyro[1], gyro[2]);
+	 //elm_object_text_set(ad->sensor_label[1], buf);
 }
 
 static void
@@ -463,6 +442,8 @@ _new_sensor_value_heart(sensor_h sensor, sensor_event_s *sensor_data, void *user
 	int hr = sensor_data->values[0];
 
 	 appdata_s *ad = user_data;
+	
+	 ad->hr_test = hr;
 
 
 	 if(ad->sensor_status[2] == 2 && heart_flag == 1){ //play mode
@@ -475,6 +456,7 @@ _new_sensor_value_heart(sensor_h sensor, sensor_event_s *sensor_data, void *user
 		 ad->title2 = elm_label_add(ad->grid2);
 		 elm_grid_pack(ad->grid2, ad->title2, 5, 10, 100, 20);
 		 evas_object_show(ad->title2);
+		 //elm_object_text_set(ad->title2, "<font_size = 50><align=center>Raise heart rate!</align></font_size>");
 		 char temp[100];
 		 sprintf(temp, "<font_size = 50><align=center>%d / %d</align></font_size>", hr, initial_beat+5);
 		 elm_object_text_set(ad->title2, temp);
@@ -658,6 +640,10 @@ void sensor_test_cb(void *data, Evas_Object *obj, void *event_info)
 	elm_list_item_append(ad->sensor_list, "VIBE TEST", NULL, NULL, vibe_test_cb, ad);
 	evas_object_show(ad->sensor_list);
 	elm_box_pack_after(ad->box, ad->sensor_list, ad->box_title);
+
+
+	//evas_object_event_callback_add(ad->conform, EVAS_CALLBACK_MOUSE_DOWN, main_menu_cb, ad);
+	//evas_object_show(ad->back);
 
 	evas_object_show(ad->back_list);
 	elm_box_pack_end(ad->box, ad->back_list);
