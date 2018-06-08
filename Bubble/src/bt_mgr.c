@@ -1,3 +1,4 @@
+
 #include "bubble.h"
 #include "bt_chat.h"
 #include "bt_mgr.h"
@@ -343,3 +344,5 @@ HAPI void bt_mgr_release(void)
 	bt_socket_unset_connection_state_changed_cb();
 	bt_deinitialize();
 }
+
+
