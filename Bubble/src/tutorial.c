@@ -66,7 +66,6 @@ static void
 _file_abs_resource_path_get(char *res_file_path, char *abs_path, int buf_size)
 {
 	char *res_dir_path = app_get_resource_path();
-
 	if (res_dir_path)
 	{
 		snprintf(abs_path, buf_size, "%s%s", res_dir_path, res_file_path);
@@ -269,11 +268,6 @@ void tutorial_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	appdata_s *ad = data;
 
-	//elm_object_text_set(ad->title, "<font_size = 50><align=center>TUTORIAL</align></font_size>");
-
-	//clear the screen
-	//evas_object_hide(ad->title);
-	//elm_box_unpack(ad->box_title, ad->title);
 	evas_object_hide(ad->main_list);
 	elm_box_unpack(ad->box, ad->main_list);
 	elm_box_clear(ad->box_content);
