@@ -5,7 +5,13 @@ Eina_Bool timer_cb(void *data EINA_UNUSED){
 	appdata_s *ad = data;
 
 	ad->time++;
-	_message_send(ad);
+
+	if(ad->is_network >= 1)
+	{
+		 char temp[10];
+		 sprintf(temp, "%d%d%d", ad->user_state[2], ad->user_state[0], ad->user_state[1]);
+		_message_send_game(ad,temp);
+	}
 
 	return ECORE_CALLBACK_RENEW;
 }
@@ -40,6 +46,19 @@ void draw_map(appdata_s *ad){
 	evas_object_show(rect);
 	elm_grid_pack(ad->grid, rect, 25, 30, (ad->grid_width+1)*ad->stage_size+1, (ad->grid_width+1)*ad->stage_size+1);
 
+	// Need Revision
+	/* Rect- Red Wall_ horizontal
+	rect = evas_object_rectangle_add(canvas);
+	evas_object_color_set(rect, 255, 0, 0, 255);
+	evas_object_show(rect);
+	elm_grid_pack(grid, rect, 26, 30, ad->grid_width, 1);*/
+
+	/* Rect- Red Wall_ vertical
+	rect = evas_object_rectangle_add(canvas);
+	evas_object_color_set(rect, 255, 0, 0, 255);
+	evas_object_show(rect);
+	elm_grid_pack(grid, rect, 25, 31, 1, ad->grid_width);*/
+
 	/* Bubble Image */
 	char img_path[PATH_MAX] = "";
 	app_get_resource("bubble_not_popped.png", img_path, PATH_MAX);
@@ -69,7 +88,7 @@ void draw_map(appdata_s *ad){
 				elm_grid_pack(ad->grid, img, 26+(ad->grid_width+1)*i, 31+(ad->grid_width+1)*j, ad->grid_width, ad->grid_width);
 				evas_object_show(img);
 			}
-			/* heart : grid_state[][][5] =3 */
+			/* heart : grid_state[][][5] =2 */
 			else if(ad->grid_state[i][j][5]==3)
 			{
 				app_get_resource("heart.png", img_path, PATH_MAX);
@@ -80,7 +99,7 @@ void draw_map(appdata_s *ad){
 				elm_grid_pack(ad->grid, img, 26+(ad->grid_width+1)*i, 31+(ad->grid_width+1)*j, ad->grid_width, ad->grid_width);
 				evas_object_show(img);
 			}
-			/* bug : grid_state[][][5] =2 */
+			/* bug : grid_state[][][5] =3 */
 			else if(ad->grid_state[i][j][5]==2)
 			{
 				app_get_resource("bug.png", img_path, PATH_MAX);
@@ -148,11 +167,11 @@ void map_creater_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	appdata_s *ad = data;
 
-	/* start timer */
+	//start timer
 	ad->timer = ecore_timer_add(1.0, timer_cb, ad);
 	ad->time = 0;
 
-	/* create vibration */
+	//create vibration
 	device_haptic_open(0, &ad->handle);
 
 
@@ -164,7 +183,7 @@ void map_creater_cb(void *data, Evas_Object *obj, void *event_info)
 	ad->sensor_status[2] = 2;
 
 
-	/* initialize user_state and grid state */
+	//initialize user_state and grid state
 	ad->user_state[0] = 0;
 	ad->user_state[1] = ad->stage_size-1;
 	ad->user_state[2] = 0;
@@ -181,3 +200,7 @@ void map_creater_cb(void *data, Evas_Object *obj, void *event_info)
 
 	draw_map(ad);
 }
+
+
+
+
