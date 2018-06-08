@@ -30,7 +30,8 @@ static int size;
 static char final_grid_info[200] ="000000000000000000000000000000000000000000000000000000";
 static int position = 0;
 
-static int write_map_num=0;//for writing to file(to know to which file to write final_grid_info)
+/* for writing to file(to know to which file to write final_grid_info) */
+static int write_map_num=0;
 
 static void _rotary_selector_create_wall(appdata_s *ad);
 static void _rotary_selector_create_obstacle(appdata_s *ad);
@@ -132,12 +133,6 @@ static void _item_clicked_cb_wall(void *data, Evas_Object *obj, void *event_info
    Evas_Object *rotary_selector = ad->rotary_selector;
    Eext_Object_Item *selected_item = eext_rotary_selector_selected_item_get(rotary_selector);
 
-   /*
-   eext_rotary_selector_item_part_color_set(selected_item,
-                                            "item,bg_image",
-                                            EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL,
-                                            255, 255, 255, 255); */
-
    if(size == 3){
 	   if(selected_item == exit_item){
 		   create_base_gui(ad);
@@ -207,13 +202,6 @@ _item_selected_cb_wall(void *data, Evas_Object *obj, void *event_info)
    Evas_Object *rotary_selector = ad->rotary_selector;
    Eext_Object_Item *selected_item = eext_rotary_selector_selected_item_get(rotary_selector);
 
-
-   /*
-   eext_rotary_selector_item_part_color_set(selected_item,
-                                            "item,bg_image",
-                                            EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL,
-                                            r, g, b, 255); */
-
    if(size == 3){
 	   if(selected_item == items[0])
 		   map_editor_decode_3(ad, WALL30);
@@ -276,13 +264,6 @@ _item_clicked_cb_obstacle(void *data, Evas_Object *obj, void *event_info)
 
    Evas_Object *rotary_selector = ad->rotary_selector;
    Eext_Object_Item *selected_item = eext_rotary_selector_selected_item_get(rotary_selector);
-
-   /*
-   eext_rotary_selector_item_part_color_set(selected_item,
-                                            "item,bg_image",
-                                            EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL,
-                                            255, 255, 255, 255); */
-
 
    //can not put obstacles on the start point
    if(selected_item == items[0] && position != size*(size-1)){ //jump
@@ -444,9 +425,6 @@ custom_map1_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	//display
 	appdata_s *ad = data;
-	//elm_object_text_set(ad->title2, "<font_size = 50><align=center>MAP 1</align></font_size>");
-	//evas_object_hide(ad->main_list2);
-	//elm_box_unpack(ad->box, ad->main_list2);
 
 	//read from file to char *map_str
 	// open file
@@ -513,9 +491,6 @@ custom_map2_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	//display
 	appdata_s *ad = data;
-	//elm_object_text_set(ad->title2, "<font_size = 50><align=center>MAP 1</align></font_size>");
-	//evas_object_hide(ad->main_list2);
-	//elm_box_unpack(ad->box, ad->main_list2);
 
 	//read from file to char *map_str
 	// open file
@@ -583,9 +558,6 @@ custom_map3_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	//display
 	appdata_s *ad = data;
-	//elm_object_text_set(ad->title2, "<font_size = 50><align=center>MAP 1</align></font_size>");
-	//evas_object_hide(ad->main_list2);
-	//elm_box_unpack(ad->box, ad->main_list2);
 
 	//read from file to char *map_str
 	// open file
@@ -653,9 +625,6 @@ custom_map4_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	//display
 	appdata_s *ad = data;
-	//elm_object_text_set(ad->title2, "<font_size = 50><align=center>MAP 1</align></font_size>");
-	//evas_object_hide(ad->main_list2);
-	//elm_box_unpack(ad->box, ad->main_list2);
 
 	//read from file to char *map_str
 	// open file
@@ -723,9 +692,6 @@ custom_map5_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	//display
 	appdata_s *ad = data;
-	//elm_object_text_set(ad->title2, "<font_size = 50><align=center>MAP 1</align></font_size>");
-	//evas_object_hide(ad->main_list2);
-	//elm_box_unpack(ad->box, ad->main_list2);
 
 	//read from file to char *map_str
 	// open file
@@ -796,14 +762,6 @@ _item_selected_cb_obstacle(void *data, Evas_Object *obj, void *event_info) //not
 
    Evas_Object *rotary_selector = ad->rotary_selector;
    Eext_Object_Item *selected_item = eext_rotary_selector_selected_item_get(rotary_selector);
-
-
-   /*
-   eext_rotary_selector_item_part_color_set(selected_item,
-                                            "item,bg_image",
-                                            EEXT_ROTARY_SELECTOR_ITEM_STATE_NORMAL,
-                                            r, g, b, 255); */
-
 
    //save or exit
    if(selected_item == save_item)
@@ -1166,8 +1124,6 @@ static void _rotary_selector_create_obstacle(appdata_s *ad)
         const char MAX_TEXT_SIZE = 20;
         char item_text[MAX_TEXT_SIZE] = {'\0',};
         snprintf(item_text, MAX_TEXT_SIZE, "Element %d", i + 1);
-        //eext_rotary_selector_item_part_text_set(item, "selector,main_text", item_text);
-        //eext_rotary_selector_item_part_text_set(item, "selector,sub_text", "Additional information");
      }
 
    	//save
@@ -1204,14 +1160,12 @@ static void _rotary_selector_create_obstacle(appdata_s *ad)
 
 	exit_item = item2;
 
-
-
-   evas_object_smart_callback_add(ad->rotary_selector,
+	evas_object_smart_callback_add(ad->rotary_selector,
                                   "item,clicked",
                                   _item_clicked_cb_obstacle,
                                   ad);
 
-   evas_object_smart_callback_add(ad->rotary_selector,
+	evas_object_smart_callback_add(ad->rotary_selector,
                                   "item,selected",
                                   _item_selected_cb_obstacle,
                                   ad);
@@ -1220,8 +1174,6 @@ static void _rotary_selector_create_obstacle(appdata_s *ad)
 
    elm_object_content_set(ad->conform, ad->rotary_selector);
    evas_object_show(ad->rotary_selector);
-
-
 
    //obstacle editor start
    position = 0;
@@ -1251,8 +1203,7 @@ void map_editor_cb(void *data, Evas_Object *obj, void *event_info)
 	evas_object_hide(ad->bottom);
 	elm_box_unpack(ad->box_bottom, ad->bottom);
 
-	//map editor
-
+	/* map editor */
 	ad->map_editor_size_list = elm_list_add(ad->box);
 	evas_object_size_hint_weight_set(ad->map_editor_size_list, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	evas_object_size_hint_align_set(ad->map_editor_size_list, EVAS_HINT_FILL, EVAS_HINT_FILL);

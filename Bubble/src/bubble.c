@@ -43,8 +43,8 @@ void main_menu_cb(void *data, Evas_Object *obj, void *event_info){
 	ad->sensor_status[2] = -1;
 	ad->user_state[2] = 0;
 	ecore_timer_del(ad->timer);
-	ad->is_network = 0;
-	create_base_gui(ad);
+
+	create_base_gui(ad); //go back to main
 }
 
 void create_base_gui(appdata_s *ad)
@@ -81,7 +81,7 @@ void create_base_gui(appdata_s *ad)
 		evas_object_show(ad->box_title);
 		elm_box_pack_end(ad->box, ad->box_title);
 
-		//title
+		/* title */
 
 		ad->title = elm_label_add(ad->box_title);
 		elm_object_text_set(ad->title, "<font_size = 50><align=center>GEAR BUBBLE</align></font_size>");
@@ -108,7 +108,7 @@ void create_base_gui(appdata_s *ad)
 		elm_list_item_append(ad->main_list, "TUTORIAL", NULL, NULL, tutorial_cb, ad);
 		elm_list_item_append(ad->main_list, "RANKING", NULL, NULL, ranking_cb, ad);
 		elm_list_item_append(ad->main_list, "SOUND", NULL, NULL, sound_cb, ad);
-		elm_list_item_append(ad->main_list, "SENSOR", NULL, NULL, sensor_test_cb, ad);
+		//elm_list_item_append(ad->main_list, "SENSOR", NULL, NULL, sensor_test_cb, ad);
 
 		/* Show and add to box */
 		evas_object_show(ad->main_list);
@@ -119,9 +119,6 @@ void create_base_gui(appdata_s *ad)
 		evas_object_size_hint_weight_set(ad->box_bottom, EVAS_HINT_EXPAND, 0.2);
 		evas_object_show(ad->box_bottom);
 		elm_box_pack_end(ad->box, ad->box_bottom);
-
-
-
 
 		ad->bottom = elm_label_add(ad->box_bottom);
 
@@ -137,17 +134,6 @@ void create_base_gui(appdata_s *ad)
 		evas_object_size_hint_weight_set(ad->back_list, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 		evas_object_size_hint_align_set(ad->back_list, EVAS_HINT_FILL, EVAS_HINT_FILL);
 		elm_list_item_append(ad->back_list, "MENU", NULL, NULL, main_menu_cb, ad);
-
-/*
-		ad->stage_list = elm_list_add(ad->box);
-		evas_object_size_hint_weight_set(ad->stage_list, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-		evas_object_size_hint_align_set(ad->stage_list, EVAS_HINT_FILL, EVAS_HINT_FILL);
-		elm_list_item_append(ad->stage_list, "STAGE 1", NULL, NULL, stage1_cb, ad);
-		elm_list_item_append(ad->stage_list, "STAGE 2", NULL, NULL, stage2_cb, ad);
-		elm_list_item_append(ad->stage_list, "STAGE 3", NULL, NULL, stage3_cb, ad);
-		elm_list_item_append(ad->stage_list, "STAGE 4", NULL, NULL, stage4_cb, ad);
-		elm_list_item_append(ad->stage_list, "STAGE 5", NULL, NULL, stage5_cb, ad);
-*/
 
 		ad->stage = elm_list_add(ad->box);
 		evas_object_size_hint_weight_set(ad->stage, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);

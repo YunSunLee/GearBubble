@@ -101,6 +101,17 @@ prepare_player(appdata_s* ad, int index)
 	dlog_print(DLOG_INFO, "tag", "File load : %d", result);
 }
 
+/* Stop play */
+void
+stop_player(void *data)
+{
+	appdata_s *ad = data;
+	if( get_player_state(ad->player) == PLAYER_STATE_PLAYING || get_player_state(ad->player) == PLAYER_STATE_PAUSED)
+	{
+		player_stop(ad->player);
+	}
+}
+
 /* Start play */
 void
 start_player(void *data)

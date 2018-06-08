@@ -92,10 +92,10 @@ Evas_Object *back_list;
 
 Evas_Object *sound_check;
 
-Evas_Object *grid; //added
+Evas_Object *grid;
 Evas_Object *grid2;
-Evas_Object *rect[25]; //added
-Evas *canvas; //added
+Evas_Object *rect[25];
+Evas *canvas;
 int grid_width;
 
 Evas_Object *popup;
@@ -139,7 +139,6 @@ int ranking[75]; // 1st to 5th for each stage
 /* sound effect player */
 player_h player;
 
-
 //for bluetooth
 Evas_Object* navi;
 Eext_Circle_Surface *circle_surface;
@@ -151,8 +150,13 @@ bt_socket_role_e role;
 int win_w;
 int win_h;
 
+int hr_test; //remove later
+
 int friend_pop_num;
-int is_network;
+int is_network; // 0 : 1player, 1: server, 2:client
+
+int network_start; // 0: chat mode, 1: game mode
+
 
 };
 typedef struct appdata appdata_s;
@@ -191,11 +195,29 @@ static void sound_changed_cb(void *data, Evas_Object *obj, void *event_info);
 void sound_cb(void *data, Evas_Object *obj, void *event_info);
 
 /* stage */
-
 void app_get_resource(const char *res_file_in, char *res_path_out, int res_path_max);
 
-/* sensor */
+void stage_size_3_cb(void *data, Evas_Object *obj, void *event_info);
+void stage_size_4_cb(void *data, Evas_Object *obj, void *event_info);
+void stage_size_5_cb(void *data, Evas_Object *obj, void *event_info);
 
+void stage1_cb(void *data, Evas_Object *obj, void *event_info);
+void stage2_cb(void *data, Evas_Object *obj, void *event_info);
+void stage3_cb(void *data, Evas_Object *obj, void *event_info);
+void stage4_cb(void *data, Evas_Object *obj, void *event_info);
+void stage5_cb(void *data, Evas_Object *obj, void *event_info);
+void stage6_cb(void *data, Evas_Object *obj, void *event_info);
+void stage7_cb(void *data, Evas_Object *obj, void *event_info);
+void stage8_cb(void *data, Evas_Object *obj, void *event_info);
+void stage9_cb(void *data, Evas_Object *obj, void *event_info);
+void stage10_cb(void *data, Evas_Object *obj, void *event_info);
+void stage11_cb(void *data, Evas_Object *obj, void *event_info);
+void stage12_cb(void *data, Evas_Object *obj, void *event_info);
+void stage13_cb(void *data, Evas_Object *obj, void *event_info);
+void stage14_cb(void *data, Evas_Object *obj, void *event_info);
+void stage15_cb(void *data, Evas_Object *obj, void *event_info);
+
+/* sensor */
 void start_acceleration_sensor(appdata_s *ad);
 void start_gyroscope_sensor(appdata_s *ad);
 void start_heartrate_sensor(appdata_s *ad);
@@ -204,9 +226,6 @@ void start_heartrate_sensor(appdata_s *ad);
 /* map creater */
 void draw_map(appdata_s *ad);
 Eina_Bool timer_cb(void *data EINA_UNUSED);
-
-/* map_editor */
-
 
 /* ranking */
 void app_get_data(const char *res_file_in, char *res_path_out, int res_path_max);
@@ -220,8 +239,8 @@ player_state_e get_player_state(player_h player);
 player_h create_player();
 static inline const char* get_resource_path(const char *file_path);
 void prepare_player(appdata_s* ad, int index);
-void stop_player(void *data);
 void start_player(void *data);
+void stop_player(void *data);
 
 
 /*network*/

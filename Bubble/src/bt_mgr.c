@@ -40,47 +40,9 @@ static void _socket_conn_state_changed_cb(int result, bt_socket_connection_state
 			ad->role = connection->local_role;
 			ad->socket_fd = connection->socket_fd;
 
-			/* draw 3*3 map */
-/*			//appdata_s *ad = data;
-
-			//start timer
-			ad->timer = ecore_timer_add(1.0, timer_cb, ad);
-			ad->time = 0;
-
-			//create vibration
-			device_haptic_open(0, &ad->handle);
-
-			start_acceleration_sensor(ad);
-			start_gyroscope_sensor(ad);
-			start_heartrate_sensor(ad);
-			ad->sensor_status[0] = 2;
-			ad->sensor_status[1] = 2;
-			ad->sensor_status[2] = 2;
 
 
-			//initialize user_state and grid state
-			ad->user_state[0] = 0;
-			ad->user_state[1] = ad->stage_size-1;
-			ad->user_state[2] = 0;
-			ad->user_state[3] = 0;
-
-			for (int j=0;j<ad->stage_size;j++){ //i,j order change
-				for (int i=0;i<ad->stage_size;i++){
-					ad->grid_state[i][j][4] = 0;
-				}
-			}
-
-			ad->user_state[2] = 1;
-*/
-			//draw_map(ad);
-
-			create_base_gui(ad);
-			single_play_cb(ad, NULL, NULL);
-			ad -> stage_size =3;
-			map_creater_cb(ad, NULL, NULL);
-
-
-			//bt_chat_room_layout_create(ad);
+			bt_chat_room_layout_create(ad);
 			if (s_info.noti) {
 				evas_object_del(s_info.noti);
 				s_info.noti = NULL;
@@ -93,7 +55,6 @@ static void _socket_conn_state_changed_cb(int result, bt_socket_connection_state
 		_D("Disconnected");
 	}
 }
-
 
 static void _device_bond_created_cb(int result, bt_device_info_s *device_info, void *user_data)
 {

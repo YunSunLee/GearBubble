@@ -19,7 +19,6 @@ static int is_obstacle=0;
 
 static int jmp_detect=0;
 static int shake_detect=0;
-//static int heart_detect=0;
 
 Evas_Object *jmp;
 
@@ -128,6 +127,8 @@ static void bubble_pop(appdata_s *ad, int x, int y){
 
 			/* Load audio file to Player */
 			prepare_player(ad, 0);
+
+			/* Play sound */
 			start_player(ad);
 		}
 	}
@@ -176,9 +177,7 @@ static void check_obstacle(appdata_s *ad){
 		else if(ad->grid_state[x][y][5]==3)
 		{	//show Heart image
 
-
 			//elm_object_text_set(ad->title, "<font_size = 50><align=center>Raise heart rate!</align></font_size>");
-
 
 			//connect heart rate monitor
 			heart_flag = 1;
@@ -205,7 +204,6 @@ static void check_obstacle(appdata_s *ad){
 			is_obstacle=1;
 		}
 	}
-	//return 0;
 }
 
 
@@ -237,10 +235,6 @@ _new_sensor_value_acc_jump(sensor_h sensor, sensor_event_s *sensor_data, void *u
 		evas_object_image_file_set(jmp, img_path, NULL);
 		elm_grid_pack(ad->grid2, jmp, 15, 25, 75, 75);
 		evas_object_show(jmp);
-		//evas_object_hide(jmp);
-		//elm_grid_unpack(ad->grid, jmp);
-
-
 	}
 	else{
 		evas_object_show(ad->grid);
@@ -250,7 +244,6 @@ _new_sensor_value_acc_jump(sensor_h sensor, sensor_event_s *sensor_data, void *u
 		 elm_object_text_set(ad->title2, "<font_size = 50><align=center>JUMP detected!</align></font_size>");
 		 jmp_detect=1;
 		 jump_flag = 0;
-
 		 is_obstacle = 0;
 
 		 ad->user_state[2]++;
@@ -261,10 +254,7 @@ _new_sensor_value_acc_jump(sensor_h sensor, sensor_event_s *sensor_data, void *u
 
 		 draw_map(ad);
 	 }
-
 }
-
-
 
 
 static void
@@ -311,8 +301,6 @@ _new_sensor_value_acc_shake(sensor_h sensor, sensor_event_s *sensor_data, void *
 		 shake_cnt = 0;
 		 shake_flag = 0;
 
-		 //elm_grid_pack(ad->grid, bug, 15, 25, 75, 75);
-		 //evas_object_show(bug);
 		 is_obstacle = 0;
 
 		 ad->user_state[2]++;
@@ -353,7 +341,6 @@ _new_sensor_value_acc(sensor_h sensor, sensor_event_s *sensor_data, void *user_d
 
 	 if(ad->sensor_status[0] >= 1){
 
-
 		 //play mode
 		 if(ad->sensor_status[0] == 2){
 			 char buf_title[100];
@@ -388,9 +375,6 @@ _new_sensor_value_acc(sensor_h sensor, sensor_event_s *sensor_data, void *user_d
 			 evas_object_color_set(ad->rect[ad->stage_size * ad->user_state[1] + ad->user_state[0]], 200, 0, 0, 100);
 		 else if(ready == 1)
 			 evas_object_color_set(ad->rect[ad->stage_size * ad->user_state[1] + ad->user_state[0]], 0, 200, 0, 100);
-
-
-
 
 		 if(ready == 1 && (fabsf(x) >= 1 || fabsf(y) >= 1) && gyro_check() == 1){
 			 sprintf(buf, direction(x, px, y, py));
@@ -471,9 +455,6 @@ _new_sensor_value_gyro(sensor_h sensor, sensor_event_s *sensor_data, void *user_
 		 elm_object_text_set(ad->sensor_label[1], "Gathering data...");
 		 return;
 	 }
-
-	 //snprintf(buf, sizeof(buf), "<font_size = 10>X:%0.1f/Y:%0.1f/Z:%0.1f</font_size>", gyro[0], gyro[1], gyro[2]);
-	 //elm_object_text_set(ad->sensor_label[1], buf);
 }
 
 static void
@@ -494,7 +475,6 @@ _new_sensor_value_heart(sensor_h sensor, sensor_event_s *sensor_data, void *user
 		 ad->title2 = elm_label_add(ad->grid2);
 		 elm_grid_pack(ad->grid2, ad->title2, 5, 10, 100, 20);
 		 evas_object_show(ad->title2);
-		 //elm_object_text_set(ad->title2, "<font_size = 50><align=center>Raise heart rate!</align></font_size>");
 		 char temp[100];
 		 sprintf(temp, "<font_size = 50><align=center>%d / %d</align></font_size>", hr, initial_beat+5);
 		 elm_object_text_set(ad->title2, temp);
@@ -678,10 +658,6 @@ void sensor_test_cb(void *data, Evas_Object *obj, void *event_info)
 	elm_list_item_append(ad->sensor_list, "VIBE TEST", NULL, NULL, vibe_test_cb, ad);
 	evas_object_show(ad->sensor_list);
 	elm_box_pack_after(ad->box, ad->sensor_list, ad->box_title);
-
-
-	//evas_object_event_callback_add(ad->conform, EVAS_CALLBACK_MOUSE_DOWN, main_menu_cb, ad);
-	//evas_object_show(ad->back);
 
 	evas_object_show(ad->back_list);
 	elm_box_pack_end(ad->box, ad->back_list);
