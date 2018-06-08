@@ -34,6 +34,7 @@ void single_play_cb(void *data, Evas_Object *obj, void *event_info)
 
 	evas_object_hide(ad->main_list);
 	elm_box_unpack(ad->box, ad->main_list);
+
 	evas_object_hide(ad->bottom);
 	elm_box_unpack(ad->box_bottom, ad->bottom);
 
@@ -269,7 +270,7 @@ void stage15_cb(void *data, Evas_Object *obj, void *event_info){
 	ad->grid_state[0][1][5] = 1; /* hurdle */
 	ad->grid_state[3][4][5] = 1;
 	ad->grid_state[0][0][5]= 2; /* bug */
-	//ad->grid_state[1][2][5] = 3;/* heart */
+	ad->grid_state[1][2][5] = 3;/* heart */
 	ad->grid_state[2][1][5] = 3;
 	stage_common(ad, 5);
 }

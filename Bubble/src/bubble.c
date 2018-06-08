@@ -92,7 +92,6 @@ void create_base_gui(appdata_s *ad)
 		evas_object_size_hint_weight_set(ad->box_content, EVAS_HINT_EXPAND, 0.5);
 		evas_object_show(ad->box_content);
 
-
 		/* List */
 
 		/* Create the list */
@@ -108,7 +107,6 @@ void create_base_gui(appdata_s *ad)
 		elm_list_item_append(ad->main_list, "TUTORIAL", NULL, NULL, tutorial_cb, ad);
 		elm_list_item_append(ad->main_list, "RANKING", NULL, NULL, ranking_cb, ad);
 		elm_list_item_append(ad->main_list, "SOUND", NULL, NULL, sound_cb, ad);
-		//elm_list_item_append(ad->main_list, "SENSOR", NULL, NULL, sensor_test_cb, ad);
 
 		/* Show and add to box */
 		evas_object_show(ad->main_list);
@@ -131,7 +129,7 @@ void create_base_gui(appdata_s *ad)
 		evas_object_show(ad->bottom);
 
 		ad->back_list = elm_list_add(ad->box);
-		evas_object_size_hint_weight_set(ad->back_list, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+		evas_object_size_hint_weight_set(ad->back_list, EVAS_HINT_EXPAND, 0.5);
 		evas_object_size_hint_align_set(ad->back_list, EVAS_HINT_FILL, EVAS_HINT_FILL);
 		elm_list_item_append(ad->back_list, "MENU", NULL, NULL, main_menu_cb, ad);
 
