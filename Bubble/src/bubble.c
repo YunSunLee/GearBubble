@@ -1,17 +1,8 @@
 #include "bubble.h"
 #include <sensor.h>
-#include "single_play.c"
-#include "network.c"
-#include "map_editor.c"
-#include "ranking.c"
-#include "tutorial.c"
-#include "sensor_test.c"
-#include "make_map.c"
-#include "sound.c"
-#include "bubble_image.c"
 
-static void
-win_delete_request_cb(void *data, Evas_Object *obj, void *event_info)
+
+void win_delete_request_cb(void *data, Evas_Object *obj, void *event_info)
 {
 ui_app_exit();
 }
@@ -24,22 +15,39 @@ appdata_s *ad = data;
 elm_win_lower(ad->win);
 }
 
-static void create_base_gui(appdata_s *ad);
 
-static void
-main_menu_cb(void *data, Evas_Object *obj, void *event_info){
+
+void main_menu_cb(void *data, Evas_Object *obj, void *event_info){
 	appdata_s *ad = data;
+
+	if((ad->user_state[2] == ad->stage_size * ad->stage_size) &(ad->time>0)){
+		read_rank_file(ad); // get previous record
+
+		 /* store time */
+		int stage = ad->stage_num; // get stage
+
+		if (ad->ranking[5*stage-1] > ad->time){
+			 ad->ranking[5*stage-1] =  ad->time;
+
+			 for (int i = 5*stage-1 ; i>5*(stage-1); i--){
+				 if(ad->ranking[i-1] > ad->ranking[i]){
+					 swap(&ad->ranking[i-1], &ad->ranking[i]);
+				 }
+			 }
+		}
+		write_rank_file(ad);
+	}
+
 	ad->sensor_status[0] = -1;
 	ad->sensor_status[1] = -1;
 	ad->sensor_status[2] = -1;
 	ad->user_state[2] = 0;
 	ecore_timer_del(ad->timer);
-	create_base_gui(ad);
+
+	create_base_gui(ad); //go back to main
 }
 
-
-static void
-create_base_gui(appdata_s *ad)
+void create_base_gui(appdata_s *ad)
 {
 	/* Window */
 		ad->win = elm_win_util_standard_add(PACKAGE, PACKAGE);
@@ -73,7 +81,7 @@ create_base_gui(appdata_s *ad)
 		evas_object_show(ad->box_title);
 		elm_box_pack_end(ad->box, ad->box_title);
 
-		//title
+		/* title */
 
 		ad->title = elm_label_add(ad->box_title);
 		elm_object_text_set(ad->title, "<font_size = 50><align=center>GEAR BUBBLE</align></font_size>");
@@ -83,7 +91,6 @@ create_base_gui(appdata_s *ad)
 		ad->box_content = elm_box_add(ad->conform);
 		evas_object_size_hint_weight_set(ad->box_content, EVAS_HINT_EXPAND, 0.5);
 		evas_object_show(ad->box_content);
-
 
 		/* List */
 
@@ -100,7 +107,6 @@ create_base_gui(appdata_s *ad)
 		elm_list_item_append(ad->main_list, "TUTORIAL", NULL, NULL, tutorial_cb, ad);
 		elm_list_item_append(ad->main_list, "RANKING", NULL, NULL, ranking_cb, ad);
 		elm_list_item_append(ad->main_list, "SOUND", NULL, NULL, sound_cb, ad);
-		elm_list_item_append(ad->main_list, "SENSOR", NULL, NULL, sensor_test_cb, ad);
 
 		/* Show and add to box */
 		evas_object_show(ad->main_list);
@@ -111,9 +117,6 @@ create_base_gui(appdata_s *ad)
 		evas_object_size_hint_weight_set(ad->box_bottom, EVAS_HINT_EXPAND, 0.2);
 		evas_object_show(ad->box_bottom);
 		elm_box_pack_end(ad->box, ad->box_bottom);
-
-
-
 
 		ad->bottom = elm_label_add(ad->box_bottom);
 
@@ -126,19 +129,9 @@ create_base_gui(appdata_s *ad)
 		evas_object_show(ad->bottom);
 
 		ad->back_list = elm_list_add(ad->box);
-		evas_object_size_hint_weight_set(ad->back_list, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+		evas_object_size_hint_weight_set(ad->back_list, EVAS_HINT_EXPAND, 0.5);
 		evas_object_size_hint_align_set(ad->back_list, EVAS_HINT_FILL, EVAS_HINT_FILL);
 		elm_list_item_append(ad->back_list, "MENU", NULL, NULL, main_menu_cb, ad);
-
-
-		ad->stage_list = elm_list_add(ad->box);
-		evas_object_size_hint_weight_set(ad->stage_list, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-		evas_object_size_hint_align_set(ad->stage_list, EVAS_HINT_FILL, EVAS_HINT_FILL);
-		elm_list_item_append(ad->stage_list, "STAGE 1", NULL, NULL, stage1_cb, ad);
-		elm_list_item_append(ad->stage_list, "STAGE 2", NULL, NULL, stage2_cb, ad);
-		elm_list_item_append(ad->stage_list, "STAGE 3", NULL, NULL, stage3_cb, ad);
-		elm_list_item_append(ad->stage_list, "STAGE 4", NULL, NULL, stage4_cb, ad);
-		elm_list_item_append(ad->stage_list, "STAGE 5", NULL, NULL, stage5_cb, ad);
 
 		ad->stage = elm_list_add(ad->box);
 		evas_object_size_hint_weight_set(ad->stage, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);

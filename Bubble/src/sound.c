@@ -1,10 +1,3 @@
-/*
- * sound.c
- *
- *  Created on: Apr 13, 2018
- *      Author: yunsun
- */
-
 #include "bubble.h"
 
 static void
@@ -18,8 +11,7 @@ sound_changed_cb(void *data, Evas_Object *obj, void *event_info)
 		ad->sound = 0;
 }
 
-static void
-sound_cb(void *data, Evas_Object *obj, void *event_info)
+void sound_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	appdata_s *ad = data;
 
@@ -47,4 +39,84 @@ sound_cb(void *data, Evas_Object *obj, void *event_info)
 	evas_object_show(ad->back_list);
 	elm_box_pack_end(ad->box, ad->back_list);
 
+}
+
+
+/* Get player state */
+player_state_e get_player_state(player_h player)
+{
+	player_state_e state;
+	player_get_state(player, &state);
+	return state;
+}
+
+/* Play completed event function */
+static void
+on_player_completed(player_h* player)
+{
+	if(player)
+		player_stop(player);
+}
+
+/* Create Player */
+player_h create_player()
+{
+	player_h player;
+	player_create(&player);
+	player_set_completed_cb(player, on_player_completed, player);
+	return player;
+}
+
+
+/* Get full path of source file */
+static inline const char*
+get_resource_path(const char *file_path)
+{
+	static char absolute_path[PATH_MAX] = {'\0'};
+	static char *res_path_buff = NULL;
+	if(res_path_buff == NULL)
+		res_path_buff = app_get_resource_path();
+	snprintf(absolute_path, PATH_MAX, "%s%s", res_path_buff, file_path);
+	return absolute_path;
+}
+
+/* Load file to Player */
+
+void
+prepare_player(appdata_s* ad, int index)
+{
+	// Stop play
+	stop_player(ad);
+	// Close file
+	player_unprepare(ad->player);
+	const char* file_name[] = { "bubble_pop.wav" };
+
+	const char* file = file_name[index];
+	// Get full path of source file
+	const char *res_path = get_resource_path(file);
+	// Load file
+	player_set_uri(ad->player, res_path);
+	// Prepare play
+	int result = player_prepare(ad->player);
+	dlog_print(DLOG_INFO, "tag", "File load : %d", result);
+}
+
+/* Stop play */
+void
+stop_player(void *data)
+{
+	appdata_s *ad = data;
+	if( get_player_state(ad->player) == PLAYER_STATE_PLAYING || get_player_state(ad->player) == PLAYER_STATE_PAUSED)
+	{
+		player_stop(ad->player);
+	}
+}
+
+/* Start play */
+void
+start_player(void *data)
+{
+	appdata_s *ad = data;
+	if( get_player_state(ad->player) != PLAYER_STATE_PLAYING)
+		player_start(ad->player);
 }

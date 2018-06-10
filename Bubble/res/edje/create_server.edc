@@ -1,0 +1,48 @@
+collections {
+   group {
+      name: "create_server";
+      parts {
+         part {
+            name: "bg";
+            type: RECT;
+            mouse_events: 0;
+            description {
+               state: "default" 0.0;
+               align: 0.0 0.0;
+               rel1 { relative: 0.0 0.0; }
+               rel2 { relative: 1.0 1.0; }
+               color: 0 0 0 100;
+            }
+         }
+         part {
+            name: "progress";
+            type: SWALLOW;
+            description {
+               state: "default" 0.0;
+               align: 0.5 0.5;
+               rel1 { relative: 0.5 0.4; to: "bg"; }
+               rel2 { relative: 0.5 0.4; to: "bg"; }
+            }
+         }
+         part {
+            name: "console";
+            type: TEXT;
+            mouse_events: 0;
+            description {
+               state: "default" 0.0;
+               align: 0.5 0.0;
+               fixed: 1 1;
+               rel1 { relative: 0.5 1.0; to: "progress"; }
+               rel2 { relative: 0.5 1.0; to: "progress"; }
+               text {
+                  text: "Waiting a Friend";
+                  font: "Tizen:style=regular";
+                  size: 30;
+                  min: 1 1;
+               }
+               color: 255 255 255 255;
+            }
+         }
+      }
+   }
+}
